@@ -10,22 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.sarin.prod.goodshost.databinding.FragmentNotificationsBinding;
+import com.sarin.prod.goodshost.databinding.FragmentFavoriteBinding;
 
-public class NotificationsFragment extends Fragment {
+public class FavoriteFragment extends Fragment {
 
-    private FragmentNotificationsBinding binding;
+    private FragmentFavoriteBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        NotificationsViewModel notificationsViewModel =
-                new ViewModelProvider(this).get(NotificationsViewModel.class);
+        FavoriteViewModel favoriteViewModel =
+                new ViewModelProvider(this).get(FavoriteViewModel.class);
 
-        binding = FragmentNotificationsBinding.inflate(inflater, container, false);
+        binding = FragmentFavoriteBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textNotifications;
-        notificationsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        final TextView textView = binding.textFavorite;
+        favoriteViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 

@@ -1,6 +1,7 @@
 package com.sarin.prod.goodshost.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.item.ProductItem;
+import com.sarin.prod.goodshost.activity.ProductDetailActivity;
 
 import java.util.List;
 
@@ -47,9 +49,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             public void onItemClickListener(View v, int position) {
 
                 Log.d(TAG, "position: " + position);
-//                Intent intent = new Intent(v.getContext(), ServiceDetailActivity.class);
-//                intent.putExtra("serviceId", items.get(position).getServiceId());
-//                v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
+                Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
+                intent.putExtra("vendor_item_id", items.get(position).getVendor_item_id());
+                v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
 
             }
         };

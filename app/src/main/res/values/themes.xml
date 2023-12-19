@@ -33,7 +33,11 @@
         <item name="android:textSize">16dp</item>
         <item name="android:textColor">@color/black_500</item>
     </style>
-
+    <!-- Base application theme. -->
+    <style name="Base.Theme.R_GoodsHost" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
 
 
 </resources>
