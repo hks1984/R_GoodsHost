@@ -2,6 +2,7 @@
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">192.168.10.70</domain>
+        <domain includeSubdomains="true">192.168.0.2</domain>
         <!-- 여기에 추가적으로 허용할 도메인을 추가할 수 있습니다 -->
     </domain-config>
 </network-security-config>

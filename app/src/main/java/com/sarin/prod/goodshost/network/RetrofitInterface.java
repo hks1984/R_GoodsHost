@@ -26,5 +26,14 @@ public interface RetrofitInterface {
             @Query("page") int page
     );
 
+    @GET("{path}")
+    Call<ProductItem> getProductDetail(
+            @Path ("path") String path,
+            @Query("vendor_item_id") String vendor_item_id
+    );
+
+
+
+
 }
 

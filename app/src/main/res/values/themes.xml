@@ -19,20 +19,37 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Text.smallStyle" parent="android:TextAppearance">
+    <style name="TextBlack.smallStyle" parent="android:TextAppearance">
         <item name="android:textSize">12dp</item>
         <item name="android:textColor">@color/black_500</item>
     </style>
 
-    <style name="Text.mediumStyle" parent="android:TextAppearance">
+    <style name="TextBlack.mediumStyle" parent="android:TextAppearance">
         <item name="android:textSize">14dp</item>
         <item name="android:textColor">@color/black_500</item>
     </style>
 
-    <style name="Text.largeStyle" parent="android:TextAppearance">
+    <style name="TextBlack.largeStyle" parent="android:TextAppearance">
         <item name="android:textSize">16dp</item>
         <item name="android:textColor">@color/black_500</item>
     </style>
+
+    <style name="TextWhite.smallStyle" parent="android:TextAppearance">
+        <item name="android:textSize">12dp</item>
+        <item name="android:textColor">@color/white_500</item>
+    </style>
+
+    <style name="TextWhite.mediumStyle" parent="android:TextAppearance">
+        <item name="android:textSize">14dp</item>
+        <item name="android:textColor">@color/white_500</item>
+    </style>
+
+    <style name="TextWhite.largeStyle" parent="android:TextAppearance">
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/white_500</item>
+    </style>
+
+
     <!-- Base application theme. -->
     <style name="Base.Theme.R_GoodsHost" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->

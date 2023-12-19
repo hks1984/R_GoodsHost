@@ -128,7 +128,10 @@ public class SearchFragment extends Fragment {
                     editText.setVisibility(View.VISIBLE);
 
                 }else if(newState == RecyclerView.SCROLL_STATE_SETTLING && !isScrolledDown){
-                    editText.setVisibility(View.GONE);
+                    if (!piLIst.isEmpty()) {
+                        editText.setVisibility(View.GONE);
+                    }
+
                 }
             }
 
