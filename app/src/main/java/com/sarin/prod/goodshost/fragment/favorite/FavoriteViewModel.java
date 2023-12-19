@@ -1,4 +1,4 @@
-package com.sarin.prod.goodshost.fragment.notifications;
+package com.sarin.prod.goodshost.fragment.favorite;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
