@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/share_round_list"
+    android:layout_marginBottom="10dp"
     >
 
     <LinearLayout
@@ -16,9 +17,8 @@
         <ImageView
             android:layout_gravity="center"
             android:id="@+id/imagew"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@color/white"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             />
 
     </LinearLayout>
@@ -31,13 +31,26 @@
         android:layout_marginTop="2dp">
 
         <TextView
+            android:id="@+id/persent"
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:layout_weight="5"
+            android:gravity="center_vertical"
+            android:textColor="@color/blue_500"
+            android:text=""
+            style="@style/TextBlack.smallStyle"
+            android:visibility="gone"
+            />
+
+        <TextView
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="15dp"
             android:layout_weight="5"
             android:gravity="center_vertical"
-            android:text="Name"
-            style="@style/TextBlack.smallStyle"
+            android:text=""
+            style="@style/TextBlack.mediumStyle"
+            android:textStyle="bold"
              />
 
         <TextView
@@ -46,19 +59,40 @@
             android:layout_height="15dp"
             android:layout_weight="5"
             android:gravity="center_vertical"
-            android:text="Name"
+            android:text=""
             style="@style/TextBlack.mediumStyle"
              />
 
-        <TextView
-            android:id="@+id/price_value1"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_weight="6"
             android:layout_width="match_parent"
-            android:layout_height="15dp"
-            android:layout_weight="5"
-            android:gravity="center_vertical"
-            android:text="Name"
-            style="@style/TextBlack.largeStyle"
-            />
+            android:layout_height="wrap_content"
+
+            >
+
+            <RatingBar
+                android:id="@+id/rating"
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:rating="0"
+                android:stepSize="0.5"
+                android:progressTint="@color/black_500"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/rating_total_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                style="@style/TextBlack.smallStyle"
+                android:layout_gravity="center"
+                />
+
+        </LinearLayout>
 
 
     </LinearLayout>

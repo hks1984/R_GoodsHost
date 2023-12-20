@@ -25,6 +25,7 @@ import com.sarin.prod.goodshost.databinding.FragmentHomeBinding;
 import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
+import com.sarin.prod.goodshost.util.LoadingDialogManager;
 
 import java.util.List;
 
@@ -36,6 +37,8 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private ActivityProductDetailBinding binding;
     private static String TAG = MainApplication.TAG;
+
+    private LoadingDialogManager loadingDialogManager;
 
     private ImageView image, exit;
     private TextView name, price_value;
@@ -50,12 +53,13 @@ public class ProductDetailActivity extends AppCompatActivity {
         Intent tp_intent = getIntent();
         String vendor_item_id = tp_intent.getStringExtra("vendor_item_id");
 
+        loadingDialogManager = new LoadingDialogManager();
+
         name = binding.name;
         price_value = binding.priceValue;
         image = binding.image;
 
         getProductDetail(vendor_item_id);
-
 
         exit = binding.exit;
         exit.setOnClickListener(new View.OnClickListener() {
@@ -69,7 +73,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     public void getProductDetail(String vendor_item_id){
 //        Log.d(TAG, "page: " + CategoryProducts_page);
-
+        loadingDialogManager.showLoading(getSupportFragmentManager());
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
@@ -90,16 +94,25 @@ public class ProductDetailActivity extends AppCompatActivity {
                     Log.e(TAG, "실패 코드 확인 : " + response.code());
                     Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
+                loadingDialogManager.hideLoading();
             }
 
             @Override
             public void onFailure(Call<ProductItem> call, Throwable t) {
                 // 통신 실패
                 Log.e(TAG, "onFailure: " + t.getMessage());
+                loadingDialogManager.hideLoading();
             }
         });
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (loadingDialogManager != null) {
+            loadingDialogManager.hideLoading();
+        }
 
+    }
 }

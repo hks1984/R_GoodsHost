@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -69,8 +70,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView name, price_value;
+        private TextView name, price_value, rating_total_count, persent;
         private ImageView image;
+        private RatingBar rating;
+
         ProductItemClickListener productItemClickListener;
 
         public ViewHolder(View itemView) {
@@ -79,6 +82,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             name = (TextView) itemView.findViewById(R.id.name);
             price_value = (TextView) itemView.findViewById(R.id.price_value);
             image = (ImageView) itemView.findViewById(R.id.imagew);
+            rating = (RatingBar) itemView.findViewById(R.id.rating);
+            rating_total_count = (TextView) itemView.findViewById(R.id.rating_total_count);
+            persent = (TextView) itemView.findViewById(R.id.persent);
 
             itemView.setOnClickListener(this);
         }
@@ -88,6 +94,37 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             price_value.setText(pitem.getPrice_value());
             String url = "https:" + pitem.getImage();
             Glide.with(context).load(url).into(image);
+            rating.setRating(Float.parseFloat(pitem.getRating()));
+            String ratingTotalCount = pitem.getRating_total_count();
+            if (ratingTotalCount != null && !ratingTotalCount.isEmpty()) {
+                rating_total_count.setText("(" + ratingTotalCount + ")");
+            } else {
+                rating_total_count.setText("");
+            }
+            Log.d(TAG, "pitem.getPersent(): " + pitem.getPersent());
+
+            int numberInt = 0;
+            try {
+                // 먼저 문자열을 float 또는 double로 변환합니다.
+                float numberFloat = Float.parseFloat(pitem.getPersent());
+
+                // 변환된 float 또는 double을 int로 변환합니다.
+                numberInt = (int) numberFloat;
+
+                // 결과 출력
+//                System.out.println("변환된 정수: " + numberInt);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                // 예외 처리 로직
+            }
+
+            if (numberInt < 0) {
+                persent.setVisibility(View.VISIBLE); // 레이아웃 표시
+                persent.setText(Math.abs(numberInt)) + "%"); // 할인율 표시
+            } else {
+                persent.setVisibility(View.GONE); // 레이아웃 숨김
+            }
+
         }
 
         @Override
