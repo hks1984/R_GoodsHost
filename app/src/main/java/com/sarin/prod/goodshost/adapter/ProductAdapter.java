@@ -101,26 +101,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             } else {
                 rating_total_count.setText("");
             }
-            Log.d(TAG, "pitem.getPersent(): " + pitem.getPersent());
 
-            int numberInt = 0;
-            try {
-                // 먼저 문자열을 float 또는 double로 변환합니다.
-                float numberFloat = Float.parseFloat(pitem.getPersent());
-
-                // 변환된 float 또는 double을 int로 변환합니다.
-                numberInt = (int) numberFloat;
-
-                // 결과 출력
-//                System.out.println("변환된 정수: " + numberInt);
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-                // 예외 처리 로직
-            }
-
-            if (numberInt < 0) {
+            double number = Double.parseDouble(pitem.getPersent());
+            if(number < 0){
+                String numString = getNumberConverter(number);
                 persent.setVisibility(View.VISIBLE); // 레이아웃 표시
-                persent.setText(Math.abs(numberInt)) + "%"); // 할인율 표시
+                persent.setText(numString + "% off"); // 할인율 표시
             } else {
                 persent.setVisibility(View.GONE); // 레이아웃 숨김
             }
@@ -155,6 +141,26 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 //    }
 
 
+    public static String getNumberConverter (double number){
+
+        String convertedString = "";
+        // 문자열을 Double로 변환
+        try{
+            // 반올림
+            number = Math.round(number);
+            // 마이너스 제거 (절대값 사용)
+            number = Math.abs(number);
+
+            // 숫자를 문자열로 변환
+            convertedString = String.valueOf((int)number);
+            // 결과 출력
+            System.out.println("변환된 문자열: " + convertedString);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return convertedString;
+    }
 
 }
 
