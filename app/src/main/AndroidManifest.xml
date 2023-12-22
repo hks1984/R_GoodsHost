@@ -21,6 +21,11 @@
         <activity
             android:name=".activity.ProductDetailActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".activity.CategoryMenuActivity"
+            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

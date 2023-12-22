@@ -1,5 +1,6 @@
 package com.sarin.prod.goodshost.network;
 
+import com.sarin.prod.goodshost.item.CategoryItem;
 import com.sarin.prod.goodshost.item.ProductItem;
 
 import java.util.List;
@@ -31,6 +32,12 @@ public interface RetrofitInterface {
             @Path ("path") String path,
             @Query("vendor_item_id") String vendor_item_id
     );
+
+    @GET("{path}")
+    Call<List<CategoryItem>> getCategoryList(
+            @Path ("path") String path
+    );
+
 
 
 

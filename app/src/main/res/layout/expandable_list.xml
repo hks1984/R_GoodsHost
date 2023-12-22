@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/header_title"
-        android:textColor="@color/text_sub"
+        android:textColor="@color/black_500"
         android:textSize="16sp"
         android:gravity="center_vertical"
         android:layout_width="0dp"

@@ -1,11 +1,13 @@
 package com.sarin.prod.goodshost.fragment.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
+import com.sarin.prod.goodshost.activity.CategoryMenuActivity;
+import com.sarin.prod.goodshost.activity.ProductDetailActivity;
+import com.sarin.prod.goodshost.adapter.ExpandableListAdapter;
 import com.sarin.prod.goodshost.adapter.ProductAdapter;
 import com.sarin.prod.goodshost.databinding.FragmentHomeBinding;
 import com.sarin.prod.goodshost.item.ProductItem;
@@ -37,6 +42,7 @@ public class HomeFragment extends Fragment {
 
     private static RecyclerView recyclerView;
     public static ProductAdapter productAdapter;
+    private static ImageView menu;
     private List<ProductItem> piLIst = new ArrayList<>();
 
 
@@ -51,12 +57,22 @@ public class HomeFragment extends Fragment {
 //        final TextView textView = binding.textHome;
 //        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
-        recyclerView = root.findViewById(R.id.recyclerView);
+        recyclerView = binding.recyclerView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-
+        
         productAdapter = new ProductAdapter(piLIst);
         recyclerView.setAdapter(productAdapter);
+        
+        menu = binding.menu;
+        menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), CategoryMenuActivity.class);
+//                intent.putExtra("vendor_item_id", items.get(position).getVendor_item_id());
+                getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
+            }
+        });
 
         getCategoryProducts("510222");
 

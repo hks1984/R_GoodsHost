@@ -1,65 +1,59 @@
 package com.sarin.prod.goodshost.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.sarin.prod.goodshost.MainApplication;
-import com.sarin.prod.goodshost.databinding.ActivityMainBinding;
+import com.sarin.prod.goodshost.adapter.ExpandableListAdapter;
+import com.sarin.prod.goodshost.adapter.ProductAdapter;
+import com.sarin.prod.goodshost.databinding.ActivityCategoryMenuBinding;
 import com.sarin.prod.goodshost.databinding.ActivityProductDetailBinding;
-
-
-import com.sarin.prod.goodshost.R;
-import com.sarin.prod.goodshost.databinding.FragmentHomeBinding;
+import com.sarin.prod.goodshost.item.CategoryItem;
 import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
 import com.sarin.prod.goodshost.util.LoadingDialogManager;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProductDetailActivity extends AppCompatActivity {
+public class CategoryMenuActivity extends AppCompatActivity {
 
-    private ActivityProductDetailBinding binding;
+    private ActivityCategoryMenuBinding binding;
     private static String TAG = MainApplication.TAG;
 
+    private static RecyclerView recyclerView;
+    public static ExpandableListAdapter expandableListAdapter;
+    private static ImageView exit;
     private LoadingDialogManager loadingDialogManager;
 
-    private ImageView image, exit;
-    private TextView name, price_value;
+    private List<CategoryItem> categoryItem;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityProductDetailBinding.inflate(getLayoutInflater());
+        binding = ActivityCategoryMenuBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        Intent tp_intent = getIntent();
-        String vendor_item_id = tp_intent.getStringExtra("vendor_item_id");
-
-        loadingDialogManager = new LoadingDialogManager();
-
-        name = binding.name;
-        price_value = binding.priceValue;
-        image = binding.image;
-
-        getProductDetail(vendor_item_id);
+        recyclerView = binding.recyclerView;
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
 
         exit = binding.exit;
         exit.setOnClickListener(new View.OnClickListener() {
@@ -69,43 +63,86 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
 
+        loadingDialogManager = new LoadingDialogManager();
+
+        getCategoryList();
+
+
+
+
     }
 
-    public void getProductDetail(String vendor_item_id){
+
+    public void getCategoryList(){
 //        Log.d(TAG, "page: " + CategoryProducts_page);
-        loadingDialogManager.showLoading(getSupportFragmentManager());
+
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<ProductItem> call = service.getProductDetail("getProductDetail", vendor_item_id);
+        Call<List<CategoryItem>> call = service.getCategoryList("getCategoryList");
 
-        call.enqueue(new Callback<ProductItem>() {
+        call.enqueue(new Callback<List<CategoryItem>>() {
             @Override
-            public void onResponse(Call<ProductItem> call, Response<ProductItem> response) {
+            public void onResponse(Call<List<CategoryItem>> call, Response<List<CategoryItem>> response) {
                 if(response.isSuccessful()){
-                    ProductItem productItem = response.body();
-                    name.setText(productItem.getName());
-                    price_value.setText(productItem.getPrice_value());
-                    String url = "https:" + productItem.getImage();
-                    Glide.with(getApplicationContext()).load(url).into(image);
+                    categoryItem = response.body();
+                    Log.d(TAG, "productItem: " + categoryItem.toString());
+//                    piLIst.addAll(productItem);
+//                    productAdapter.notifyDataSetChanged();
+
+//                    List<ExpandableListAdapter.Item> data = new ArrayList<>();
+//
+//                    ExpandableListAdapter.Item places = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, categoryItem.get(0).name);
+//                    places.invisibleChildren = new ArrayList<>();
+//                    places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, categoryItem.get(1).name));
+//                    data.add(places);
+//
+//                    places = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, categoryItem.get(2).name);
+//                    places.invisibleChildren = new ArrayList<>();
+//                    places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, categoryItem.get(3).name));
+//                    data.add(places);
+//
+//                    recyclerView.setAdapter(new ExpandableListAdapter(data));
+
+                    List<ExpandableListAdapter.Item> data = new ArrayList<>();
+                    Map<String, ExpandableListAdapter.Item> headerMap = new HashMap<>();
+
+                    for (CategoryItem category : categoryItem) {
+                        if ("1".equals(category.getLevel())) {
+                            // Level 1 카테고리는 헤더로 추가
+                            ExpandableListAdapter.Item header = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, category.getName());
+                            header.invisibleChildren = new ArrayList<>();
+                            data.add(header);
+                            headerMap.put(category.getCode(), header);
+                        } else if ("2".equals(category.getLevel())) {
+                            // Level 2 카테고리는 상위 카테고리의 invisibleChildren으로 추가
+                            ExpandableListAdapter.Item child = new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, category.getName());
+                            ExpandableListAdapter.Item parentHeader = headerMap.get(category.getPcode());
+                            if (parentHeader != null && parentHeader.invisibleChildren != null) {
+                                parentHeader.invisibleChildren.add(child);
+                            }
+                        }
+                    }
+
+                    recyclerView.setAdapter(new ExpandableListAdapter(data));
+
                 }
                 else{
                     // 실패
                     Log.e(TAG, "실패 코드 확인 : " + response.code());
                     Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
-                loadingDialogManager.hideLoading();
             }
 
             @Override
-            public void onFailure(Call<ProductItem> call, Throwable t) {
+            public void onFailure(Call<List<CategoryItem>> call, Throwable t) {
                 // 통신 실패
                 Log.e(TAG, "onFailure: " + t.getMessage());
-                loadingDialogManager.hideLoading();
             }
         });
 
     }
+
 
     @Override
     protected void onDestroy() {
