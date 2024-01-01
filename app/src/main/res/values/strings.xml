@@ -5,4 +5,15 @@
     <string name="title_favorite">관심</string>
     <string name="title_activity_detail_product">DetailProductActivity</string>
 
+    <!-- 공통 -->
+    <string name="logo_title">G Mall</string>
+    <string name="won">원</string>
+
+
+    <!-- 홈 -->
+    <string name="best_sale">Best Sale</string>
+
+
+
+
 </resources>

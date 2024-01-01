@@ -38,6 +38,15 @@ public interface RetrofitInterface {
             @Path ("path") String path
     );
 
+    @GET("{path}")
+    Call<List<ProductItem>> getBestSalesProducts(
+            @Path ("path") String path,
+            @Query("cnt") int cnt,
+            @Query("page") int page
+    );
+
+
+
 
 
 

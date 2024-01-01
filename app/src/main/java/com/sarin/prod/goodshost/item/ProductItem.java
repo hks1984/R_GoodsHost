@@ -11,12 +11,12 @@ public class ProductItem {
     public String name;
     public String image;
     public String out_of_stock;
-    public String price_value;
+    public int price_value;
     public String discount_percentage;
-    public String base_price;
+    public int base_price;
     public String rocket_baesong;
     public String rating;
-    public String rating_total_count;
+    public int rating_total_count;
     public String page_link;
     public String coupang_link_use;
     public String coupang_link;
@@ -88,11 +88,11 @@ public class ProductItem {
         this.out_of_stock = out_of_stock;
     }
 
-    public String getPrice_value() {
+    public int getPrice_value() {
         return price_value;
     }
 
-    public void setPrice_value(String price_value) {
+    public void setPrice_value(int price_value) {
         this.price_value = price_value;
     }
 
@@ -104,11 +104,11 @@ public class ProductItem {
         this.discount_percentage = discount_percentage;
     }
 
-    public String getBase_price() {
+    public int getBase_price() {
         return base_price;
     }
 
-    public void setBase_price(String base_price) {
+    public void setBase_price(int base_price) {
         this.base_price = base_price;
     }
 
@@ -128,11 +128,11 @@ public class ProductItem {
         this.rating = rating;
     }
 
-    public String getRating_total_count() {
+    public int getRating_total_count() {
         return rating_total_count;
     }
 
-    public void setRating_total_count(String rating_total_count) {
+    public void setRating_total_count(int rating_total_count) {
         this.rating_total_count = rating_total_count;
     }
 

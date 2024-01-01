@@ -7,10 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -18,6 +20,7 @@ import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.activity.ProductDetailActivity;
+import com.sarin.prod.goodshost.util.StringUtil;
 
 import java.util.List;
 
@@ -27,6 +30,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     private List<ProductItem> items;
     public static String TAG = MainApplication.TAG;
     private static Context context;
+
+    static StringUtil sUtil = StringUtil.getInstance();
 
     public ProductAdapter(List<ProductItem> items){
         this.items = items;
@@ -71,8 +76,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView name, price_value, rating_total_count, persent;
-        private ImageView image;
+        private ImageView image, favorite;
         private RatingBar rating;
+
+        private LinearLayout layout_favorite;
 
         ProductItemClickListener productItemClickListener;
 
@@ -85,17 +92,32 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             rating = (RatingBar) itemView.findViewById(R.id.rating);
             rating_total_count = (TextView) itemView.findViewById(R.id.rating_total_count);
             persent = (TextView) itemView.findViewById(R.id.persent);
+            favorite = (ImageView) itemView.findViewById(R.id.favorite);
+            layout_favorite = (LinearLayout) itemView.findViewById(R.id.layout_favorite);
+
+            layout_favorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 클릭 이벤트 처리
+                    onFavoriteClick(getLayoutPosition());
+                }
+            });
 
             itemView.setOnClickListener(this);
         }
 
+        private void onFavoriteClick(int position) {
+            Log.d(TAG, "Favorite clicked at position: " + position);
+            // 여기에서 필요한 작업 수행 (예: 즐겨찾기 추가/제거)
+        }
+
         public void setItem(ProductItem pitem){
             name.setText(pitem.getName());
-            price_value.setText(pitem.getPrice_value());
+            price_value.setText(sUtil.replaceStringPriceToInt(pitem.getPrice_value()) + context.getResources().getString(R.string.won));
             String url = "https:" + pitem.getImage();
             Glide.with(context).load(url).into(image);
             rating.setRating(Float.parseFloat(pitem.getRating()));
-            String ratingTotalCount = pitem.getRating_total_count();
+            String ratingTotalCount = sUtil.replaceStringPriceToInt(pitem.getRating_total_count());
             if (ratingTotalCount != null && !ratingTotalCount.isEmpty()) {
                 rating_total_count.setText("(" + ratingTotalCount + ")");
             } else {
@@ -110,6 +132,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             } else {
                 persent.setVisibility(View.GONE); // 레이아웃 숨김
             }
+
 
         }
 
@@ -154,7 +177,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             // 숫자를 문자열로 변환
             convertedString = String.valueOf((int)number);
             // 결과 출력
-            System.out.println("변환된 문자열: " + convertedString);
+//            System.out.println("변환된 문자열: " + convertedString);
         }catch(Exception e){
             e.printStackTrace();
         }

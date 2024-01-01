@@ -110,13 +110,13 @@ public class CategoryMenuActivity extends AppCompatActivity {
                     for (CategoryItem category : categoryItem) {
                         if ("1".equals(category.getLevel())) {
                             // Level 1 카테고리는 헤더로 추가
-                            ExpandableListAdapter.Item header = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, category.getName());
+                            ExpandableListAdapter.Item header = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, category.getName(), category.getCode());
                             header.invisibleChildren = new ArrayList<>();
                             data.add(header);
                             headerMap.put(category.getCode(), header);
                         } else if ("2".equals(category.getLevel())) {
                             // Level 2 카테고리는 상위 카테고리의 invisibleChildren으로 추가
-                            ExpandableListAdapter.Item child = new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, category.getName());
+                            ExpandableListAdapter.Item child = new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, category.getName(), category.getCode());
                             ExpandableListAdapter.Item parentHeader = headerMap.get(category.getPcode());
                             if (parentHeader != null && parentHeader.invisibleChildren != null) {
                                 parentHeader.invisibleChildren.add(child);

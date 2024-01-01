@@ -26,6 +26,7 @@ import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
 import com.sarin.prod.goodshost.util.LoadingDialogManager;
+import com.sarin.prod.goodshost.util.StringUtil;
 
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private static String TAG = MainApplication.TAG;
 
     private LoadingDialogManager loadingDialogManager;
+    static StringUtil sUtil = StringUtil.getInstance();
 
     private ImageView image, exit;
     private TextView name, price_value;
@@ -85,7 +87,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
                     ProductItem productItem = response.body();
                     name.setText(productItem.getName());
-                    price_value.setText(productItem.getPrice_value());
+                    price_value.setText(sUtil.replaceStringPriceToInt(productItem.getPrice_value()));
                     String url = "https:" + productItem.getImage();
                     Glide.with(getApplicationContext()).load(url).into(image);
                 }

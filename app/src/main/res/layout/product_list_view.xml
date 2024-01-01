@@ -3,72 +3,69 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/share_round_list"
-    android:layout_marginBottom="10dp"
+    android:layout_marginBottom="15dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
     >
 
+    <ImageView
+        android:id="@+id/imagew"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:scaleType="centerInside"
+        />
+
     <LinearLayout
         android:orientation="vertical"
-        android:layout_weight="4"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="2dp">
-
-        <ImageView
-            android:layout_gravity="center"
-            android:id="@+id/imagew"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            />
-
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_weight="6"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="2dp"
+        android:layout_weight="8"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="2dp">
 
         <TextView
             android:id="@+id/persent"
             android:layout_width="match_parent"
-            android:layout_height="15dp"
-            android:layout_weight="5"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:textColor="@color/blue_500"
             android:text=""
-            style="@style/TextBlack.smallStyle"
+            style="@style/TextBlack.mediumStyle"
+            android:layout_marginBottom="5dp"
+            android:textStyle="bold"
             android:visibility="gone"
             />
 
         <TextView
             android:id="@+id/name"
             android:layout_width="match_parent"
-            android:layout_height="15dp"
-            android:layout_weight="5"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text=""
+            android:layout_marginBottom="5dp"
             style="@style/TextBlack.mediumStyle"
             android:textStyle="bold"
+            android:maxLines="3"
+            android:ellipsize="end"
              />
 
         <TextView
             android:id="@+id/price_value"
             android:layout_width="match_parent"
-            android:layout_height="15dp"
-            android:layout_weight="5"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text=""
+            android:layout_marginBottom="5dp"
             style="@style/TextBlack.mediumStyle"
+            android:textStyle="bold"
              />
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_weight="6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
+            android:layout_marginBottom="5dp"
             >
 
             <RatingBar
@@ -94,6 +91,22 @@
 
         </LinearLayout>
 
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_favorite"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        >
+        <ImageView
+            android:id="@+id/favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_favorite_border_24"
+            />
 
     </LinearLayout>
 

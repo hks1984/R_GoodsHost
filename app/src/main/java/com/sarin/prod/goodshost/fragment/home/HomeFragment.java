@@ -26,6 +26,7 @@ import com.sarin.prod.goodshost.databinding.FragmentHomeBinding;
 import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
+import com.sarin.prod.goodshost.util.LoadingDialogManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ public class HomeFragment extends Fragment {
     private static RecyclerView recyclerView;
     public static ProductAdapter productAdapter;
     private static ImageView menu;
+    private LoadingDialogManager loadingDialogManager;
     private List<ProductItem> piLIst = new ArrayList<>();
 
 
@@ -56,6 +58,8 @@ public class HomeFragment extends Fragment {
 
 //        final TextView textView = binding.textHome;
 //        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+
+        loadingDialogManager = new LoadingDialogManager();
 
         recyclerView = binding.recyclerView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -74,7 +78,8 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        getCategoryProducts("510222");
+//        getCategoryProducts("510222");
+        getBestSalesProducts(5, 0);
 
         initScrollListener();
 
@@ -85,14 +90,15 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private int CategoryProducts_page = 0;
-    public void getCategoryProducts(String category_id){
+    private int BestSalesProducts_page = 0;
+    public void getBestSalesProducts(int cnt, int page){
 //        Log.d(TAG, "page: " + CategoryProducts_page);
+        loadingDialogManager.showLoading(requireActivity().getSupportFragmentManager());
 
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<List<ProductItem>> call = service.getCategoryProductList("getCategoryProducts", category_id, CategoryProducts_page++);
+        Call<List<ProductItem>> call = service.getBestSalesProducts("getBestSalesProducts", cnt, page);
 
         call.enqueue(new Callback<List<ProductItem>>() {
             @Override
@@ -107,12 +113,14 @@ public class HomeFragment extends Fragment {
                     Log.e(TAG, "실패 코드 확인 : " + response.code());
                     Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
+                loadingDialogManager.hideLoading();
             }
 
             @Override
             public void onFailure(Call<List<ProductItem>> call, Throwable t) {
                 // 통신 실패
                 Log.e(TAG, "onFailure: " + t.getMessage());
+                loadingDialogManager.hideLoading();
             }
         });
 
@@ -154,7 +162,7 @@ public class HomeFragment extends Fragment {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                getCategoryProducts("510222");
+//                getCategoryProducts("510222");
                 isLoading = false;
             }
         }, 1000);

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/white_500"
+    android:background="@color/black_500"
     >
 
 
@@ -14,9 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         >
 
 
@@ -25,11 +24,8 @@
             android:layout_width="0dp"
             android:layout_height="25dp"
             android:layout_weight="1"
-            android:layout_gravity="left|center"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:src="@drawable/baseline_density_medium_24">
+            android:layout_gravity="center"
+            android:src="@drawable/baseline_density_medium_24_white">
 
         </ImageView>
 
@@ -39,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="8"
             android:layout_gravity="center"
-            android:src="@drawable/gmall">
+            android:src="@drawable/logo_white">
 
         </ImageView>
 
@@ -48,24 +44,58 @@
             android:layout_width="0dp"
             android:layout_height="25dp"
             android:layout_weight="1"
-            android:layout_gravity="right|center"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_gravity="center"
             >
 
         </ImageView>
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent">
 
+        <LinearLayout
+            android:id="@+id/LinearLayout_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/share_round_list"
+            >
+
+            <TextView
+                android:id="@+id/gmall_best1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                style="@style/TextBlack.mediumStyle"
+                android:textStyle="bold"
+                android:text="@string/logo_title"
+                android:paddingLeft="20dp"
+                />
+
+            <TextView
+                android:id="@+id/gmall_best2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextBlack.largeStyle"
+                android:textStyle="bold"
+                android:textSize="25dp"
+                android:text="@string/best_sale"
+                android:paddingLeft="20dp"
+                android:paddingBottom="10dp"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
