@@ -1,11 +1,20 @@
 package com.sarin.prod.goodshost.item;
 
 public class CategoryItem {
+    public String api_code;
     public String code;
     public String name;
     public String pcode;
     public String SEQ_CHAR;
     public String level;
+
+    public String getApi_code() {
+        return api_code;
+    }
+
+    public void setApi_code(String api_code) {
+        this.api_code = api_code;
+    }
 
     public String getCode() {
         return code;
@@ -50,6 +59,7 @@ public class CategoryItem {
     @Override
     public String toString() {
         return "CategoryItem{" +
+                "api_code='" + api_code + '\'' +
                 "code='" + code + '\'' +
                 ", name='" + name + '\'' +
                 ", pcode='" + pcode + '\'' +

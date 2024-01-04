@@ -25,7 +25,7 @@
             android:layout_height="25dp"
             android:layout_weight="1"
             android:layout_gravity="center"
-            android:src="@drawable/baseline_density_medium_24_white">
+            >
 
         </ImageView>
 
@@ -48,6 +48,20 @@
             >
 
         </ImageView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:orientation="horizontal"
+        android:background="@color/black_200"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/categoryRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
     </LinearLayout>
 

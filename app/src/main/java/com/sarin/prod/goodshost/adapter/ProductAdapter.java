@@ -114,7 +114,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         public void setItem(ProductItem pitem){
             name.setText(pitem.getName());
             price_value.setText(sUtil.replaceStringPriceToInt(pitem.getPrice_value()) + context.getResources().getString(R.string.won));
-            String url = "https:" + pitem.getImage();
+//            String url = "https:" + pitem.getImage();
+            String url = pitem.getImage();
+            if(!url.contains("https:")){
+                url = "https:" + url;
+            }
             Glide.with(context).load(url).into(image);
             rating.setRating(Float.parseFloat(pitem.getRating()));
             String ratingTotalCount = sUtil.replaceStringPriceToInt(pitem.getRating_total_count());

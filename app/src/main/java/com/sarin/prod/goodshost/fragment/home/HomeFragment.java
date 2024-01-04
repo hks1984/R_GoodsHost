@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,12 +16,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sarin.prod.goodshost.MainApplication;
-import com.sarin.prod.goodshost.R;
-import com.sarin.prod.goodshost.activity.CategoryMenuActivity;
-import com.sarin.prod.goodshost.activity.ProductDetailActivity;
-import com.sarin.prod.goodshost.adapter.ExpandableListAdapter;
+import com.sarin.prod.goodshost.adapter.CategoryAdapter;
 import com.sarin.prod.goodshost.adapter.ProductAdapter;
 import com.sarin.prod.goodshost.databinding.FragmentHomeBinding;
+import com.sarin.prod.goodshost.item.CategoryItem;
 import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
@@ -42,10 +39,14 @@ public class HomeFragment extends Fragment {
     public static String TAG = MainApplication.TAG;
 
     private static RecyclerView recyclerView;
+    private static RecyclerView categoryRecyclerView;
+
     public static ProductAdapter productAdapter;
+    public static CategoryAdapter categoryAdapter;
     private static ImageView menu;
     private LoadingDialogManager loadingDialogManager;
     private List<ProductItem> piLIst = new ArrayList<>();
+    private List<CategoryItem> ctLIst = new ArrayList<>();
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -64,27 +65,19 @@ public class HomeFragment extends Fragment {
         recyclerView = binding.recyclerView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        
         productAdapter = new ProductAdapter(piLIst);
         recyclerView.setAdapter(productAdapter);
-        
-        menu = binding.menu;
-        menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), CategoryMenuActivity.class);
-//                intent.putExtra("vendor_item_id", items.get(position).getVendor_item_id());
-                getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
-            }
-        });
 
-//        getCategoryProducts("510222");
+        categoryRecyclerView = binding.categoryRecyclerView;
+        LinearLayoutManager catelayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        categoryRecyclerView.setLayoutManager(catelayoutManager);
+        categoryAdapter = new CategoryAdapter(ctLIst);
+        categoryRecyclerView.setAdapter(categoryAdapter);
+
+        getCategoryList();
         getBestSalesProducts(5, 0);
 
         initScrollListener();
-
-
-
 
         return root;
     }
@@ -121,6 +114,38 @@ public class HomeFragment extends Fragment {
                 // 통신 실패
                 Log.e(TAG, "onFailure: " + t.getMessage());
                 loadingDialogManager.hideLoading();
+            }
+        });
+
+    }
+
+    public void getCategoryList(){
+//        Log.d(TAG, "page: " + CategoryProducts_page);
+
+        retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
+
+        Call<List<CategoryItem>> call = service.getCategoryList("getCategoryList");
+
+        call.enqueue(new Callback<List<CategoryItem>>() {
+            @Override
+            public void onResponse(Call<List<CategoryItem>> call, Response<List<CategoryItem>> response) {
+                if(response.isSuccessful()){
+                    List<CategoryItem> categoryItem = response.body();
+                    ctLIst.addAll(categoryItem);
+                    categoryAdapter.notifyDataSetChanged();
+                }
+                else{
+                    // 실패
+                    Log.e(TAG, "실패 코드 확인 : " + response.code());
+                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CategoryItem>> call, Throwable t) {
+                // 통신 실패
+                Log.e(TAG, "onFailure: " + t.getMessage());
             }
         });
 
