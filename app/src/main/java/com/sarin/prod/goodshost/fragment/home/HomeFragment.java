@@ -12,12 +12,14 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.adapter.CategoryAdapter;
 import com.sarin.prod.goodshost.adapter.ProductAdapter;
+import com.sarin.prod.goodshost.adapter.ProductAdapterHori;
 import com.sarin.prod.goodshost.databinding.FragmentHomeBinding;
 import com.sarin.prod.goodshost.item.CategoryItem;
 import com.sarin.prod.goodshost.item.ProductItem;
@@ -42,6 +44,7 @@ public class HomeFragment extends Fragment {
     private static RecyclerView categoryRecyclerView;
 
     public static ProductAdapter productAdapter;
+    public static ProductAdapterHori productHoriAdapter;
     public static CategoryAdapter categoryAdapter;
     private static ImageView menu;
     private LoadingDialogManager loadingDialogManager;
@@ -63,10 +66,11 @@ public class HomeFragment extends Fragment {
         loadingDialogManager = new LoadingDialogManager();
 
         recyclerView = binding.recyclerView;
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+//        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2)); // 가로 2개 나열 할때.
         recyclerView.setLayoutManager(layoutManager);
-        productAdapter = new ProductAdapter(piLIst);
-        recyclerView.setAdapter(productAdapter);
+        productHoriAdapter = new ProductAdapterHori(piLIst);
+        recyclerView.setAdapter(productHoriAdapter);
 
         categoryRecyclerView = binding.categoryRecyclerView;
         LinearLayoutManager catelayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -99,7 +103,7 @@ public class HomeFragment extends Fragment {
                 if(response.isSuccessful()){
                     List<ProductItem> productItem = response.body();
                     piLIst.addAll(productItem);
-                    productAdapter.notifyDataSetChanged();
+                    productHoriAdapter.notifyDataSetChanged();
                 }
                 else{
                     // 실패

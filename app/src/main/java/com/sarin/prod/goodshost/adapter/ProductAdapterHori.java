@@ -12,20 +12,19 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
-import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.activity.ProductDetailActivity;
+import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.util.StringUtil;
 
 import java.util.List;
 
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder>{
+public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.ViewHolder>{
 
     private List<ProductItem> items;
     public static String TAG = MainApplication.TAG;
@@ -33,14 +32,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     static StringUtil sUtil = StringUtil.getInstance();
 
-    public ProductAdapter(List<ProductItem> items){
+    public ProductAdapterHori(List<ProductItem> items){
         this.items = items;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_list_view , parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_list_view_horizontal , parent, false);
         context = parent.getContext();
         return new ViewHolder(itemView);
     }
