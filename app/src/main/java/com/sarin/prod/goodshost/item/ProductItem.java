@@ -22,6 +22,7 @@ public class ProductItem {
     public String coupang_link;
     public String updateSeparator;
     public String persent;
+    public String rank;
 
 
     public String getProduct_id() {
@@ -176,6 +177,14 @@ public class ProductItem {
         this.persent = persent;
     }
 
+    public String getRank() {
+        return rank;
+    }
+
+    public void setRank(String rank) {
+        this.rank = rank;
+    }
+
     @Override
     public String toString() {
         return "ProductItem{" +
@@ -198,6 +207,7 @@ public class ProductItem {
                 ", coupang_link='" + coupang_link + '\'' +
                 ", updateSeparator='" + updateSeparator + '\'' +
                 ", persent='" + persent + '\'' +
+                ", rank='" + rank + '\'' +
                 '}';
     }
 }

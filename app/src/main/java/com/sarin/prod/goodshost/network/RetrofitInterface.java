@@ -45,6 +45,14 @@ public interface RetrofitInterface {
             @Query("page") int page
     );
 
+    @GET("{path}")
+    Call<List<ProductItem>> getTopProducts(
+            @Path ("path") String path,
+            @Query("cnt") int cnt,
+            @Query("page") int page,
+            @Query("code") String code
+    );
+
 
 
 

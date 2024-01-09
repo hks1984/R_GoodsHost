@@ -41,6 +41,7 @@ public class HomeFragment extends Fragment {
     public static String TAG = MainApplication.TAG;
 
     private static RecyclerView recyclerView;
+    private static RecyclerView recyclerViewTop;
     private static RecyclerView categoryRecyclerView;
 
     public static ProductAdapter productAdapter;
@@ -49,6 +50,9 @@ public class HomeFragment extends Fragment {
     private static ImageView menu;
     private LoadingDialogManager loadingDialogManager;
     private List<ProductItem> piLIst = new ArrayList<>();
+    private List<ProductItem> TopProductList = new ArrayList<>();
+    private String currentCategoryCode = "1001";
+
     private List<CategoryItem> ctLIst = new ArrayList<>();
 
 
@@ -65,6 +69,10 @@ public class HomeFragment extends Fragment {
 
         loadingDialogManager = new LoadingDialogManager();
 
+
+        /**
+         * 최저가 순위
+         */
         recyclerView = binding.recyclerView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 //        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2)); // 가로 2개 나열 할때.
@@ -72,25 +80,40 @@ public class HomeFragment extends Fragment {
         productHoriAdapter = new ProductAdapterHori(piLIst);
         recyclerView.setAdapter(productHoriAdapter);
 
+        /**
+         * 베스트 상품
+         */
+        recyclerViewTop = binding.recyclerViewTop;
+        LinearLayoutManager toplayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+//        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2)); // 가로 2개 나열 할때.
+        recyclerViewTop.setLayoutManager(toplayoutManager);
+        productAdapter = new ProductAdapter(TopProductList);
+        recyclerViewTop.setAdapter(productAdapter);
+
+        /**
+         * 카테고리
+         */
         categoryRecyclerView = binding.categoryRecyclerView;
         LinearLayoutManager catelayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         categoryRecyclerView.setLayoutManager(catelayoutManager);
         categoryAdapter = new CategoryAdapter(ctLIst);
         categoryRecyclerView.setAdapter(categoryAdapter);
 
+//        loadingDialogManager.showLoading(requireActivity().getSupportFragmentManager());
         getCategoryList();
         getBestSalesProducts(5, 0);
-
+        getTopProducts(10, 0, currentCategoryCode);
+//        loadingDialogManager.hideLoading();
         initScrollListener();
 
         return root;
     }
 
 
-    private int BestSalesProducts_page = 0;
+
     public void getBestSalesProducts(int cnt, int page){
 //        Log.d(TAG, "page: " + CategoryProducts_page);
-        loadingDialogManager.showLoading(requireActivity().getSupportFragmentManager());
+
 
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
@@ -110,14 +133,49 @@ public class HomeFragment extends Fragment {
                     Log.e(TAG, "실패 코드 확인 : " + response.code());
                     Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
-                loadingDialogManager.hideLoading();
+
             }
 
             @Override
             public void onFailure(Call<List<ProductItem>> call, Throwable t) {
                 // 통신 실패
                 Log.e(TAG, "onFailure: " + t.getMessage());
-                loadingDialogManager.hideLoading();
+//                loadingDialogManager.hideLoading();
+            }
+        });
+
+    }
+
+    public void getTopProducts(int cnt, int page, String code){
+//        Log.d(TAG, "page: " + CategoryProducts_page);
+//        loadingDialogManager.showLoading(requireActivity().getSupportFragmentManager());
+
+        retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
+
+        Call<List<ProductItem>> call = service.getTopProducts("getTopProducts", cnt, page, code);
+
+        call.enqueue(new Callback<List<ProductItem>>() {
+            @Override
+            public void onResponse(Call<List<ProductItem>> call, Response<List<ProductItem>> response) {
+                if(response.isSuccessful()){
+                    List<ProductItem> productItem = response.body();
+                    TopProductList.addAll(productItem);
+                    productAdapter.notifyDataSetChanged();
+                }
+                else{
+                    // 실패
+                    Log.e(TAG, "실패 코드 확인 : " + response.code());
+                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
+                }
+//                loadingDialogManager.hideLoading();
+            }
+
+            @Override
+            public void onFailure(Call<List<ProductItem>> call, Throwable t) {
+                // 통신 실패
+                Log.e(TAG, "onFailure: " + t.getMessage());
+//                loadingDialogManager.hideLoading();
             }
         });
 
