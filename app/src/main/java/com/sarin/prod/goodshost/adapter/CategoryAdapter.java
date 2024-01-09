@@ -1,7 +1,10 @@
 package com.sarin.prod.goodshost.adapter;
 
+import static com.sarin.prod.goodshost.fragment.home.HomeFragment.productAdapter;
+
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +15,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -19,6 +23,7 @@ import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.activity.CategoryProductListActivity;
 import com.sarin.prod.goodshost.activity.ProductDetailActivity;
+import com.sarin.prod.goodshost.fragment.home.HomeFragment;
 import com.sarin.prod.goodshost.item.CategoryItem;
 import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.util.StringUtil;
@@ -33,10 +38,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     private static Context context;
 
     static StringUtil sUtil = StringUtil.getInstance();
+    static HomeFragment hf = HomeFragment.getInstance();
 
     public CategoryAdapter(List<CategoryItem> items){
         this.items = items;
     }
+
+    public int selectedItem = -1;
 
     @NonNull
     @Override
@@ -51,15 +59,41 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         CategoryItem item = items.get(position);
         holder.setItem(item);
 
+
+        if(selectedItem == position) {
+            Log.d(TAG, "black");
+            holder.categoryName.setBackgroundResource(R.drawable.round_button_on);
+            holder.categoryName.setTextColor(ContextCompat.getColor(context, R.color.white_500));
+
+        } else {
+            Log.d(TAG, "white");
+            holder.categoryName.setBackgroundResource(R.drawable.round_button_off);
+            holder.categoryName.setTextColor(ContextCompat.getColor(context, R.color.black_500));
+        }
+
         holder.categoryItemClickListener = new CategoryItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
+                Log.d(TAG, "position : " + position);
+                selectedItem = position;
+                notifyDataSetChanged();
 
+                hf.productAdapter.clear();
+                hf.getTopProducts(10, 0, items.get(position).api_code);
 //                Log.d(TAG, "category: " + items.get(position).api_code + "   " + items.get(position).name);
-                Intent intent = new Intent(v.getContext(), CategoryProductListActivity.class);
-                intent.putExtra("api_code", items.get(position).api_code);
-                intent.putExtra("name", items.get(position).name);
-                v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
+//
+//                hf.productAdapter.notifyDataSetChanged();
+
+
+
+//                Intent intent = new Intent(v.getContext(), CategoryProductListActivity.class);
+//                intent.putExtra("api_code", items.get(position).api_code);
+//                intent.putExtra("name", items.get(position).name);
+//                v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
+
+
+
+
 
 
             }
@@ -106,6 +140,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         @Override
         public void onClick(View v){
             this.categoryItemClickListener.onItemClickListener(v,getLayoutPosition());
+
+
+
+
         }
 
     }

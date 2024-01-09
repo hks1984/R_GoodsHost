@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sarin.prod.goodshost.MainApplication;
+import com.sarin.prod.goodshost.activity.CategoryProductListActivity;
 import com.sarin.prod.goodshost.adapter.CategoryAdapter;
 import com.sarin.prod.goodshost.adapter.ProductAdapter;
 import com.sarin.prod.goodshost.adapter.ProductAdapterHori;
@@ -26,6 +28,7 @@ import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
 import com.sarin.prod.goodshost.util.LoadingDialogManager;
+import com.sarin.prod.goodshost.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,13 +51,23 @@ public class HomeFragment extends Fragment {
     public static ProductAdapterHori productHoriAdapter;
     public static CategoryAdapter categoryAdapter;
     private static ImageView menu;
+    private static TextView gmall_best_totalView;
     private LoadingDialogManager loadingDialogManager;
     private List<ProductItem> piLIst = new ArrayList<>();
-    private List<ProductItem> TopProductList = new ArrayList<>();
+    public List<ProductItem> TopProductList = new ArrayList<>();
     private String currentCategoryCode = "1001";
 
     private List<CategoryItem> ctLIst = new ArrayList<>();
 
+    private static HomeFragment mInstnace = null;
+
+    public static HomeFragment getInstance() {
+        if (mInstnace == null) {
+            mInstnace = new HomeFragment();
+        }
+
+        return mInstnace;
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -99,12 +112,26 @@ public class HomeFragment extends Fragment {
         categoryAdapter = new CategoryAdapter(ctLIst);
         categoryRecyclerView.setAdapter(categoryAdapter);
 
+        gmall_best_totalView = binding.gmallBestTotalView;
+        gmall_best_totalView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), CategoryProductListActivity.class);
+                intent.putExtra("flag", "best");
+                v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
+            }
+        });
+
+
 //        loadingDialogManager.showLoading(requireActivity().getSupportFragmentManager());
         getCategoryList();
-        getBestSalesProducts(5, 0);
+        getBestSalesProducts(10, 0);
         getTopProducts(10, 0, currentCategoryCode);
 //        loadingDialogManager.hideLoading();
         initScrollListener();
+
+
+
 
         return root;
     }
@@ -147,7 +174,7 @@ public class HomeFragment extends Fragment {
     }
 
     public void getTopProducts(int cnt, int page, String code){
-//        Log.d(TAG, "page: " + CategoryProducts_page);
+        Log.d(TAG, "cnt: " + cnt + "  page: " + page + "  code: " + code);
 //        loadingDialogManager.showLoading(requireActivity().getSupportFragmentManager());
 
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
@@ -160,8 +187,9 @@ public class HomeFragment extends Fragment {
             public void onResponse(Call<List<ProductItem>> call, Response<List<ProductItem>> response) {
                 if(response.isSuccessful()){
                     List<ProductItem> productItem = response.body();
-                    TopProductList.addAll(productItem);
-                    productAdapter.notifyDataSetChanged();
+
+                    productAdapter.addItems(productItem);
+//                    productAdapter.notifyDataSetChanged();
                 }
                 else{
                     // 실패

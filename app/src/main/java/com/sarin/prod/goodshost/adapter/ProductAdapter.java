@@ -66,6 +66,16 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     public void addItems(List<ProductItem> items){
         this.items.addAll( items);
+        notifyDataSetChanged();
+    }
+
+    public void setItems(List<ProductItem> list){
+        items = list;
+        notifyDataSetChanged();
+    }
+
+    public void clear(){
+        items.clear();
 //        notifyDataSetChanged();
     }
 
@@ -150,10 +160,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     }
 
-    public void setItems(List<ProductItem> list){
-        items = list;
-//        notifyDataSetChanged();
-    }
+
 
 
     @Override

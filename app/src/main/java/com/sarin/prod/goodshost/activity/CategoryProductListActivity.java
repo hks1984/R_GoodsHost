@@ -45,8 +45,7 @@ public class CategoryProductListActivity extends AppCompatActivity {
     private LinearLayout LinearLayout1;
     private boolean isScrollListenerAdded = false;
     private RecyclerView.OnScrollListener scrollListener;
-    private String api_code;
-    private String name;
+    private String flag;
 
 
 
@@ -65,8 +64,7 @@ public class CategoryProductListActivity extends AppCompatActivity {
         recyclerView.setAdapter(productAdapter);
 
         Intent intent = getIntent();
-        api_code = intent.getStringExtra("api_code");
-        name = intent.getStringExtra("name");
+        flag = intent.getStringExtra("flag");
 
         exit = binding.exit;
         exit.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +75,7 @@ public class CategoryProductListActivity extends AppCompatActivity {
         });
 
         logo = binding.logo;
-        logo.setText(name);
+        logo.setText(flag);
 
 
         loadingDialogManager = new LoadingDialogManager();
