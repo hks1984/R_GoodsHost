@@ -2,7 +2,6 @@ package com.sarin.prod.goodshost.fragment.search;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -28,8 +27,7 @@ import com.sarin.prod.goodshost.databinding.FragmentSearchBinding;
 import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
-
-import com.sarin.prod.goodshost.util.LoadingDialogManager;
+import com.sarin.prod.goodshost.util.LoadingProgressManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +49,7 @@ public class SearchFragment extends Fragment {
     private List<ProductItem> piLIst = new ArrayList<>();
     private EditText editText;
     private String searchName = "";
-    private LoadingDialogManager loadingDialogManager;
+    private LoadingProgressManager loadingProgressManager = LoadingProgressManager.getInstance();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -60,9 +58,6 @@ public class SearchFragment extends Fragment {
 
         binding = FragmentSearchBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
-        loadingDialogManager = new LoadingDialogManager();
-
 
         recyclerView = binding.recyclerView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -163,7 +158,9 @@ public class SearchFragment extends Fragment {
     private int SearchProducts_page = 0;
     public void getSearchProducts(String searchName){
 //        Log.d(TAG, "page: " + CategoryProducts_page);
-        loadingDialogManager.showLoading(requireActivity().getSupportFragmentManager());
+
+        loadingProgressManager.showLoading(getContext());
+
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
@@ -182,14 +179,14 @@ public class SearchFragment extends Fragment {
                     Log.e(TAG, "실패 코드 확인 : " + response.code());
                     Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
-                loadingDialogManager.hideLoading();
+                loadingProgressManager.hideLoading();
             }
 
             @Override
             public void onFailure(Call<List<ProductItem>> call, Throwable t) {
                 // 통신 실패
                 Log.e(TAG, "onFailure: " + t.getMessage());
-                loadingDialogManager.hideLoading();
+                loadingProgressManager.hideLoading();
             }
         });
 
@@ -247,8 +244,8 @@ public class SearchFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-        if (loadingDialogManager != null) {
-            loadingDialogManager.hideLoading();
+        if (loadingProgressManager != null) {
+            loadingProgressManager.hideLoading();
         }
 
         if (isScrollListenerAdded && recyclerView != null) {

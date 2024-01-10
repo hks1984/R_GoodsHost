@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,7 +15,8 @@ public class MainApplication extends Application implements Application.Activity
 
     public static final String TAG = "SARIN_LOG";
     private Activity currentActivity;
-    Context context;
+    public static Context context;
+    public static Activity activity;
 
     int count = 0;
 
@@ -40,11 +42,15 @@ public class MainApplication extends Application implements Application.Activity
 
     /** ActivityLifecycleCallback methods. */
     @Override
-    public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {}
+    public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+
+        Log.d(TAG, "onActivityCreated: " + activity.getLocalClassName());
+    }
 
     @Override
     public void onActivityStarted(@NonNull Activity activity) {
-
+        Log.d(TAG, "onActivityStarted: " + activity.getLocalClassName());
+        this.activity = activity;
         if (++count == 1) {
 //            Log.d(TAG, "포그라운드." + activity.getLocalClassName());
 
@@ -60,8 +66,11 @@ public class MainApplication extends Application implements Application.Activity
 
     @Override
     public void onActivityStopped(@NonNull Activity activity) {
+        Log.d(TAG, "onActivityStopped: " + activity.getLocalClassName());
+
         if (--count == 0) {
 //            Log.d(TAG, "백그라운드." + activity.getLocalClassName());
+
         }
     }
 

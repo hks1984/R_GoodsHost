@@ -15,12 +15,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sarin.prod.goodshost.MainApplication;
+import com.sarin.prod.goodshost.adapter.CategoryProductListAdapter;
 import com.sarin.prod.goodshost.adapter.ProductAdapter;
 import com.sarin.prod.goodshost.databinding.ActivityCategoryProductListBinding;
+import com.sarin.prod.goodshost.fragment.home.HomeFragment;
+import com.sarin.prod.goodshost.item.CategoryItem;
 import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
-import com.sarin.prod.goodshost.util.LoadingDialogManager;
+import com.sarin.prod.goodshost.util.LoadingProgressManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +39,7 @@ public class CategoryProductListActivity extends AppCompatActivity {
 
     private static RecyclerView recyclerView;
     public static ProductAdapter productAdapter;
-    private LoadingDialogManager loadingDialogManager;
+    private LoadingProgressManager loadingProgressManager = LoadingProgressManager.getInstance();
     private List<ProductItem> piLIst = new ArrayList<>();
 
     private ImageView exit;
@@ -46,16 +49,31 @@ public class CategoryProductListActivity extends AppCompatActivity {
     private boolean isScrollListenerAdded = false;
     private RecyclerView.OnScrollListener scrollListener;
     private String flag;
+    private int viewCount = 50;
+    public String categoryCode;
 
 
+    static HomeFragment hf = HomeFragment.getInstance();
+
+    public static CategoryProductListAdapter categoryProductListAdapter;
+    private static RecyclerView categoryRecyclerView;
+    private List<CategoryItem> ctLIst = new ArrayList<>();
+
+    private static CategoryProductListActivity mInstnace = null;
+
+    public static CategoryProductListActivity getInstance() {
+        if (mInstnace == null) {
+            mInstnace = new CategoryProductListActivity();
+        }
+
+        return mInstnace;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityCategoryProductListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        loadingDialogManager = new LoadingDialogManager();
 
         recyclerView = binding.recyclerView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
@@ -76,9 +94,6 @@ public class CategoryProductListActivity extends AppCompatActivity {
 
         logo = binding.logo;
         logo.setText(flag);
-
-
-        loadingDialogManager = new LoadingDialogManager();
 
         LinearLayout1 = binding.LinearLayout1;
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -106,28 +121,46 @@ public class CategoryProductListActivity extends AppCompatActivity {
         });
 
 
-        getCategoryProducts(api_code);
+
+        categoryRecyclerView = binding.categoryRecyclerView;
+        LinearLayoutManager catelayoutManager = new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false);
+        categoryRecyclerView.setLayoutManager(catelayoutManager);
+        CategoryItem ci = new CategoryItem();
+        categoryCode = "0";
+        ci.setApi_code(categoryCode);
+        ci.setName("전체");
+        ctLIst.add(ci);
+        categoryProductListAdapter = new CategoryProductListAdapter(ctLIst);
+        categoryRecyclerView.setAdapter(categoryProductListAdapter);
+
+
+        if(flag.equals("top")){
+//            getTopProducts(10, 0, categoryCode);
+        } else if(flag.equals("best")) {
+            getBestSalesProducts(viewCount, categoryCode);
+        }
+
+        getCategoryList();
         initScrollListener();
 
     }
 
-    private int CategoryProducts_page = 0;
-    public void getCategoryProducts(String category_id){
+    public void getCategoryList(){
 //        Log.d(TAG, "page: " + CategoryProducts_page);
 
-        loadingDialogManager.showLoading(getSupportFragmentManager());
+        loadingProgressManager.showLoading(this);
+
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<List<ProductItem>> call = service.getCategoryProductList("getCategoryProducts", category_id, CategoryProducts_page++);
+        Call<List<CategoryItem>> call = service.getCategoryList("getCategoryList");
 
-        call.enqueue(new Callback<List<ProductItem>>() {
+        call.enqueue(new Callback<List<CategoryItem>>() {
             @Override
-            public void onResponse(Call<List<ProductItem>> call, Response<List<ProductItem>> response) {
+            public void onResponse(Call<List<CategoryItem>> call, Response<List<CategoryItem>> response) {
                 if(response.isSuccessful()){
-                    List<ProductItem> productItem = response.body();
-                    piLIst.addAll(productItem);
-                    productAdapter.notifyDataSetChanged();
+                    List<CategoryItem> categoryItem = response.body();
+                    categoryProductListAdapter.addItems(categoryItem);
 
                 }
                 else{
@@ -135,18 +168,55 @@ public class CategoryProductListActivity extends AppCompatActivity {
                     Log.e(TAG, "실패 코드 확인 : " + response.code());
                     Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
-                loadingDialogManager.hideLoading();
+                loadingProgressManager.hideLoading();
+            }
+
+            @Override
+            public void onFailure(Call<List<CategoryItem>> call, Throwable t) {
+                // 통신 실패
+                Log.e(TAG, "onFailure: " + t.getMessage());
+                loadingProgressManager.hideLoading();
+            }
+        });
+
+    }
+
+    public int page = 0;
+    public void getBestSalesProducts(int cnt, String code){
+
+        loadingProgressManager.showLoading(MainApplication.activity);
+        retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
+
+        Call<List<ProductItem>> call = service.getBestSalesProducts("getBestSalesProducts", cnt, page++, code);
+
+        call.enqueue(new Callback<List<ProductItem>>() {
+            @Override
+            public void onResponse(Call<List<ProductItem>> call, Response<List<ProductItem>> response) {
+                if(response.isSuccessful()){
+                    List<ProductItem> productItem = response.body();
+//                    piLIst.addAll(productItem);
+                    productAdapter.addItems(productItem);
+                }
+                else{
+                    // 실패
+                    Log.e(TAG, "실패 코드 확인 : " + response.code());
+                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
+                }
+                loadingProgressManager.hideLoading();
+
             }
 
             @Override
             public void onFailure(Call<List<ProductItem>> call, Throwable t) {
                 // 통신 실패
                 Log.e(TAG, "onFailure: " + t.getMessage());
-                loadingDialogManager.hideLoading();
+                loadingProgressManager.hideLoading();
             }
         });
 
     }
+
 
     boolean isLoading = false;
 
@@ -165,7 +235,7 @@ public class CategoryProductListActivity extends AppCompatActivity {
                     LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
 
                     if (!isLoading) {
-                        if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == piLIst.size() - 10) {
+                        if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == productAdapter.size() - 10) {
                             loadMore();
                             isLoading = true;
                         }
@@ -188,7 +258,7 @@ public class CategoryProductListActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                getCategoryProducts(api_code);
+                getBestSalesProducts(viewCount, categoryCode);
                 isLoading = false;
             }
         }, 1000);
@@ -203,8 +273,8 @@ public class CategoryProductListActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (loadingDialogManager != null) {
-            loadingDialogManager.hideLoading();
+        if (loadingProgressManager != null) {
+            loadingProgressManager.hideLoading();
         }
 
         if (isScrollListenerAdded && recyclerView != null) {

@@ -1,38 +1,28 @@
 package com.sarin.prod.goodshost.adapter;
 
-import static com.sarin.prod.goodshost.fragment.home.HomeFragment.productAdapter;
-
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.activity.CategoryProductListActivity;
-import com.sarin.prod.goodshost.activity.ProductDetailActivity;
 import com.sarin.prod.goodshost.fragment.home.HomeFragment;
 import com.sarin.prod.goodshost.item.CategoryItem;
-import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.util.StringUtil;
 
 import java.util.List;
 
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder>{
+public class CategoryProductListAdapter extends RecyclerView.Adapter<CategoryProductListAdapter.ViewHolder>{
 
     private List<CategoryItem> items;
     public static String TAG = MainApplication.TAG;
@@ -40,9 +30,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     static StringUtil sUtil = StringUtil.getInstance();
     static HomeFragment hf = HomeFragment.getInstance();
-    RetrofitClientInstance rci = RetrofitClientInstance.getInstance();
+    static CategoryProductListActivity cpla = CategoryProductListActivity.getInstance();
 
-    public CategoryAdapter(List<CategoryItem> items){
+    public CategoryProductListAdapter(List<CategoryItem> items){
         this.items = items;
     }
 
@@ -76,28 +66,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.categoryItemClickListener = new CategoryItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
-                Log.d(TAG, "position : " + position);
+                Log.d(TAG, "category: " + items.get(position).api_code + "   " + items.get(position).name);
                 selectedItem = position;
                 notifyDataSetChanged();
 
-                hf.productAdapter.clear();
-                hf.getTopProducts(10, 0, items.get(position).api_code);
-//                Log.d(TAG, "category: " + items.get(position).api_code + "   " + items.get(position).name);
-//
-//                hf.productAdapter.notifyDataSetChanged();
-
-
-
-//                Intent intent = new Intent(v.getContext(), CategoryProductListActivity.class);
-//                intent.putExtra("api_code", items.get(position).api_code);
-//                intent.putExtra("name", items.get(position).name);
-//                v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
-
-
-
-
-
-
+                cpla.productAdapter.clear();
+                cpla.productAdapter.notifyDataSetChanged();
+                cpla.categoryCode = items.get(position).api_code;
+                cpla.page = 0;
+                cpla.getBestSalesProducts(30, items.get(position).api_code);
             }
         };
 
@@ -119,6 +96,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public int size() {
         int i = items.size();
         return i;
+    }
+
+    public void clear(){
+        items.clear();
+//        notifyDataSetChanged();
     }
 
     @Override

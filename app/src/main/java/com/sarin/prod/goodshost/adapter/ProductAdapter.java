@@ -79,6 +79,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 //        notifyDataSetChanged();
     }
 
+    public int size() {
+        int i = items.size();
+        return i;
+    }
+
     @Override
     public int getItemCount() {
         return items.size();
@@ -129,7 +134,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             if(!url.contains("https:")){
                 url = "https:" + url;
             }
-            Glide.with(context).load(url).into(image);
+            Glide.with(itemView.getContext()).load(url).into(image);
             if(pitem.getRating() == null){
                 pitem.setRating("0");
             }

@@ -65,7 +65,21 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
 
     public void addItems(List<ProductItem> items){
         this.items.addAll( items);
+        notifyDataSetChanged();
+    }
+
+    public void setItems(List<ProductItem> list){
+        items = list;
 //        notifyDataSetChanged();
+    }
+
+    public int size() {
+        int i = items.size();
+        return i;
+    }
+
+    public void clear() {
+        items.clear();
     }
 
     @Override
@@ -146,10 +160,7 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
 
     }
 
-    public void setItems(List<ProductItem> list){
-        items = list;
-//        notifyDataSetChanged();
-    }
+
 
 
     @Override

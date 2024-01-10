@@ -26,6 +26,7 @@ import com.sarin.prod.goodshost.activity.ProductDetailActivity;
 import com.sarin.prod.goodshost.fragment.home.HomeFragment;
 import com.sarin.prod.goodshost.item.CategoryItem;
 import com.sarin.prod.goodshost.item.ProductItem;
+import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.util.StringUtil;
 
 import java.util.List;
@@ -39,6 +40,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     static StringUtil sUtil = StringUtil.getInstance();
     static HomeFragment hf = HomeFragment.getInstance();
+    RetrofitClientInstance rci = RetrofitClientInstance.getInstance();
 
     public CategoryAdapter(List<CategoryItem> items){
         this.items = items;
@@ -74,13 +76,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.categoryItemClickListener = new CategoryItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
-                Log.d(TAG, "position : " + position);
+                Log.d(TAG, "category: " + items.get(position).api_code + "   " + items.get(position).name);
                 selectedItem = position;
                 notifyDataSetChanged();
 
                 hf.productAdapter.clear();
                 hf.getTopProducts(10, 0, items.get(position).api_code);
-//                Log.d(TAG, "category: " + items.get(position).api_code + "   " + items.get(position).name);
+
 //
 //                hf.productAdapter.notifyDataSetChanged();
 
@@ -103,15 +105,20 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     public void addItems(List<CategoryItem> items){
         this.items.addAll(items);
-//        notifyDataSetChanged();
+        notifyDataSetChanged();
     }
     public void addItem(CategoryItem items){
         this.items.add(items);
-//        notifyDataSetChanged();
+        notifyDataSetChanged();
     }
-    public void setItems(List<CategoryItem> list){
-        items = list;
-//        notifyDataSetChanged();
+    public void setItems(List<CategoryItem> items){
+        items = items;
+        notifyDataSetChanged();
+    }
+
+    public int size() {
+        int i = items.size();
+        return i;
     }
 
     @Override
