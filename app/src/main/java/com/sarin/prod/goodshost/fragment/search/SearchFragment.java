@@ -49,6 +49,7 @@ public class SearchFragment extends Fragment {
     private List<ProductItem> piLIst = new ArrayList<>();
     private EditText editText;
     private String searchName = "";
+    private int SearchProducts_page = 0;
     private LoadingProgressManager loadingProgressManager = LoadingProgressManager.getInstance();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -155,7 +156,7 @@ public class SearchFragment extends Fragment {
         return root;
     }
 
-    private int SearchProducts_page = 0;
+
     public void getSearchProducts(String searchName){
 //        Log.d(TAG, "page: " + CategoryProducts_page);
 
@@ -208,12 +209,15 @@ public class SearchFragment extends Fragment {
 
                     LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
 
-                    if (!isLoading) {
-                        if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == piLIst.size() - 10) {
-                            loadMore();
-                            isLoading = true;
+                    if(productAdapter.size() > 4){
+                        if (!isLoading) {
+                            if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == productAdapter.size() - 1) {
+                                loadMore();
+                                isLoading = true;
+                            }
                         }
                     }
+
                 }
             };
 

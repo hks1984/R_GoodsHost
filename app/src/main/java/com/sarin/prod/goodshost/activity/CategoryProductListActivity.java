@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sarin.prod.goodshost.MainApplication;
+import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.adapter.CategoryProductListAdapter;
 import com.sarin.prod.goodshost.adapter.ProductAdapter;
 import com.sarin.prod.goodshost.databinding.ActivityCategoryProductListBinding;
@@ -49,11 +50,9 @@ public class CategoryProductListActivity extends AppCompatActivity {
     private boolean isScrollListenerAdded = false;
     private RecyclerView.OnScrollListener scrollListener;
     private String flag;
-    private int viewCount = 50;
-    public String categoryCode;
-
-
-    static HomeFragment hf = HomeFragment.getInstance();
+    public int viewCount = 50;
+    public static int page = 0;
+    public static String categoryCode;
 
     public static CategoryProductListAdapter categoryProductListAdapter;
     private static RecyclerView categoryRecyclerView;
@@ -91,9 +90,6 @@ public class CategoryProductListActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        logo = binding.logo;
-        logo.setText(flag);
 
         LinearLayout1 = binding.LinearLayout1;
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -134,10 +130,17 @@ public class CategoryProductListActivity extends AppCompatActivity {
         categoryRecyclerView.setAdapter(categoryProductListAdapter);
 
 
+        logo = binding.logo;
+
+
         if(flag.equals("top")){
-//            getTopProducts(10, 0, categoryCode);
+            categoryProductListAdapter.setMode("top");
+            getTopProducts(viewCount, categoryCode);
+            logo.setText(getResources().getString(R.string.top_products));
         } else if(flag.equals("best")) {
+            categoryProductListAdapter.setMode("best");
             getBestSalesProducts(viewCount, categoryCode);
+            logo.setText(getResources().getString(R.string.best_sale));
         }
 
         getCategoryList();
@@ -181,7 +184,44 @@ public class CategoryProductListActivity extends AppCompatActivity {
 
     }
 
-    public int page = 0;
+
+
+    public void getTopProducts(int cnt, String code){
+
+        loadingProgressManager.showLoading(MainApplication.activity);
+        retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
+
+        Call<List<ProductItem>> call = service.getTopProducts("getTopProducts", cnt, page++, code);
+
+        call.enqueue(new Callback<List<ProductItem>>() {
+            @Override
+            public void onResponse(Call<List<ProductItem>> call, Response<List<ProductItem>> response) {
+                if(response.isSuccessful()){
+                    List<ProductItem> productItem = response.body();
+                    productAdapter.addItems(productItem);
+
+                }
+                else{
+                    // 실패
+                    Log.e(TAG, "실패 코드 확인 : " + response.code());
+                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
+                }
+
+                loadingProgressManager.hideLoading();
+            }
+
+            @Override
+            public void onFailure(Call<List<ProductItem>> call, Throwable t) {
+                // 통신 실패
+                Log.e(TAG, "onFailure: " + t.getMessage());
+
+                loadingProgressManager.hideLoading();
+            }
+        });
+
+
+    }
     public void getBestSalesProducts(int cnt, String code){
 
         loadingProgressManager.showLoading(MainApplication.activity);
@@ -234,12 +274,15 @@ public class CategoryProductListActivity extends AppCompatActivity {
 
                     LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
 
-                    if (!isLoading) {
-                        if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == productAdapter.size() - 10) {
-                            loadMore();
-                            isLoading = true;
+                    if(productAdapter.size() > 4){
+                        if (!isLoading) {
+                            if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == productAdapter.size() - 1) {
+                                loadMore();
+                                isLoading = true;
+                            }
                         }
                     }
+
                 }
             };
 
@@ -258,7 +301,11 @@ public class CategoryProductListActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                getBestSalesProducts(viewCount, categoryCode);
+                if(flag.equals("top")){
+                    getTopProducts(viewCount, categoryCode);
+                } else if(flag.equals("best")) {
+                    getBestSalesProducts(viewCount, categoryCode);
+                }
                 isLoading = false;
             }
         }, 1000);
@@ -281,6 +328,9 @@ public class CategoryProductListActivity extends AppCompatActivity {
             recyclerView.removeOnScrollListener(scrollListener);
             isScrollListenerAdded = false;
         }
+
+        page = 0;
+        categoryCode = "";
 
     }
 }

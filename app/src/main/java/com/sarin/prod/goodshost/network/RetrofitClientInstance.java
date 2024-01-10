@@ -6,13 +6,8 @@ import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.fragment.home.HomeFragment;
 import com.sarin.prod.goodshost.item.ProductItem;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -21,10 +16,9 @@ public class RetrofitClientInstance {
     public static String TAG = MainApplication.TAG;
     private static Retrofit retrofit;
 
-    List<ProductItem> productItem = new ArrayList<>();
     // BaseUrl등록
-    private static final String BASE_URL = "http://192.168.10.70:9090/test/";
-//    private static final String BASE_URL = "http://192.168.0.2:9090/test/";
+//    private static final String BASE_URL = "http://192.168.10.70:9090/test/";
+    private static final String BASE_URL = "http://192.168.0.2:9090/test/";
 
     private static RetrofitClientInstance mInstnace = null;
 
