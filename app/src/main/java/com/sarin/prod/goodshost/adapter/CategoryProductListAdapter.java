@@ -27,10 +27,10 @@ public class CategoryProductListAdapter extends RecyclerView.Adapter<CategoryPro
     private List<CategoryItem> items;
     public static String TAG = MainApplication.TAG;
     private static Context context;
+    private String isMode = "";
 
-    static StringUtil sUtil = StringUtil.getInstance();
-    static HomeFragment hf = HomeFragment.getInstance();
     static CategoryProductListActivity cpla = CategoryProductListActivity.getInstance();
+
 
     public CategoryProductListAdapter(List<CategoryItem> items){
         this.items = items;
@@ -46,19 +46,21 @@ public class CategoryProductListAdapter extends RecyclerView.Adapter<CategoryPro
         return new ViewHolder(itemView);
     }
 
+    public void setMode(String isMode) {
+        this.isMode = isMode;
+        notifyDataSetChanged();  // 데이터 변경을 알리기
+    }
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CategoryItem item = items.get(position);
         holder.setItem(item);
 
-
         if(selectedItem == position) {
-            Log.d(TAG, "black");
             holder.categoryName.setBackgroundResource(R.drawable.round_button_on);
             holder.categoryName.setTextColor(ContextCompat.getColor(context, R.color.white_500));
 
         } else {
-            Log.d(TAG, "white");
             holder.categoryName.setBackgroundResource(R.drawable.round_button_off);
             holder.categoryName.setTextColor(ContextCompat.getColor(context, R.color.black_500));
         }
@@ -74,7 +76,12 @@ public class CategoryProductListAdapter extends RecyclerView.Adapter<CategoryPro
                 cpla.productAdapter.notifyDataSetChanged();
                 cpla.categoryCode = items.get(position).api_code;
                 cpla.page = 0;
-                cpla.getBestSalesProducts(30, items.get(position).api_code);
+                if("best".equals(isMode)){
+                    cpla.getBestSalesProducts(cpla.viewCount, items.get(position).api_code);
+                }else{
+                    cpla.getTopProducts(cpla.viewCount, items.get(position).api_code);
+                }
+
             }
         };
 
