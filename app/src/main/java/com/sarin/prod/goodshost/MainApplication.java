@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,8 @@ import androidx.lifecycle.LifecycleObserver;
 public class MainApplication extends Application implements Application.ActivityLifecycleCallbacks, LifecycleObserver {
 
     public static final String TAG = "SARIN_LOG";
+
+    public static String ANDROID_ID = "";
     private Activity currentActivity;
     public static Context context;
     public static Activity activity;
@@ -34,9 +37,11 @@ public class MainApplication extends Application implements Application.Activity
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         context = this;
 
+        ANDROID_ID = Settings.Secure.getString(this.getContentResolver(),Settings.Secure.ANDROID_ID);
+        Log.d(TAG, "ANDROID_ID: " + MainApplication.ANDROID_ID);
+
         this.registerActivityLifecycleCallbacks(this);
         //Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
-
 
     }
 
