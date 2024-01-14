@@ -19,6 +19,10 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.sarin.prod.goodshost.MainApplication;
 
 import com.sarin.prod.goodshost.R;
+import com.sarin.prod.goodshost.item.UserItem;
+import com.sarin.prod.goodshost.network.RetrofitApi;
+import com.sarin.prod.goodshost.util.PreferenceManager;
+import com.sarin.prod.goodshost.util.StringUtil;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -26,21 +30,28 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     String CHANNEL_ID = "SARIN_NOTI_ID";
     String CHANNEL_NAME = "SARIN_NOTI_NAME";
 
+    RetrofitApi retrofitApi = RetrofitApi.getInstance();
+    StringUtil stringUtil = StringUtil.getInstance();
+
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
 
+        String userId = PreferenceManager.getString(getApplicationContext(), "userId");
+        if(!stringUtil.nullCheck(userId)){
+            UserItem userItem = new UserItem();
+            userItem.setUser_id(MainApplication.ANDROID_ID);
+            userItem.setFcm_token(token);
+            retrofitApi.setUserRegister(userItem);
+        }
 
-        Log.d(TAG, "android_id: " + MainApplication.ANDROID_ID);
-        Log.d(TAG, "onNewToken: " + token);
-        //token을 서버로 전송
-//        sendRegistrationToServer(token);
     }
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
+        Log.d(TAG,"onMessageReceived : " + remoteMessage.getNotification().getTitle());
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
 
         NotificationCompat.Builder builder = null;

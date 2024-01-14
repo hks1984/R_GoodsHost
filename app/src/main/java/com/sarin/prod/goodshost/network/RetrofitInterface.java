@@ -1,11 +1,15 @@
 package com.sarin.prod.goodshost.network;
 
 import com.sarin.prod.goodshost.item.CategoryItem;
+import com.sarin.prod.goodshost.item.ChartItem;
 import com.sarin.prod.goodshost.item.ProductItem;
+import com.sarin.prod.goodshost.item.ReturnMsgItem;
+import com.sarin.prod.goodshost.item.UserItem;
 
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -53,6 +57,38 @@ public interface RetrofitInterface {
             @Query("page") int page,
             @Query("code") String code
     );
+
+    @GET("{path}")
+    Call<ReturnMsgItem> setUserRegister(
+            @Path ("path") String path,
+            @Query("user_id") String user_id,
+            @Query("fcm_token") String fcm_token
+    );
+
+    @GET("{path}")
+    Call<List<ChartItem>> getProductChart(
+            @Path ("path") String path,
+            @Query("vendor_item_id") String vendor_item_id
+    );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

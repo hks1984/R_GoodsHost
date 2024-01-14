@@ -15,9 +15,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.activity.CategoryProductListActivity;
 import com.sarin.prod.goodshost.adapter.CategoryAdapter;
@@ -146,21 +143,6 @@ public class HomeFragment extends Fragment {
         if(productAdapter.size() <= 0){
             getTopProducts(10, 0, currentCategoryCode);
         }
-
-
-//        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-//            @Override
-//            public void onComplete(@NonNull Task<String> task) {
-//                Log.d(TAG,"task.isSuccessful() : " + task.isSuccessful());
-//                if(task.isSuccessful() == false) {
-//                    Log.d(TAG,"Fetching FCM registration token failed : " + task.getException());
-//                    return;
-//                }
-//                String token = task.getResult();
-//                Log.d(TAG,"Fetching FCM token : " + token);
-//            }
-//        });
-
 
         return root;
     }

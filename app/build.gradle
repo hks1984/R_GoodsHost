@@ -71,6 +71,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'             // FireBase
     implementation 'com.google.firebase:firebase-messaging:23.4.0'      // FCM
 
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'   // 그래프
+    
 
 
 

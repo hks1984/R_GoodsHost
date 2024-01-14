@@ -26,5 +26,16 @@ public class StringUtil {
         return formattedValue;
     }
 
+    public static String replaceIntToPrice(int value) {
+        NumberFormat formatter = NumberFormat.getNumberInstance(Locale.KOREA);
+        return formatter.format(value);
+    }
+
+    public boolean nullCheck(String str) {
+        // null 이면 true
+        return str == null || str.isEmpty();
+
+    }
+
 
 }

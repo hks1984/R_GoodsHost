@@ -1,4 +1,4 @@
-package com.sarin.prod.item;
+package com.sarin.prod.goodshost.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;

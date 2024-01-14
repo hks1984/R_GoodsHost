@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.ProductDetailActivity">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".activity.ProductDetailActivity"
+    >
 
     <LinearLayout
         android:id="@+id/LinearLayout1"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         >
 
         <ImageView
@@ -31,61 +29,110 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        android:background="@color/white_500"
-        app:layout_constraintTop_toBottomOf="@id/LinearLayout1"
-        app:layout_constraintBottom_toTopOf="@id/LinearLayout3"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_weight="1"
+        android:scrollbars="none"
         >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:background="@color/gray_500"
-            android:layout_gravity="center"
-            app:layout_constraintTop_toBottomOf="@id/LinearLayout1"
-            app:layout_constraintBottom_toTopOf="@id/LinearLayout3"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            android:background="@color/white_500"
             >
 
-            <ImageView
-                android:id="@+id/image"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="30dp"
-                android:background="@color/white"
+                android:layout_height="200dp"
+                android:orientation="vertical"
+                android:background="@color/white_500"
+                android:layout_gravity="center"
+                >
+
+                <ImageView
+                    android:id="@+id/image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white_500"
+                    />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="20dp"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                style="@style/TextBlack.largeStyle"
                 />
+
+            <TextView
+                android:id="@+id/price_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="20dp"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                style="@style/TextBlack.largeStyle"
+                />
+
+            <TextView
+                android:id="@+id/rocket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="로켓배송"
+                android:layout_marginTop="10dp"
+                style="@style/TextBlack.smallStyle"
+                android:textColor="@color/gray_700"
+                android:background="@drawable/round_button_gray"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal"
+                >
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray_500" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/Chart_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="가격 시세"
+                android:textStyle="bold"
+                style="@style/TextBlack.largeStyle"
+                />
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/detail_linechart"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                />
+
+
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:layout_marginRight="100dp"
-            android:layout_marginTop="10dp"
-            style="@style/TextBlack.mediumStyle"
-            />
-
-        <TextView
-            android:id="@+id/price_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:layout_marginRight="100dp"
-            android:layout_marginTop="10dp"
-            style="@style/TextBlack.mediumStyle"
-            />
 
 
-    </LinearLayout>
+
+
+    </ScrollView>
 
 
 
@@ -93,11 +140,9 @@
         android:id="@+id/LinearLayout3"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:layout_weight="0"
         android:orientation="horizontal"
         android:background="@color/black_500"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         >
         <TextView
             android:layout_width="0dp"
@@ -134,5 +179,4 @@
 
     </LinearLayout>
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
