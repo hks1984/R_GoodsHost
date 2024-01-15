@@ -156,10 +156,11 @@
             tools:ignore="Suspicious0dp" />
 
         <TextView
+            android:id="@+id/registration"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:text="선물하기"
+            android:text="관심등록"
             android:gravity="center"
             android:textColor="@color/white"
             style="@style/TextWhite.largeStyle"
@@ -170,7 +171,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:text="구매하기"
+            android:text="상품확인"
             android:gravity="center"
             android:textColor="@color/white"
             style="@style/TextWhite.largeStyle"

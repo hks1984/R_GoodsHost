@@ -5,10 +5,12 @@ import static com.sarin.prod.goodshost.util.StringUtil.replaceIntToPrice;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,6 +33,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.databinding.ActivityProductDetailBinding;
@@ -62,7 +65,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     static StringUtil sUtil = StringUtil.getInstance();
 
     private ImageView image, exit;
-    private TextView name, price_value;
+    private TextView name, price_value, registration;
 
     private LineChart lineChart;
 
@@ -81,9 +84,26 @@ public class ProductDetailActivity extends AppCompatActivity {
         price_value = binding.priceValue;
         image = binding.image;
         lineChart = binding.detailLinechart;
+        registration = binding.registration;
 
         getProductDetail(vendor_item_id);
         getProductChart(vendor_item_id);
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.bottom_sheet_registration, null, false);
+        // 상단 라운딩 적용. (themes.xml에 style 추가 필요)
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this, R.style.RoundCornerBottomSheetDialogTheme);
+        bottomSheetDialog.setContentView(view);
+
+        registration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                bottomSheetDialog.show();
+
+            }
+        });
+
 
         exit = binding.exit;
         exit.setOnClickListener(new View.OnClickListener() {

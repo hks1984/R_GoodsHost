@@ -59,11 +59,21 @@
         <item name="android:textColor">@color/white_500</item>
     </style>
 
+    <style name="RoundCornerBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/RoundCornerModalStyle</item>
+    </style>
+
+    <style name="RoundCornerModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/share_round_bottom_sheet_registration</item>
+    </style>
+
     <!-- Base application theme. -->
     <style name="Base.Theme.R_GoodsHost" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
+
+
 
 
 </resources>
