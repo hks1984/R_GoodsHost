@@ -47,7 +47,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="300dp"
                 android:orientation="vertical"
                 android:background="@color/white_500"
                 android:layout_gravity="center"
@@ -168,6 +168,7 @@
             tools:ignore="Suspicious0dp" />
 
         <TextView
+            android:id="@+id/link"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"

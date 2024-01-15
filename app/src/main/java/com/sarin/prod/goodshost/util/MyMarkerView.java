@@ -16,6 +16,7 @@ import java.util.Map;
 public class MyMarkerView extends MarkerView {
     private TextView date, value;
     private Map<Integer, String> xValuesMap; // X 값과 문자열 매핑
+    static StringUtil sUtil = StringUtil.getInstance();
 
     public MyMarkerView(Context context, int layoutResource, Map<Integer, String> xValuesMap) {
         super(context, layoutResource);
@@ -29,7 +30,7 @@ public class MyMarkerView extends MarkerView {
     public void refreshContent(Entry e, Highlight highlight) {
         String xValue = xValuesMap.get((int)e.getX());
         date.setText(xValue);
-        value.setText("" + replaceIntToPrice((int)e.getY()) + "원");
+        value.setText("" + sUtil.replaceStringPriceToInt((int)e.getY()) + "원");
         super.refreshContent(e, highlight);
     }
 

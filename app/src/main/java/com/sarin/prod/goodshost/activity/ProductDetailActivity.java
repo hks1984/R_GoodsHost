@@ -1,17 +1,20 @@
 package com.sarin.prod.goodshost.activity;
 
-import static com.sarin.prod.goodshost.util.StringUtil.replaceIntToPrice;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -47,9 +50,11 @@ import com.sarin.prod.goodshost.util.LoadingProgressManager;
 import com.sarin.prod.goodshost.util.MyMarkerView;
 import com.sarin.prod.goodshost.util.StringUtil;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -65,9 +70,15 @@ public class ProductDetailActivity extends AppCompatActivity {
     static StringUtil sUtil = StringUtil.getInstance();
 
     private ImageView image, exit;
-    private TextView name, price_value, registration;
+    private TextView name, price_value, registration, link;
+
+    private TextView save;
+    private EditText hope_price;
+    private CheckBox check;
 
     private LineChart lineChart;
+
+    ProductItem _pi = new ProductItem();
 
 
     @Override
@@ -85,6 +96,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         image = binding.image;
         lineChart = binding.detailLinechart;
         registration = binding.registration;
+        link = binding.link;
+
 
         getProductDetail(vendor_item_id);
         getProductChart(vendor_item_id);
@@ -103,6 +116,75 @@ public class ProductDetailActivity extends AppCompatActivity {
 
             }
         });
+
+        link.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String aaa = sUtil.replaceHttp(_pi.getCoupang_link());
+                Log.d(TAG, "aaa: " + aaa);
+                String temp = "coupang://deeplink/detail?lptag=AF5520956&pageKey=324286997&itemId=1038296605&vendorItemId=5493710543&traceid=V0-113-19b64e35bb380c83";
+
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setPackage("com.coupang.mobile");
+                intent.setData(Uri.parse(temp));
+                startActivity(intent);
+
+            }
+        });
+
+
+        save = bottomSheetDialog.findViewById(R.id.save);
+        hope_price = bottomSheetDialog.findViewById(R.id.hope_price);
+        check = bottomSheetDialog.findViewById(R.id.check);
+
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isCheckBoxChecked = check.isChecked();
+                String editTextValue = hope_price.getText().toString();
+
+                Log.d(TAG, "" + isCheckBoxChecked + "   " + sUtil.convertStringToInt(editTextValue));
+
+//                finish();
+            }
+        });
+
+        hope_price.addTextChangedListener(new TextWatcher() {
+            private String current = "";
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // 변경 전에 필요한 작업이 있다면 여기서 수행
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // 변경되는 텍스트에 대한 처리
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().equals(current)) {
+                    hope_price.removeTextChangedListener(this);
+
+                    String cleanString = s.toString().replaceAll("[,]", "");
+                    if (!cleanString.isEmpty()) {
+                        try {
+                            String formatted = NumberFormat.getNumberInstance(Locale.KOREA).format(Double.parseDouble(cleanString));
+                            current = formatted;
+                            hope_price.setText(formatted);
+                            hope_price.setSelection(formatted.length());
+                        } catch (NumberFormatException e) {
+                            // 예외 처리
+                        }
+                    }
+
+                    hope_price.addTextChangedListener(this);
+                }
+            }
+        });
+
 
 
         exit = binding.exit;
@@ -256,7 +338,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         lineChart.getAxisLeft().setAxisMaximum(maxValue + range * 2.0f);
 
         // 최소값에 대한 LimitLine 추가
-        LimitLine llMin = new LimitLine(minValue, "최소값: " + replaceIntToPrice((int)minValue) + "원");
+        LimitLine llMin = new LimitLine(minValue, "최소값: " + sUtil.replaceStringPriceToInt((int)minValue) + "원");
         llMin.setLineColor(Color.BLUE);
         llMin.setLineWidth(1f);
         llMin.enableDashedLine(10f, 10f, 0f);
@@ -265,7 +347,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         llMin.setTextColor(Color.BLUE);
 
         // 최대값에 대한 LimitLine 추가
-        LimitLine llMax = new LimitLine(maxValue, "최대값: " + replaceIntToPrice((int)maxValue) + "원");
+        LimitLine llMax = new LimitLine(maxValue, "최대값: " + sUtil.replaceStringPriceToInt((int)maxValue) + "원");
         llMax.setLineColor(Color.RED);
         llMax.setLineWidth(1f);
         llMax.enableDashedLine(10f, 10f, 0f);
@@ -375,6 +457,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             public void onResponse(Call<ProductItem> call, Response<ProductItem> response) {
                 if(response.isSuccessful()){
                     ProductItem productItem = response.body();
+                    _pi = productItem;
                     name.setText(productItem.getName());
                     price_value.setText(sUtil.replaceStringPriceToInt(productItem.getPrice_value()) + getApplicationContext().getResources().getString(R.string.won));
                     String url = productItem.getImage();
