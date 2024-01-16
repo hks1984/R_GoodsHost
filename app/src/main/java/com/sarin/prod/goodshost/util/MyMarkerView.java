@@ -36,7 +36,13 @@ public class MyMarkerView extends MarkerView {
 
     @Override
     public MPPointF getOffset() {
-        // MarkerView가 클릭한 포인트에 정확히 위치하도록 조정
-        return new MPPointF(-(getWidth() / 2), -getHeight());
+        // 차트 뷰의 너비를 가져옵니다.
+        float chartWidth = getChartView().getWidth();
+
+        // MarkerView의 너비와 높이를 고려하여 우측 상단에 위치하도록 오프셋을 계산합니다.
+        // 여기서 getWidth()는 MarkerView의 너비, getHeight()는 MarkerView의 높이를 반환합니다.
+        return new MPPointF(chartWidth - getWidth(), -300 - getWidth());
     }
+
+
 }

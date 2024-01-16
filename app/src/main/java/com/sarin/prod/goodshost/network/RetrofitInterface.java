@@ -59,6 +59,12 @@ public interface RetrofitInterface {
     );
 
     @GET("{path}")
+    Call<List<ChartItem>> getProductChart(
+            @Path ("path") String path,
+            @Query("vendor_item_id") String vendor_item_id
+    );
+
+    @GET("{path}")
     Call<ReturnMsgItem> setUserRegister(
             @Path ("path") String path,
             @Query("user_id") String user_id,
@@ -66,10 +72,15 @@ public interface RetrofitInterface {
     );
 
     @GET("{path}")
-    Call<List<ChartItem>> getProductChart(
+    Call<ReturnMsgItem> setUserItemMap(
             @Path ("path") String path,
-            @Query("vendor_item_id") String vendor_item_id
+            @Query("user_id") String user_id,
+            @Query("vendor_item_id") String vendor_item_id,
+            @Query("hope_price") int hope_price,
+            @Query("out_of_stock") String out_of_stock
     );
+
+
 
 
 

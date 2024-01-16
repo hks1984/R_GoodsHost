@@ -44,6 +44,8 @@ import com.sarin.prod.goodshost.databinding.ActivityProductDetailBinding;
 
 import com.sarin.prod.goodshost.item.ChartItem;
 import com.sarin.prod.goodshost.item.ProductItem;
+import com.sarin.prod.goodshost.item.ReturnMsgItem;
+import com.sarin.prod.goodshost.network.RetrofitApi;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
 import com.sarin.prod.goodshost.util.LoadingProgressManager;
@@ -75,11 +77,11 @@ public class ProductDetailActivity extends AppCompatActivity {
     private TextView save;
     private EditText hope_price;
     private CheckBox check;
+    private String vendor_item_id;
 
     private LineChart lineChart;
 
     ProductItem _pi = new ProductItem();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +90,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         Intent tp_intent = getIntent();
-        String vendor_item_id = tp_intent.getStringExtra("vendor_item_id");
-
+        vendor_item_id = tp_intent.getStringExtra("vendor_item_id");
 
         name = binding.name;
         price_value = binding.priceValue;
@@ -97,7 +98,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         lineChart = binding.detailLinechart;
         registration = binding.registration;
         link = binding.link;
-
 
         getProductDetail(vendor_item_id);
         getProductChart(vendor_item_id);
@@ -138,11 +138,16 @@ public class ProductDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 boolean isCheckBoxChecked = check.isChecked();
+                String out_of_stock = "";
+                out_of_stock = isCheckBoxChecked ? "Y" : "N";
+
                 String editTextValue = hope_price.getText().toString();
 
-                Log.d(TAG, "" + isCheckBoxChecked + "   " + sUtil.convertStringToInt(editTextValue));
+                Log.d(TAG, "" + MainApplication.ANDROID_ID + "   " + vendor_item_id + "   " + sUtil.convertStringToInt(editTextValue) + "   " + out_of_stock);
+                setUserItemMap(MainApplication.ANDROID_ID, vendor_item_id, sUtil.convertStringToInt(editTextValue), out_of_stock);
 
-//                finish();
+
+                finish();
             }
         });
 
@@ -195,70 +200,34 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     }
 
-//    private void LineChartGraph(List<ChartItem> chartItems) {
-//        List<Entry> entries = new ArrayList<>();
-//        final Map<String, Integer> xLabelMap = new HashMap<>();
-//
-//        Log.d(TAG,chartItems.toString()  );
-//        int index = 0;
-//        for (ChartItem ci : chartItems) {
-//            String date = ci.getC_date();
-//            if (!xLabelMap.containsKey(date)) {
-//                xLabelMap.put(date, index++);
-//            }
-//            entries.add(new Entry(xLabelMap.get(date), ci.getMin_value()));
-//        }
-//
-//        LineDataSet dataSet = new LineDataSet(entries, "Label");
-//        dataSet.setColor(Color.RED);
-//        dataSet.setValueTextColor(Color.BLUE);
-//
-//        LineData lineData = new LineData(dataSet);
-//        lineChart.setData(lineData);
-//
-//        XAxis xAxis = lineChart.getXAxis();
-//        xAxis.setDrawAxisLine(false);
-//        xAxis.setGranularity(1f);
-//        xAxis.setTextSize(10f);  //x축 텍스트 크기
-//        xAxis.setGridColor(ContextCompat.getColor(getApplicationContext(), R.color.white));    //그래프 그리드 컬러
-//        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // X 축 데이터 표시 위치
-//        xAxis.setGranularityEnabled(true);  //x축 5개 이하일때 값 중복 제거
-//
-//
-//        lineChart.getXAxis().setValueFormatter(new ValueFormatter() {
-//            @Override
-//            public String getAxisLabel(float value, AxisBase axis) {
-//                int intValue = (int) value;
-//                for (Map.Entry<String, Integer> entry : xLabelMap.entrySet()) {
-//                    if (entry.getValue().equals(intValue)) {
-//                        return entry.getKey();
-//                    }
-//                }
-//                return "";
-//            }
-//        });
-//
-//        YAxis axisLeft = lineChart.getAxisLeft();
-////        axisLeft.setAxisMinimum(0f); // 최솟값
-////        axisLeft.setAxisMaximum(50f); // 최댓값
-//        axisLeft.setGranularity(1f); // 값만큼 라인선 설정
-//        axisLeft.setDrawGridLines(false);
-//        axisLeft.setDrawAxisLine(false);
-//        axisLeft.setDrawLabels(false); // label 삭제
-//
-//        // YAxis(Right) (수평 막대 기준 위쪽) - 사이즈, 선 유무
-//        YAxis axisRight = lineChart.getAxisRight();
-//        axisRight.setTextSize(15f);
-//        axisRight.setDrawLabels(false); // label 삭제
-//        axisRight.setDrawGridLines(false);
-//        axisRight.setDrawAxisLine(false);
-//
-//        Description description = new Description();
-//        description.setText("My Line Chart");
-//        lineChart.setDescription(description);
-//
-//        lineChart.invalidate(); // 차트 갱신
-//    }
+    public void setUserItemMap(String user_id, String vendor_item_id, int hope_price, String out_of_stock){
+
+        retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
+
+        Call<ReturnMsgItem> call = service.setUserItemMap("setUserItemMap", user_id, vendor_item_id, hope_price, out_of_stock);
+        call.enqueue(new Callback<ReturnMsgItem>() {
+            @Override
+            public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
+                if(response.isSuccessful()){
+                    ReturnMsgItem returnMsgItem = response.body();
+                    Log.d(TAG, "setUserRegister : " + returnMsgItem.toString());
+
+                }
+                else{
+                    Log.e(TAG, "실패 코드 확인 : " + response.code());
+                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
+                }
+            }
+            @Override
+            public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+
+
+    }
+
 
     private void LineChartGraph(List<ChartItem> chartItems) {
         List<Entry> entries = new ArrayList<>();
@@ -276,10 +245,16 @@ public class ProductDetailActivity extends AppCompatActivity {
             String date = ci.getC_date();
             if (!xLabelMap.containsKey(date)) {
                 xLabelMap.put(date, index++);
+
+                Log.d(TAG, "date : " + date);
             }
             entries.add(new Entry(xLabelMap.get(date), value));
-        }
 
+
+        }
+        Log.d(TAG, "chartItems: " + chartItems.size());
+        Log.d(TAG, "chartItems: " + chartItems.toString());
+        Log.d(TAG, "" + minValue + "   " + maxValue);
         LineDataSet dataSet = new LineDataSet(entries, null);
         dataSet.setColor(Color.RED);
 //        dataSet.setValueTextColor(Color.BLUE);
@@ -315,23 +290,45 @@ public class ProductDetailActivity extends AppCompatActivity {
         lineChart.setData(lineData);
 
         // X축 Formatter 설정
+//        lineChart.getXAxis().setValueFormatter(new ValueFormatter() {
+//            @Override
+//            public String getAxisLabel(float value, AxisBase axis) {
+//                Log.d(TAG, "!!!!!!!!!!!!!!!!!!!!!");
+//                int intValue = (int) value;
+//                for (Map.Entry<String, Integer> entry : xLabelMap.entrySet()) {
+//                    if (entry.getValue().equals(intValue)) {
+//                        Log.d(TAG, "entry.getKey(): " + entry.getKey() + "   value: " + value);
+//                        return entry.getKey();
+//                    }
+//                }
+//                return "";
+//            }
+//        });
+
         lineChart.getXAxis().setValueFormatter(new ValueFormatter() {
             @Override
             public String getAxisLabel(float value, AxisBase axis) {
                 int intValue = (int) value;
-                for (Map.Entry<String, Integer> entry : xLabelMap.entrySet()) {
-                    if (entry.getValue().equals(intValue)) {
-                        return entry.getKey();
+
+                if(xLabelMap.containsValue(intValue)) {
+                    for (Map.Entry<String, Integer> entry : xLabelMap.entrySet()) {
+                        if (entry.getValue().equals(intValue)) {
+                            return entry.getKey();
+                        }
                     }
                 }
                 return "";
             }
         });
 
-        // Y축 범위에 여유 공간 추가
+
+                        // Y축 범위에 여유 공간 추가
         float range = maxValue - minValue;
-        lineChart.getAxisLeft().setAxisMinimum(minValue - range * 2.0f);
-        lineChart.getAxisLeft().setAxisMaximum(maxValue + range * 2.0f);
+        if(range == 0){
+            range = 10;
+        }
+        lineChart.getAxisLeft().setAxisMinimum(minValue - range * 1.0f);
+        lineChart.getAxisLeft().setAxisMaximum(maxValue + range * 1.0f);
 
         // 최소값에 대한 LimitLine 추가
         LimitLine llMin = new LimitLine(minValue, "최소값: " + sUtil.replaceStringPriceToInt((int)minValue) + "원");
@@ -371,6 +368,13 @@ public class ProductDetailActivity extends AppCompatActivity {
 //        lineChart.getXAxis().setDrawLabels(false);
 //        lineChart.getXAxis().setDrawAxisLine(false);
         lineChart.getXAxis().setDrawGridLines(false);
+
+        lineChart.getXAxis().setGranularity(1f);
+
+
+
+
+
 
 
         lineChart.getAxisRight().setEnabled(false);
@@ -412,6 +416,8 @@ public class ProductDetailActivity extends AppCompatActivity {
                     Log.d(TAG, vendor_item_id + " "+ chartItem.toString());
                     if(chartItem.size() > 0){
                         LineChartGraph(chartItem);
+                        lineChart.setScaleEnabled(false);
+
 //                        lineChart.setTouchEnabled(false);
 //                        lineChart.getAxisRight().setAxisMaxValue(80);
 //                        lineChart.getAxisLeft().setAxisMaxValue(80);

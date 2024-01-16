@@ -22,12 +22,14 @@
     <!-- 상품상세 -->
     <string name="detail_buy">상품확인</string>
     <string name="detail_favorite">상품확인</string>
+    <string name="detail_terms">1. GoodsHost의 상품 정보는 주기적으로 업데이트하고 있으나 시차에 따라 쇼핑몰의 정보와 일치하지 않을 수 있습니다. 반드시 쇼핑몰의 정확한 정보를 확인하시기 바랍니다.\n2. GOODSHOST는 파트너스 활동의 일환으로 이에 따른 일정액의 수수료를 쇼핑몰로부터 제공받을 수 있습니다. 발생한 수익금은 무료로 앱 운영을 하기위해 쓰여집니다.</string>
 
     <string name="detail_favorite_setting">관심 상품 설정</string>
     <string name="detail_favorite_note">원하는 가격 및 재입고 항목을 설정하시면\n알림을 받으실 수 있어요.\n관심상품 등록 후 나중에 알림 설정을 하실 수도 있어요.!</string>
     <string name="detail_alarm_price">가격 알림 설정</string>
     <string name="detail_alarm_solt">재입고 알림 설정</string>
     <string name="detail_save">저장하기</string>
+
 
 
 
