@@ -120,13 +120,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         link.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String aaa = sUtil.replaceHttp(_pi.getCoupang_link());
-                Log.d(TAG, "aaa: " + aaa);
-                String temp = "coupang://deeplink/detail?lptag=AF5520956&pageKey=324286997&itemId=1038296605&vendorItemId=5493710543&traceid=V0-113-19b64e35bb380c83";
 
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setPackage("com.coupang.mobile");
-                intent.setData(Uri.parse(temp));
+                intent.setData(Uri.parse(_pi.getCoupang_link()));
                 startActivity(intent);
 
             }
