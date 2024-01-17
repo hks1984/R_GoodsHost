@@ -80,6 +80,13 @@ public interface RetrofitInterface {
             @Query("out_of_stock") String out_of_stock
     );
 
+    @GET("{path}")
+    Call<ReturnMsgItem> setUserSelectProduct(
+            @Path ("path") String path,
+            @Query("user_id") String user_id,
+            @Query("deep_link") String deep_link
+    );
+
 
 
 

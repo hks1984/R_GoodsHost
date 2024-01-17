@@ -9,12 +9,19 @@ import android.util.Log;
 
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
+import com.sarin.prod.goodshost.item.ReturnMsgItem;
+import com.sarin.prod.goodshost.network.RetrofitClientInstance;
+import com.sarin.prod.goodshost.network.RetrofitInterface;
 import com.sarin.prod.goodshost.util.StringUtil;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ShareActivity extends AppCompatActivity {
 
@@ -32,23 +39,11 @@ public class ShareActivity extends AppCompatActivity {
 
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if ("text/plain".equals(type)) {
-                final String[] url = {handleSendText(intent)}; // 텍스트 데이터 처리
-                Log.d(TAG, "ss URL: " + url[0]);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // 네트워크 작업 수행
-                        url[0] = expandShortURL(url[0]);
-                        Log.d(TAG, "찐 url : " + url[0]);
-                        // UI 스레드에서 결과 처리
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // UI 업데이트
-                            }
-                        });
-                    }
-                }).start();
+//                handleSendText(intent);
+                String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+                Log.d(TAG, "ShareActivity sharedText: " + sharedText);
+
+                setUserSelectProduct(MainApplication.ANDROID_ID, sharedText);
 
             }
 //            else if (type.startsWith("image/")) {
@@ -64,42 +59,43 @@ public class ShareActivity extends AppCompatActivity {
         }
     }
 
-    public static String expandShortURL(String shortUrl) {
-        String longUrl = "";
-        try {
-            HttpURLConnection connection = (HttpURLConnection) new URL(shortUrl).openConnection();
-            connection.setInstanceFollowRedirects(false); // 리디렉션을 자동으로 따르지 않도록 설정
-            connection.connect();
-            int responseCode = connection.getResponseCode();
+    public void setUserSelectProduct(String user_id, String deep_link){
 
-            // 301 또는 302 응답 코드는 리디렉션을 나타냅니다.
-            Log.d(TAG, "responseCode: " + responseCode);
-            if (responseCode == HttpURLConnection.HTTP_MOVED_TEMP || responseCode == HttpURLConnection.HTTP_MOVED_PERM) {
-                longUrl = connection.getHeaderField("Location");
+        retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
+
+        Call<ReturnMsgItem> call = service.setUserSelectProduct("setUserSelectProduct", user_id, deep_link);
+        call.enqueue(new Callback<ReturnMsgItem>() {
+            @Override
+            public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
+                if(response.isSuccessful()){
+                    ReturnMsgItem returnMsgItem = response.body();
+                    Log.d(TAG, "setUserSelectProduct : " + returnMsgItem.toString());
+
+                }
+                else{
+                    Log.e(TAG, "실패 코드 확인 : " + response.code());
+                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
+                }
             }
+            @Override
+            public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
+            }
+        });
 
-            connection.disconnect();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return longUrl;
+
     }
 
+
+
     // 데이터 처리 메서드 구현
-    public String handleSendText(Intent intent) {
+    public void handleSendText(Intent intent) {
+
         String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
-        String rtn = "";
-        Log.d(TAG, "sharedText : " + sharedText);
         if (sharedText != null) {
             // 공유된 텍스트 사용
-            List<String> urls = sUtil.extractUrls(sharedText);
-            for (String url : urls) {
-                Log.d(TAG, "URL: " + url);
-                rtn = url;
-                break;
-            }
         }
-        return rtn;
     }
 
     void handleSendImage(Intent intent) {
