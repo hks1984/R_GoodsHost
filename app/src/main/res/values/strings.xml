@@ -17,8 +17,6 @@
     <string name="top_totalView">모든 상품 보기</string>
 
 
-
-
     <!-- 상품상세 -->
     <string name="detail_buy">상품확인</string>
     <string name="detail_favorite">상품확인</string>
@@ -29,8 +27,6 @@
     <string name="detail_alarm_price">가격 알림 설정</string>
     <string name="detail_alarm_solt">재입고 알림 설정</string>
     <string name="detail_save">저장하기</string>
-
-
 
 
 </resources>

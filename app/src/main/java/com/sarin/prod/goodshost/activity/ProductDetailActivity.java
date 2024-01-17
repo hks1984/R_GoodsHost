@@ -138,16 +138,16 @@ public class ProductDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 boolean isCheckBoxChecked = check.isChecked();
-                String out_of_stock = "";
-                out_of_stock = isCheckBoxChecked ? "Y" : "N";
+                String out_of_stock = isCheckBoxChecked ? "Y" : "N";
 
                 String editTextValue = hope_price.getText().toString();
 
                 Log.d(TAG, "" + MainApplication.ANDROID_ID + "   " + vendor_item_id + "   " + sUtil.convertStringToInt(editTextValue) + "   " + out_of_stock);
                 setUserItemMap(MainApplication.ANDROID_ID, vendor_item_id, sUtil.convertStringToInt(editTextValue), out_of_stock);
 
+                bottomSheetDialog.dismiss();
 
-                finish();
+
             }
         });
 

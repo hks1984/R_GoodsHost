@@ -133,6 +133,9 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
                 url = "https:" + url;
             }
             Glide.with(context).load(url).into(image);
+            if(pitem.getRating() == null){
+                pitem.setRating("0");
+            }
             rating.setRating(Float.parseFloat(pitem.getRating()));
             String ratingTotalCount = sUtil.replaceStringPriceToInt(pitem.getRating_total_count());
             if (ratingTotalCount != null && !ratingTotalCount.isEmpty()) {

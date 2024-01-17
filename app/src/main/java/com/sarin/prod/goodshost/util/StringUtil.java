@@ -1,7 +1,11 @@
 package com.sarin.prod.goodshost.util;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StringUtil {
 
@@ -57,6 +61,18 @@ public class StringUtil {
         // null 이면 true
         return str == null || str.isEmpty();
 
+    }
+
+    public List<String> extractUrls(String text) {
+        List<String> foundUrls = new ArrayList<String>();
+        String regex = "\\b((?:https?|ftp)://[^\\s\"<]+[^\\s\"<]*)";
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher urlMatcher = pattern.matcher(text);
+
+        while (urlMatcher.find()) {
+            foundUrls.add(text.substring(urlMatcher.start(0), urlMatcher.end(0)));
+        }
+        return foundUrls;
     }
 
 
