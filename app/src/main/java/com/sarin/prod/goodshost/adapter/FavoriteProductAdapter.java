@@ -36,6 +36,14 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
         this.items = items;
     }
 
+    private OnItemClickListener onItemClickListener = null;
+    public interface OnItemClickListener {
+        void onItemClick(View v, int pos);
+    }
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -73,10 +81,25 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
         notifyDataSetChanged();
     }
 
+    public void set(int position, ProductItem productItem){
+        items.set(position, productItem);
+        notifyDataSetChanged();
+    }
+
     public void clear(){
         items.clear();
 //        notifyDataSetChanged();
     }
+
+    public void remove(int position){
+        items.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public ProductItem get(int position){
+        return items.get(position);
+    }
+
 
     public int size() {
         int i = items.size();
@@ -88,12 +111,12 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
         return items.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView name, price_value, persent, favorite_hope_price, favorite_hope_stock;
-        private ImageView image, favorite_del, favorite_alarm_edit;
+        private ImageView image;
 //        private RatingBar rating;
 
-//        private LinearLayout layout_favorite;
+        private LinearLayout favorite_del, favorite_alarm_edit;
 
         ProductItemClickListener productItemClickListener;
 
@@ -106,8 +129,43 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
             favorite_hope_price = (TextView) itemView.findViewById(R.id.favorite_hope_price);
             favorite_hope_stock = (TextView) itemView.findViewById(R.id.favorite_hope_stock);
             persent = (TextView) itemView.findViewById(R.id.persent);
-            favorite_del = (ImageView) itemView.findViewById(R.id.favorite_del);
-            favorite_alarm_edit = (ImageView) itemView.findViewById(R.id.favorite_alarm_edit);
+            favorite_del = (LinearLayout) itemView.findViewById(R.id.favorite_del);
+            favorite_alarm_edit = (LinearLayout) itemView.findViewById(R.id.favorite_alarm_edit);
+
+            favorite_del.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 클릭 이벤트 처리
+//                    onFavoriteClick(getLayoutPosition());
+                    //존재하는 포지션인지 확인
+                    int pos = getAdapterPosition();
+                    if(pos != RecyclerView.NO_POSITION){
+                        //동작 호출 (onItemClick 함수 호출)
+                        if(onItemClickListener != null){
+                            onItemClickListener.onItemClick(v, pos);
+                        }
+                    }
+
+                }
+            });
+
+            favorite_alarm_edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 클릭 이벤트 처리
+//                    onFavoriteClick(getLayoutPosition());
+                    //존재하는 포지션인지 확인
+                    int pos = getAdapterPosition();
+                    if(pos != RecyclerView.NO_POSITION){
+                        //동작 호출 (onItemClick 함수 호출)
+                        if(onItemClickListener != null){
+                            onItemClickListener.onItemClick(v, pos);
+                        }
+                    }
+
+                }
+            });
+
 
 //            layout_favorite.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -122,6 +180,7 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
 
         private void onFavoriteClick(int position) {
             Log.d(TAG, "Favorite clicked at position: " + position);
+
             // 여기에서 필요한 작업 수행 (예: 즐겨찾기 추가/제거)
         }
 
@@ -144,9 +203,17 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
                 persent.setVisibility(View.GONE); // 레이아웃 숨김
             }
 
-            favorite_hope_price.setText(sUtil.replaceStringPriceToInt(pitem.getHope_price()) + context.getResources().getString(R.string.won));
+            if(pitem.getHope_price() > 0){
+                favorite_hope_price.setText(sUtil.replaceStringPriceToInt(pitem.getHope_price()) + context.getResources().getString(R.string.won));
+            } else {
+                favorite_hope_price.setVisibility(View.GONE); // 레이아웃 숨김
+            }
+
+
             if("Y".equals(pitem.getHope_stock())){
                 favorite_hope_stock.setText(context.getResources().getString(R.string.favorite_stock_alarm));
+            } else {
+                favorite_hope_stock.setVisibility(View.GONE); // 레이아웃 숨김
             }
 
 
