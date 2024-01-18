@@ -5,33 +5,41 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
-import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
+import com.sarin.prod.goodshost.databinding.ActivityShareBinding;
+import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.item.ReturnMsgItem;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
 import com.sarin.prod.goodshost.util.StringUtil;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ShareActivity extends AppCompatActivity {
 
+    private ActivityShareBinding binding;
+
     public static String TAG = MainApplication.TAG;
+
+    private TextView add, textViewCountdown;
 
     static StringUtil sUtil = StringUtil.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_share);
+        binding = ActivityShareBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        add = binding.add;
+        textViewCountdown = binding.textViewCountdown;
 
         Intent intent = getIntent();
         String action = intent.getAction();
@@ -41,6 +49,7 @@ public class ShareActivity extends AppCompatActivity {
             if ("text/plain".equals(type)) {
 //                handleSendText(intent);
                 String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+                add.setText(getApplicationContext().getResources().getString(R.string.share_adding));
                 Log.d(TAG, "ShareActivity sharedText: " + sharedText);
 
                 setUserSelectProduct(MainApplication.ANDROID_ID, sharedText);
@@ -71,6 +80,20 @@ public class ShareActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
                     ReturnMsgItem returnMsgItem = response.body();
                     Log.d(TAG, "setUserSelectProduct : " + returnMsgItem.toString());
+
+                    if(returnMsgItem.getCode() > 0){
+                        add.setText(getApplicationContext().getResources().getString(R.string.share_add_product));
+                        new CountDownTimer(3000, 1000) { // 3000 milliseconds in total, 1000 milliseconds interval
+                            public void onTick(long millisUntilFinished) {
+                                textViewCountdown.setText("" + millisUntilFinished / 1000);
+                            }
+                            public void onFinish() {
+//                                add.setVisibility(View.GONE); // Hide TextView
+                                finish();
+                            }
+
+                        }.start();
+                    }
 
                 }
                 else{

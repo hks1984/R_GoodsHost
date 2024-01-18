@@ -68,25 +68,24 @@
             android:layout_marginBottom="5dp"
             >
 
-            <RatingBar
-                android:id="@+id/rating"
-                style="@style/Widget.AppCompat.RatingBar.Small"
+            <TextView
+                android:id="@+id/favorite_hope_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:numStars="5"
-                android:rating="0"
-                android:stepSize="0.5"
-                android:progressTint="@color/black_500"
+                android:text="12,000"
+                style="@style/TextBlack.smallStyle"
                 android:layout_gravity="center"
+                android:background="@color/gray_500"
                 />
 
             <TextView
-                android:id="@+id/rating_total_count"
+                android:id="@+id/favorite_hope_stock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
+                android:text="쿠팡배송"
                 style="@style/TextBlack.smallStyle"
                 android:layout_gravity="center"
+                android:background="@color/gray_500"
                 />
 
         </LinearLayout>
@@ -96,6 +95,7 @@
 
     <LinearLayout
         android:id="@+id/layout_favorite"
+        android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_weight="2"
         android:layout_height="wrap_content"
@@ -103,11 +103,19 @@
         android:layout_gravity="center"
         >
         <ImageView
-            android:id="@+id/favorite"
+            android:id="@+id/favorite_del"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/baseline_favorite_border_24"
             />
+
+        <ImageView
+            android:id="@+id/favorite_alarm_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_edit_notifications_24"
+            />
+
 
     </LinearLayout>
 

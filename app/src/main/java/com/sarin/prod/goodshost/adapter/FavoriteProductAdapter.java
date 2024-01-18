@@ -12,20 +12,19 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
-import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.activity.ProductDetailActivity;
+import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.util.StringUtil;
 
 import java.util.List;
 
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder>{
+public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProductAdapter.ViewHolder>{
 
     private List<ProductItem> items;
     public static String TAG = MainApplication.TAG;
@@ -33,14 +32,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     static StringUtil sUtil = StringUtil.getInstance();
 
-    public ProductAdapter(List<ProductItem> items){
+    public FavoriteProductAdapter(List<ProductItem> items){
         this.items = items;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_list_view , parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_favorite_list_view , parent, false);
         context = parent.getContext();
         return new ViewHolder(itemView);
     }
@@ -90,11 +89,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView name, price_value, rating_total_count, persent;
-        private ImageView image, favorite;
-        private RatingBar rating;
+        private TextView name, price_value, persent, favorite_hope_price, favorite_hope_stock;
+        private ImageView image, favorite_del, favorite_alarm_edit;
+//        private RatingBar rating;
 
-        private LinearLayout layout_favorite;
+//        private LinearLayout layout_favorite;
 
         ProductItemClickListener productItemClickListener;
 
@@ -104,19 +103,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             name = (TextView) itemView.findViewById(R.id.name);
             price_value = (TextView) itemView.findViewById(R.id.price_value);
             image = (ImageView) itemView.findViewById(R.id.imagew);
-            rating = (RatingBar) itemView.findViewById(R.id.rating);
-            rating_total_count = (TextView) itemView.findViewById(R.id.rating_total_count);
+            favorite_hope_price = (TextView) itemView.findViewById(R.id.favorite_hope_price);
+            favorite_hope_stock = (TextView) itemView.findViewById(R.id.favorite_hope_stock);
             persent = (TextView) itemView.findViewById(R.id.persent);
-            favorite = (ImageView) itemView.findViewById(R.id.favorite);
-            layout_favorite = (LinearLayout) itemView.findViewById(R.id.layout_favorite);
+            favorite_del = (ImageView) itemView.findViewById(R.id.favorite_del);
+            favorite_alarm_edit = (ImageView) itemView.findViewById(R.id.favorite_alarm_edit);
 
-            layout_favorite.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // 클릭 이벤트 처리
-                    onFavoriteClick(getLayoutPosition());
-                }
-            });
+//            layout_favorite.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    // 클릭 이벤트 처리
+//                    onFavoriteClick(getLayoutPosition());
+//                }
+//            });
 
             itemView.setOnClickListener(this);
         }
@@ -135,16 +134,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 url = "https:" + url;
             }
             Glide.with(itemView.getContext()).load(url).into(image);
-            if(pitem.getRating() == null){
-                pitem.setRating("0");
-            }
-            rating.setRating(Float.parseFloat(pitem.getRating()));
-            String ratingTotalCount = sUtil.replaceStringPriceToInt(pitem.getRating_total_count());
-            if (ratingTotalCount != null && !ratingTotalCount.isEmpty()) {
-                rating_total_count.setText("(" + ratingTotalCount + ")");
-            } else {
-                rating_total_count.setText("");
-            }
 
             double number = Double.parseDouble(pitem.getPersent());
             if(number < 0){
@@ -153,6 +142,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 persent.setText(numString + "% off"); // 할인율 표시
             } else {
                 persent.setVisibility(View.GONE); // 레이아웃 숨김
+            }
+
+            favorite_hope_price.setText(sUtil.replaceStringPriceToInt(pitem.getHope_price()) + context.getResources().getString(R.string.won));
+            if("Y".equals(pitem.getHope_stock())){
+                favorite_hope_stock.setText(context.getResources().getString(R.string.favorite_stock_alarm));
             }
 
 

@@ -28,5 +28,11 @@
     <string name="detail_alarm_solt">재입고 알림 설정</string>
     <string name="detail_save">저장하기</string>
 
+    <!-- 관심상품 화면 -->
+    <string name="favorite_stock_alarm">재입고 알림</string>
+
+    <!-- 링크 공유 화면 -->
+    <string name="share_adding">상품을 추가하고 있어요. 잠시만 기다려주세요.</string>
+    <string name="share_add_product">상품 등록이 완료되었어요.</string>
 
 </resources>

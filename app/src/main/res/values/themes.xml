@@ -67,6 +67,17 @@
         <item name="android:background">@drawable/share_round_bottom_sheet_registration</item>
     </style>
 
+    <style name="Transparent" parent="@style/Theme.R_GoodsHost">
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
     <!-- Base application theme. -->
     <style name="Base.Theme.R_GoodsHost" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->

@@ -77,7 +77,7 @@ public interface RetrofitInterface {
             @Query("user_id") String user_id,
             @Query("vendor_item_id") String vendor_item_id,
             @Query("hope_price") int hope_price,
-            @Query("out_of_stock") String out_of_stock
+            @Query("hope_stock") String hope_stock
     );
 
     @GET("{path}")
@@ -85,6 +85,12 @@ public interface RetrofitInterface {
             @Path ("path") String path,
             @Query("user_id") String user_id,
             @Query("deep_link") String deep_link
+    );
+
+    @GET("{path}")
+    Call<List<ProductItem>> getFavoriteProducts(
+            @Path ("path") String path,
+            @Query("user_id") String user_id
     );
 
 

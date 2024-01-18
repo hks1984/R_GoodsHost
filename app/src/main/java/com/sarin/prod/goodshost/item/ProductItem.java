@@ -24,6 +24,24 @@ public class ProductItem {
     public String persent;
     public String rank;
 
+    public int hope_price;
+    public String hope_stock;
+
+    public int getHope_price() {
+        return hope_price;
+    }
+
+    public void setHope_price(int hope_price) {
+        this.hope_price = hope_price;
+    }
+
+    public String getHope_stock() {
+        return hope_stock;
+    }
+
+    public void setHope_stock(String hope_stock) {
+        this.hope_stock = hope_stock;
+    }
 
     public String getProduct_id() {
         return product_id;
@@ -208,6 +226,8 @@ public class ProductItem {
                 ", updateSeparator='" + updateSeparator + '\'' +
                 ", persent='" + persent + '\'' +
                 ", rank='" + rank + '\'' +
+                ", hope_price='" + hope_price + '\'' +
+                ", hope_stock='" + hope_stock + '\'' +
                 '}';
     }
 }

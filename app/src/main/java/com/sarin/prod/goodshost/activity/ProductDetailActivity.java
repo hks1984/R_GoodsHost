@@ -138,12 +138,12 @@ public class ProductDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 boolean isCheckBoxChecked = check.isChecked();
-                String out_of_stock = isCheckBoxChecked ? "Y" : "N";
+                String hope_stock = isCheckBoxChecked ? "Y" : "N";
 
                 String editTextValue = hope_price.getText().toString();
 
-                Log.d(TAG, "" + MainApplication.ANDROID_ID + "   " + vendor_item_id + "   " + sUtil.convertStringToInt(editTextValue) + "   " + out_of_stock);
-                setUserItemMap(MainApplication.ANDROID_ID, vendor_item_id, sUtil.convertStringToInt(editTextValue), out_of_stock);
+                Log.d(TAG, "" + MainApplication.ANDROID_ID + "   " + vendor_item_id + "   " + sUtil.convertStringToInt(editTextValue) + "   " + hope_stock);
+                setUserItemMap(MainApplication.ANDROID_ID, vendor_item_id, sUtil.convertStringToInt(editTextValue), hope_stock);
 
                 bottomSheetDialog.dismiss();
 
@@ -200,12 +200,12 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     }
 
-    public void setUserItemMap(String user_id, String vendor_item_id, int hope_price, String out_of_stock){
+    public void setUserItemMap(String user_id, String vendor_item_id, int hope_price, String hope_stock){
 
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<ReturnMsgItem> call = service.setUserItemMap("setUserItemMap", user_id, vendor_item_id, hope_price, out_of_stock);
+        Call<ReturnMsgItem> call = service.setUserItemMap("setUserItemMap", user_id, vendor_item_id, hope_price, hope_stock);
         call.enqueue(new Callback<ReturnMsgItem>() {
             @Override
             public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
