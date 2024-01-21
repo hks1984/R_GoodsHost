@@ -11,22 +11,28 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sarin.prod.goodshost.MainApplication;
+import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.activity.CategoryProductListActivity;
 import com.sarin.prod.goodshost.adapter.CategoryAdapter;
 import com.sarin.prod.goodshost.adapter.CategoryProductListAdapter;
+import com.sarin.prod.goodshost.adapter.FavoriteProductAdapter;
 import com.sarin.prod.goodshost.adapter.ProductAdapter;
 import com.sarin.prod.goodshost.adapter.ProductAdapterHori;
 import com.sarin.prod.goodshost.databinding.FragmentHomeBinding;
 import com.sarin.prod.goodshost.item.CategoryItem;
 import com.sarin.prod.goodshost.item.ProductItem;
+import com.sarin.prod.goodshost.item.ReturnMsgItem;
+import com.sarin.prod.goodshost.item.SharedViewModel;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
 import com.sarin.prod.goodshost.util.LoadingProgressManager;
+import com.sarin.prod.goodshost.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +54,7 @@ public class HomeFragment extends Fragment {
     public static ProductAdapter productAdapter;
     public static ProductAdapterHori productHoriAdapter;
     public static CategoryAdapter categoryAdapter;
-    private static ImageView menu;
+    private static ImageView favorite;
     private static TextView gmall_best_totalView, gmall_top_totalView;
 
     private List<ProductItem> piLIst = new ArrayList<>();
@@ -59,7 +65,14 @@ public class HomeFragment extends Fragment {
 
     private static HomeFragment mInstnace = null;
 
+    private ProductItem pdItem = new ProductItem();
+    private int pdItem_possion = 0;
+
     private LoadingProgressManager loadingProgressManager = LoadingProgressManager.getInstance();
+
+    private StringUtil sUtil = StringUtil.getInstance();
+
+    private SharedViewModel viewModel;
 
     public static HomeFragment getInstance() {
         if (mInstnace == null) {
@@ -80,6 +93,17 @@ public class HomeFragment extends Fragment {
 //        final TextView textView = binding.textHome;
 //        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        viewModel.getFavoriteStatus().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isFavorite) {
+                Log.d(TAG, "1111111111111111111111111111111111111111111111");
+                // 즐겨찾기 아이콘 업데이트
+                updateFavoriteIcon(isFavorite);
+            }
+        });
 
         /**
          * 최저가 순위
@@ -92,7 +116,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setAdapter(productHoriAdapter);
 
         /**
-         * 베스트 상품
+         * 인기 상품
          */
         recyclerViewTop = binding.recyclerViewTop;
         LinearLayoutManager toplayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -144,8 +168,115 @@ public class HomeFragment extends Fragment {
             getTopProducts(10, 0, currentCategoryCode);
         }
 
+        productAdapter.setOnItemClickListener(new ProductAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int pos) {
+                //save = bottomSheetDialog.findViewById(R.id.save);
+                pdItem = productAdapter.get(pos);
+                pdItem_possion = pos;
+                if (v.getId() == R.id.layout_favorite) {
+                    if(pdItem.isIs_Favorite()){
+                        setDelUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id());
+                        pdItem.setIs_Favorite(false);
+                        productAdapter.set(pos, pdItem);
+                    } else {
+                        setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), 0, "Y");
+                        pdItem.setIs_Favorite(true);
+                        productAdapter.set(pos, pdItem);
+                    }
+
+                }
+
+            }
+        });
+
+        productHoriAdapter.setOnItemClickListener(new ProductAdapterHori.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int pos) {
+                //save = bottomSheetDialog.findViewById(R.id.save);
+                pdItem = productHoriAdapter.get(pos);
+                pdItem_possion = pos;
+
+                if (v.getId() == R.id.layout_favorite) {
+                    if(pdItem.isIs_Favorite()){
+                        setDelUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id());
+                        pdItem.setIs_Favorite(false);
+                        productHoriAdapter.set(pos, pdItem);
+                    } else {
+                        setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), 0, "Y");
+                        pdItem.setIs_Favorite(true);
+                        productHoriAdapter.set(pos, pdItem);
+                    }
+
+                }
+
+            }
+        });
+
         return root;
     }
+
+    private void updateFavoriteIcon(boolean isFavorite) {
+        // 즐겨찾기 아이콘을 업데이트하는 로직
+        Log.d(TAG, "updateFavoriteIcon: " + isFavorite);
+    }
+
+    public void setUserItemMap(String user_id, String vendor_item_id, int hope_price, String hope_stock){
+
+        retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
+
+        Call<ReturnMsgItem> call = service.setUserItemMap("setUserItemMap", user_id, vendor_item_id, hope_price, hope_stock);
+        call.enqueue(new Callback<ReturnMsgItem>() {
+            @Override
+            public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
+                if(response.isSuccessful()){
+                    ReturnMsgItem returnMsgItem = response.body();
+                    Log.d(TAG, "setUserRegister : " + returnMsgItem.toString());
+
+
+                }
+                else{
+                    Log.e(TAG, "실패 코드 확인 : " + response.code());
+                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
+                }
+            }
+            @Override
+            public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+
+
+    }
+
+    public void setDelUserItemMap(String user_id, String vendor_item_id){
+
+        retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
+
+        Call<ReturnMsgItem> call = service.setDelUserItemMap("setDelUserItemMap", user_id, vendor_item_id);
+        call.enqueue(new Callback<ReturnMsgItem>() {
+            @Override
+            public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
+                if(response.isSuccessful()){
+                    ReturnMsgItem returnMsgItem = response.body();
+//                    productAdapter.remove(pdItem_possion);
+                }
+                else{
+                    Log.e(TAG, "실패 코드 확인 : " + response.code());
+                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
+                }
+            }
+            @Override
+            public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+
+
+    }
+
 
     public void getTopProducts(int cnt, int page, String code){
 
@@ -153,7 +284,7 @@ public class HomeFragment extends Fragment {
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<List<ProductItem>> call = service.getTopProducts("getTopProducts", cnt, page, code);
+        Call<List<ProductItem>> call = service.getTopProducts("getTopProducts", cnt, page, MainApplication.ANDROID_ID, code);
 
         call.enqueue(new Callback<List<ProductItem>>() {
             @Override
@@ -194,13 +325,14 @@ public class HomeFragment extends Fragment {
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<List<ProductItem>> call = service.getBestSalesProducts("getBestSalesProducts", cnt, page, "0");
+        Call<List<ProductItem>> call = service.getBestSalesProducts("getBestSalesProducts", cnt, page, MainApplication.ANDROID_ID, "0");
 
         call.enqueue(new Callback<List<ProductItem>>() {
             @Override
             public void onResponse(Call<List<ProductItem>> call, Response<List<ProductItem>> response) {
                 if(response.isSuccessful()){
                     List<ProductItem> productItem = response.body();
+                    Log.d(TAG, "1111111111111111111" + productItem.toString());
                     productHoriAdapter.addItems(productItem);
 
                 }
@@ -266,6 +398,12 @@ public class HomeFragment extends Fragment {
         });
 
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+//        productAdapter.notifyDataSetChanged();
     }
 
     @Override

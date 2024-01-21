@@ -36,6 +36,14 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
         this.items = items;
     }
 
+    private OnItemClickListener onItemClickListener = null;
+    public interface OnItemClickListener {
+        void onItemClick(View v, int pos);
+    }
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -70,7 +78,16 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
 
     public void setItems(List<ProductItem> list){
         items = list;
-//        notifyDataSetChanged();
+        notifyDataSetChanged();
+    }
+
+    public void set (int pos, ProductItem item) {
+        items.set(pos, item);
+        notifyDataSetChanged();
+    }
+
+    public ProductItem get (int pos) {
+        return items.get(pos);
     }
 
     public int size() {
@@ -87,7 +104,7 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
         return items.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView name, price_value, rating_total_count, persent;
         private ImageView image, favorite;
         private RatingBar rating;
@@ -111,17 +128,18 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
             layout_favorite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // 클릭 이벤트 처리
-                    onFavoriteClick(getLayoutPosition());
+                    int pos = getAdapterPosition();
+                    if(pos != RecyclerView.NO_POSITION){
+                        //동작 호출 (onItemClick 함수 호출)
+                        if(onItemClickListener != null){
+                            onItemClickListener.onItemClick(v, pos);
+                        }
+                    }
+
                 }
             });
 
             itemView.setOnClickListener(this);
-        }
-
-        private void onFavoriteClick(int position) {
-            Log.d(TAG, "Favorite clicked at position: " + position);
-            // 여기에서 필요한 작업 수행 (예: 즐겨찾기 추가/제거)
         }
 
         public void setItem(ProductItem pitem){
@@ -151,6 +169,13 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
                 persent.setText(numString + "% off"); // 할인율 표시
             } else {
                 persent.setVisibility(View.GONE); // 레이아웃 숨김
+            }
+
+            Log.d(TAG, "fff : " + pitem.toString());
+            if(pitem.isIs_Favorite()){
+                favorite.setImageResource(R.drawable.baseline_favorite_24);
+            }else{
+                favorite.setImageResource(R.drawable.baseline_favorite_border_24);
             }
 
 

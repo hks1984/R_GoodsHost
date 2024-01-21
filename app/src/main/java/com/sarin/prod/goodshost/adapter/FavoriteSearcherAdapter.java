@@ -17,7 +17,7 @@ import com.sarin.prod.goodshost.util.StringUtil;
 import java.util.List;
 
 
-public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder>{
+public class FavoriteSearcherAdapter extends RecyclerView.Adapter<FavoriteSearcherAdapter.ViewHolder>{
 
     private List<String> items;
     public static String TAG = MainApplication.TAG;
@@ -25,15 +25,15 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
 
     static StringUtil sUtil = StringUtil.getInstance();
 
-    public RecentAdapter(List<String> items){
+    public FavoriteSearcherAdapter(List<String> items){
         this.items = items;
     }
 
-    private RecentAdapter.OnItemClickListener onItemClickListener = null;
+    private FavoriteSearcherAdapter.OnItemClickListener onItemClickListener = null;
     public interface OnItemClickListener {
         void onItemClick(View v, int pos);
     }
-    public void setOnItemClickListener(RecentAdapter.OnItemClickListener listener) {
+    public void setOnItemClickListener(FavoriteSearcherAdapter.OnItemClickListener listener) {
         this.onItemClickListener = listener;
     }
 
@@ -53,7 +53,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
         holder.categoryItemClickListener = new CategoryItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
-                Log.d(TAG, "category: " + items.get(position));
+                Log.d(TAG, "FavoriteSearcherAdapter: " + items.get(position));
 
             }
         };

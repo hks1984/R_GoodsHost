@@ -4,8 +4,6 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -13,7 +11,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -22,9 +21,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sarin.prod.goodshost.MainApplication;
+import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.adapter.ProductAdapter;
+import com.sarin.prod.goodshost.adapter.FavoriteSearcherAdapter;
+import com.sarin.prod.goodshost.adapter.RecentAdapter;
 import com.sarin.prod.goodshost.databinding.FragmentSearchBinding;
 import com.sarin.prod.goodshost.item.ProductItem;
+import com.sarin.prod.goodshost.item.RecentSearcherItem;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
 import com.sarin.prod.goodshost.util.LoadingProgressManager;
@@ -43,13 +46,21 @@ public class SearchFragment extends Fragment {
     public static String TAG = MainApplication.TAG;
 
     private static RecyclerView recyclerView;
+    private static RecyclerView favoriteSearcherRecyclerView;
+    private static RecyclerView recentRecyclerView;
     private RecyclerView.OnScrollListener scrollListener;
     private boolean isScrollListenerAdded = false;
     public static ProductAdapter productAdapter;
+    public static FavoriteSearcherAdapter favoriteSearcherAdapter;
+    public static RecentAdapter recentAdapter;
+
     private List<ProductItem> piLIst = new ArrayList<>();
-    private EditText editText;
+    private AutoCompleteTextView autoCompleteTextView;
     private String searchName = "";
     private int SearchProducts_page = 0;
+    private List<String> favoriteSearcherList = new ArrayList<>();
+    private List<RecentSearcherItem> recentList = new ArrayList<>();
+
     private LoadingProgressManager loadingProgressManager = LoadingProgressManager.getInstance();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -66,35 +77,26 @@ public class SearchFragment extends Fragment {
         productAdapter = new ProductAdapter(piLIst);
         recyclerView.setAdapter(productAdapter);
 
-        editText = binding.editTextSearchBox;
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // 입력난에 변화가 있을 시 조치
-                Log.d(TAG, "onTextChanged: [" + s + "], [" + start + "], [" + before + "], [" + count + "]");
-            }
-            @Override
-            public void afterTextChanged(Editable arg0) {
-                // 입력이 끝났을 때 조치
-                Log.d(TAG, "afterTextChanged: " + arg0);
-                searchName = arg0.toString();
-            }
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // 입력하기 전에 조치
-            }
-        });
+        List<String> androids = new ArrayList<>();
+        androids.add("좋아하는 색은 빨간색");
+        androids.add("좋아하는 색은 파란색");
+        androids.add("좋아하는 색은 노란색");
+
+        autoCompleteTextView = binding.editTextSearchBox;
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.my_auto_complete_box, androids);
+        autoCompleteTextView.setAdapter(adapter);
 
         //엔터키 이벤트 처리
-        editText.setOnKeyListener(new View.OnKeyListener() {
+        autoCompleteTextView.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 //Enter key Action
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     //키패드 내리기
                     InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+                    imm.hideSoftInputFromWindow(autoCompleteTextView.getWindowToken(), 0);
 
+                    searchName = String.valueOf(autoCompleteTextView.getText());
                     getSearchProducts(searchName);
                     initScrollListener();
                     return true;
@@ -103,17 +105,17 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        editText.setOnTouchListener(new View.OnTouchListener() {
+        autoCompleteTextView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (event.getRawX() >= (editText.getRight() - editText.getCompoundDrawables()[2].getBounds().width() - editText.getPaddingRight())) {
+                    if (event.getRawX() >= (autoCompleteTextView.getRight() - autoCompleteTextView.getCompoundDrawables()[2].getBounds().width() - autoCompleteTextView.getPaddingRight())) {
                         // 드로어블이 클릭되었을 때의 동작을 여기에 작성합니다.
                         // 예: 검색 기능 실행, 입력 내용 지우기 등
                         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+                        imm.hideSoftInputFromWindow(autoCompleteTextView.getWindowToken(), 0);
 
-                        //처리
+                        searchName = String.valueOf(autoCompleteTextView.getText());
                         getSearchProducts(searchName);
                         initScrollListener();
                         return true;
@@ -123,17 +125,57 @@ public class SearchFragment extends Fragment {
             }
         });
 
+
+        favoriteSearcherRecyclerView = binding.favoriteSearcherList;
+        LinearLayoutManager favoriteSearcheroutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        favoriteSearcherRecyclerView.setLayoutManager(favoriteSearcheroutManager);
+        favoriteSearcherAdapter = new FavoriteSearcherAdapter(favoriteSearcherList);
+        favoriteSearcherRecyclerView.setAdapter(favoriteSearcherAdapter);
+
+        favoriteSearcherList.add("asdf");
+        favoriteSearcherList.add("asdsdf");
+        favoriteSearcherList.add("asdsdgsdfg");
+        favoriteSearcherList.add("asffg");
+        favoriteSearcherList.add("asfsdgwefg");
+        favoriteSearcherList.add("asgregrffg");
+        favoriteSearcherList.add("asffgdfgdfgfg");
+        favoriteSearcherList.add("asdfgffg");
+        favoriteSearcherList.add("asdfeeeegffg");
+        favoriteSearcherList.add("asaaaddfgffg");
+
+
+        recentRecyclerView = binding.recentRecyclerView;
+        LinearLayoutManager recentoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        recentRecyclerView.setLayoutManager(recentoutManager);
+        recentAdapter = new RecentAdapter(recentList);
+        recentRecyclerView.setAdapter(recentAdapter);
+
+        List<RecentSearcherItem> recentSearcherItem = new ArrayList<>();
+
+        for(int a = 0; a < 10; a++){
+            RecentSearcherItem ei = new RecentSearcherItem();
+            ei.setDate("" + a);
+            ei.setName("" + a);
+            recentSearcherItem.add(ei);
+            Log.d(TAG, "" + a);
+        }
+        Log.d(TAG, "size: " + recentSearcherItem.size());
+        recentAdapter.addItems(recentSearcherItem);
+
+
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             private boolean isScrolledDown = false;
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_SETTLING && isScrolledDown) {
-                    editText.setVisibility(View.VISIBLE);
+                    Log.d(TAG, "1");
+                    autoCompleteTextView.setVisibility(View.VISIBLE);
 
                 }else if(newState == RecyclerView.SCROLL_STATE_SETTLING && !isScrolledDown){
+                    Log.d(TAG, "2");
                     if (!piLIst.isEmpty()) {
-                        editText.setVisibility(View.GONE);
+                        autoCompleteTextView.setVisibility(View.GONE);
                     }
 
                 }
@@ -142,17 +184,13 @@ public class SearchFragment extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
+                Log.d(TAG, "dy: " + dy);
                 isScrolledDown = dy < 0;
             }
         });
 
 
 
-
-
-//        final TextView textView = binding.textSearch;
-//        searchViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 

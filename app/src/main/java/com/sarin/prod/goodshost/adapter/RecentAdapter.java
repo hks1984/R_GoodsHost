@@ -12,63 +12,64 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
+import com.sarin.prod.goodshost.item.RecentSearcherItem;
 import com.sarin.prod.goodshost.util.StringUtil;
 
 import java.util.List;
 
 
-public class FavoriteSearcherAdapter extends RecyclerView.Adapter<FavoriteSearcherAdapter.ViewHolder>{
+public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder>{
 
-    private List<String> items;
+    private List<RecentSearcherItem> items;
     public static String TAG = MainApplication.TAG;
     private static Context context;
 
     static StringUtil sUtil = StringUtil.getInstance();
 
-    public FavoriteSearcherAdapter(List<String> items){
+    public RecentAdapter(List<RecentSearcherItem> items){
         this.items = items;
     }
 
-    private FavoriteSearcherAdapter.OnItemClickListener onItemClickListener = null;
+    private RecentAdapter.OnItemClickListener onItemClickListener = null;
     public interface OnItemClickListener {
         void onItemClick(View v, int pos);
     }
-    public void setOnItemClickListener(FavoriteSearcherAdapter.OnItemClickListener listener) {
+    public void setOnItemClickListener(RecentAdapter.OnItemClickListener listener) {
         this.onItemClickListener = listener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.favorite_searcher_list_view, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recent_list_view, parent, false);
         context = parent.getContext();
         return new ViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String item = items.get(position);
+        RecentSearcherItem item = items.get(position);
         holder.setItem(item);
 
         holder.categoryItemClickListener = new CategoryItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
-                Log.d(TAG, "FavoriteSearcherAdapter: " + items.get(position));
+                Log.d(TAG, "FavoriteSearcherAdapter: " + items.get(position).getName());
 
             }
         };
 
     }
 
-    public void addItems(List<String> items){
+    public void addItems(List<RecentSearcherItem> items){
         this.items.addAll(items);
         notifyDataSetChanged();
     }
-    public void addItem(String items){
+    public void addItem(RecentSearcherItem items){
         this.items.add(items);
         notifyDataSetChanged();
     }
-    public void setItems(List<String> items){
+    public void setItems(List<RecentSearcherItem> items){
         items = items;
         notifyDataSetChanged();
     }
@@ -84,7 +85,7 @@ public class FavoriteSearcherAdapter extends RecyclerView.Adapter<FavoriteSearch
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView recentName;
+        private TextView recentName, recentDate;
 
         CategoryItemClickListener categoryItemClickListener;
 
@@ -92,12 +93,14 @@ public class FavoriteSearcherAdapter extends RecyclerView.Adapter<FavoriteSearch
             super(itemView);
 
             recentName = (TextView) itemView.findViewById(R.id.recentName);
+            recentDate = (TextView) itemView.findViewById(R.id.recentDate);
 
             itemView.setOnClickListener(this);
         }
 
-        public void setItem(String pitem){
-            recentName.setText(pitem);
+        public void setItem(RecentSearcherItem pitem){
+            recentName.setText(pitem.getName());
+            recentDate.setText(pitem.getDate());
         }
 
         @Override

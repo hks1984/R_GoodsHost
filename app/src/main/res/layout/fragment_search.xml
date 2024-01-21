@@ -1,47 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.search.SearchFragment"
+    android:orientation="vertical"
     android:background="@color/black_500"
+    tools:context=".fragment.search.SearchFragment"
     >
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/editTextSearchBox"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:layout_margin="10dp"
-        android:textColorHint="#AAAAAA"
-        android:textColor="@color/black_500"
-        android:autofillHints=""
+        android:completionThreshold="1"
+        android:textColorHint="#555555"
         android:background="@drawable/share_search_box"
         android:drawableEnd="@drawable/baseline_search_24"
-        android:textCursorDrawable="@color/black_500"
+        android:textCursorDrawable="@drawable/text_cursor"
         android:singleLine="true"
         android:ems="10"
         android:hint="모니터"
         android:inputType="text"
         android:minHeight="40dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/recyclerView"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="20dp"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textSize="22dp"
+            style="@style/TextWhite.bigLargeStyle"
+            android:textStyle="bold"
+            android:text="@string/search_recent_searches"
+            android:paddingLeft="20dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            >
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recentRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                />
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginBottom="20dp"
+    >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textSize="22dp"
+        style="@style/TextWhite.bigLargeStyle"
+        android:textStyle="bold"
+        android:text="@string/search_favorite_searches"
+        android:paddingLeft="20dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/favorite_searcher_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            />
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:background="@color/white_500"
-        app:layout_constraintTop_toBottomOf="@id/editTextSearchBox"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

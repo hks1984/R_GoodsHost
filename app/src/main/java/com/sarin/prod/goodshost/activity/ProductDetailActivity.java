@@ -2,6 +2,7 @@ package com.sarin.prod.goodshost.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -45,6 +47,7 @@ import com.sarin.prod.goodshost.databinding.ActivityProductDetailBinding;
 import com.sarin.prod.goodshost.item.ChartItem;
 import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.item.ReturnMsgItem;
+import com.sarin.prod.goodshost.item.SharedViewModel;
 import com.sarin.prod.goodshost.network.RetrofitApi;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
@@ -83,6 +86,8 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     ProductItem _pi = new ProductItem();
 
+    private SharedViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,10 +113,14 @@ public class ProductDetailActivity extends AppCompatActivity {
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this, R.style.RoundCornerBottomSheetDialogTheme);
         bottomSheetDialog.setContentView(view);
 
+
+        viewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+
         registration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                viewModel.setFavorite(true);
                 bottomSheetDialog.show();
 
             }
@@ -131,6 +140,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         save = bottomSheetDialog.findViewById(R.id.save);
         hope_price = bottomSheetDialog.findViewById(R.id.hope_price);
+        hope_price.setSelection(hope_price.getText().length());
         check = bottomSheetDialog.findViewById(R.id.check);
 
 
@@ -144,6 +154,10 @@ public class ProductDetailActivity extends AppCompatActivity {
 
                 Log.d(TAG, "" + MainApplication.ANDROID_ID + "   " + vendor_item_id + "   " + sUtil.convertStringToInt(editTextValue) + "   " + hope_stock);
                 setUserItemMap(MainApplication.ANDROID_ID, vendor_item_id, sUtil.convertStringToInt(editTextValue), hope_stock);
+
+
+
+
 
                 bottomSheetDialog.dismiss();
 

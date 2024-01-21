@@ -62,9 +62,6 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
             public void onItemClickListener(View v, int position) {
 
                 Log.d(TAG, "position: " + position);
-                Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
-                intent.putExtra("vendor_item_id", items.get(position).getVendor_item_id());
-                v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
 
             }
         };
@@ -73,6 +70,11 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
 
     public void addItems(List<ProductItem> items){
         this.items.addAll( items);
+        notifyDataSetChanged();
+    }
+
+    public void addItem(ProductItem items){
+        this.items.add( items);
         notifyDataSetChanged();
     }
 
@@ -178,12 +180,6 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
             itemView.setOnClickListener(this);
         }
 
-        private void onFavoriteClick(int position) {
-            Log.d(TAG, "Favorite clicked at position: " + position);
-
-            // 여기에서 필요한 작업 수행 (예: 즐겨찾기 추가/제거)
-        }
-
         public void setItem(ProductItem pitem){
             name.setText(pitem.getName());
             price_value.setText(sUtil.replaceStringPriceToInt(pitem.getPrice_value()) + context.getResources().getString(R.string.won));
@@ -204,6 +200,7 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
             }
 
             if(pitem.getHope_price() > 0){
+                favorite_hope_price.setVisibility(View.VISIBLE);
                 favorite_hope_price.setText(sUtil.replaceStringPriceToInt(pitem.getHope_price()) + context.getResources().getString(R.string.won));
             } else {
                 favorite_hope_price.setVisibility(View.GONE); // 레이아웃 숨김
@@ -211,7 +208,7 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
 
 
             if("Y".equals(pitem.getHope_stock())){
-                favorite_hope_stock.setText(context.getResources().getString(R.string.favorite_stock_alarm));
+                favorite_hope_stock.setVisibility(View.VISIBLE);
             } else {
                 favorite_hope_stock.setVisibility(View.GONE); // 레이아웃 숨김
             }

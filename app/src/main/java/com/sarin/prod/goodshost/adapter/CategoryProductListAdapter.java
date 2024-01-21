@@ -38,6 +38,14 @@ public class CategoryProductListAdapter extends RecyclerView.Adapter<CategoryPro
 
     public int selectedItem = -1;
 
+    private OnItemClickListener onItemClickListener = null;
+    public interface OnItemClickListener {
+        void onItemClick(View v, int pos);
+    }
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -115,7 +123,7 @@ public class CategoryProductListAdapter extends RecyclerView.Adapter<CategoryPro
         return items.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView categoryName;
 
         CategoryItemClickListener categoryItemClickListener;

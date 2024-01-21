@@ -47,6 +47,7 @@ public interface RetrofitInterface {
             @Path ("path") String path,
             @Query("cnt") int cnt,
             @Query("page") int page,
+            @Query("user_id") String user_id,
             @Query("code") String code
     );
 
@@ -55,6 +56,7 @@ public interface RetrofitInterface {
             @Path ("path") String path,
             @Query("cnt") int cnt,
             @Query("page") int page,
+            @Query("user_id") String user_id,
             @Query("code") String code
     );
 
@@ -78,6 +80,13 @@ public interface RetrofitInterface {
             @Query("vendor_item_id") String vendor_item_id,
             @Query("hope_price") int hope_price,
             @Query("hope_stock") String hope_stock
+    );
+
+    @GET("{path}")
+    Call<ReturnMsgItem> setDelUserItemMap(
+            @Path ("path") String path,
+            @Query("user_id") String user_id,
+            @Query("vendor_item_id") String vendor_item_id
     );
 
     @GET("{path}")

@@ -22,6 +22,7 @@ import com.sarin.prod.goodshost.databinding.ActivityCategoryProductListBinding;
 import com.sarin.prod.goodshost.fragment.home.HomeFragment;
 import com.sarin.prod.goodshost.item.CategoryItem;
 import com.sarin.prod.goodshost.item.ProductItem;
+import com.sarin.prod.goodshost.item.ReturnMsgItem;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
 import com.sarin.prod.goodshost.util.LoadingProgressManager;
@@ -60,6 +61,10 @@ public class CategoryProductListActivity extends AppCompatActivity {
 
     private static CategoryProductListActivity mInstnace = null;
 
+    private ProductItem pdItem = new ProductItem();
+    private int pdItem_possion = 0;
+
+
     public static CategoryProductListActivity getInstance() {
         if (mInstnace == null) {
             mInstnace = new CategoryProductListActivity();
@@ -92,6 +97,31 @@ public class CategoryProductListActivity extends AppCompatActivity {
         });
 
         LinearLayout1 = binding.LinearLayout1;
+
+
+        productAdapter.setOnItemClickListener(new ProductAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int pos) {
+                //save = bottomSheetDialog.findViewById(R.id.save);
+                pdItem = productAdapter.get(pos);
+                pdItem_possion = pos;
+                if (v.getId() == R.id.layout_favorite) {
+                    if(pdItem.isIs_Favorite()){
+                        setDelUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id());
+                        pdItem.setIs_Favorite(false);
+                        productAdapter.set(pos, pdItem);
+                    } else {
+                        setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), 0, "Y");
+                        pdItem.setIs_Favorite(true);
+                        productAdapter.set(pos, pdItem);
+                    }
+
+                }
+
+            }
+        });
+
+
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             private boolean isScrolledDown = false;
             @Override
@@ -148,6 +178,62 @@ public class CategoryProductListActivity extends AppCompatActivity {
 
     }
 
+    public void setUserItemMap(String user_id, String vendor_item_id, int hope_price, String hope_stock){
+
+        retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
+
+        Call<ReturnMsgItem> call = service.setUserItemMap("setUserItemMap", user_id, vendor_item_id, hope_price, hope_stock);
+        call.enqueue(new Callback<ReturnMsgItem>() {
+            @Override
+            public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
+                if(response.isSuccessful()){
+                    ReturnMsgItem returnMsgItem = response.body();
+                    Log.d(TAG, "setUserRegister : " + returnMsgItem.toString());
+
+
+                }
+                else{
+                    Log.e(TAG, "실패 코드 확인 : " + response.code());
+                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
+                }
+            }
+            @Override
+            public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+
+
+    }
+
+    public void setDelUserItemMap(String user_id, String vendor_item_id){
+
+        retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
+
+        Call<ReturnMsgItem> call = service.setDelUserItemMap("setDelUserItemMap", user_id, vendor_item_id);
+        call.enqueue(new Callback<ReturnMsgItem>() {
+            @Override
+            public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
+                if(response.isSuccessful()){
+                    ReturnMsgItem returnMsgItem = response.body();
+//                    productAdapter.remove(pdItem_possion);
+                }
+                else{
+                    Log.e(TAG, "실패 코드 확인 : " + response.code());
+                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
+                }
+            }
+            @Override
+            public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+
+
+    }
+
     public void getCategoryList(){
 //        Log.d(TAG, "page: " + CategoryProducts_page);
 
@@ -192,7 +278,7 @@ public class CategoryProductListActivity extends AppCompatActivity {
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<List<ProductItem>> call = service.getTopProducts("getTopProducts", cnt, page++, code);
+        Call<List<ProductItem>> call = service.getTopProducts("getTopProducts", cnt, page++, MainApplication.ANDROID_ID, code);
 
         call.enqueue(new Callback<List<ProductItem>>() {
             @Override
@@ -228,7 +314,7 @@ public class CategoryProductListActivity extends AppCompatActivity {
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<List<ProductItem>> call = service.getBestSalesProducts("getBestSalesProducts", cnt, page++, code);
+        Call<List<ProductItem>> call = service.getBestSalesProducts("getBestSalesProducts", cnt, page++, MainApplication.ANDROID_ID, code);
 
         call.enqueue(new Callback<List<ProductItem>>() {
             @Override
