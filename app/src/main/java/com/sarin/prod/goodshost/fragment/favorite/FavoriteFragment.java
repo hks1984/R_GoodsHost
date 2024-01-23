@@ -1,6 +1,7 @@
 package com.sarin.prod.goodshost.fragment.favorite;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,8 +25,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
+import com.sarin.prod.goodshost.activity.ProductDetailActivity;
 import com.sarin.prod.goodshost.adapter.FavoriteProductAdapter;
+import com.sarin.prod.goodshost.adapter.RecyclerViewClickListener;
 import com.sarin.prod.goodshost.databinding.FragmentFavoriteBinding;
+import com.sarin.prod.goodshost.fragment.home.HomeFragment;
 import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.item.ReturnMsgItem;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
@@ -42,7 +46,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FavoriteFragment extends Fragment {
+public class FavoriteFragment extends Fragment implements RecyclerViewClickListener {
 
     private FragmentFavoriteBinding binding;
     public static String TAG = MainApplication.TAG;
@@ -59,6 +63,11 @@ public class FavoriteFragment extends Fragment {
     private LinearLayout favorite_LinearLayout1;
     private NestedScrollView nestedScrollView;
 
+    private BottomSheetDialog bottomSheetDialog;
+    private EditText hope_price;
+    private TextView save;
+    private CheckBox check;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         FavoriteViewModel favoriteViewModel =
@@ -72,42 +81,19 @@ public class FavoriteFragment extends Fragment {
         recyclerView = binding.recyclerView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        favoriteProductAdapter = new FavoriteProductAdapter(piLIst);
+        favoriteProductAdapter = new FavoriteProductAdapter(piLIst, this);
         recyclerView.setAdapter(favoriteProductAdapter);
 
         getFavoriteProducts(MainApplication.ANDROID_ID);
 
         LayoutInflater inflater_bottom_sheet = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater_bottom_sheet.inflate(R.layout.bottom_sheet_registration, null, false);
-        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.RoundCornerBottomSheetDialogTheme);
+        bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.RoundCornerBottomSheetDialogTheme);
         bottomSheetDialog.setContentView(view);
 
-        EditText hope_price = bottomSheetDialog.findViewById(R.id.hope_price);
-        TextView save = bottomSheetDialog.findViewById(R.id.save);
-        CheckBox check = bottomSheetDialog.findViewById(R.id.check);
-
-        favoriteProductAdapter.setOnItemClickListener(new FavoriteProductAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View v, int pos) {
-                //save = bottomSheetDialog.findViewById(R.id.save);
-                pdItem = favoriteProductAdapter.get(pos);
-                pdItem_possion = pos;
-                if (v.getId() == R.id.favorite_del) {
-                    setDelUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id());
-
-                } else if (v.getId() == R.id.favorite_alarm_edit) {
-                    bottomSheetDialog.show();
-                    hope_price.setText("" + favoriteProductAdapter.get(pos).getHope_price());
-                    hope_price.setSelection(hope_price.getText().length());
-                    if("Y".equals(favoriteProductAdapter.get(pos).getHope_stock())){
-                        check.setChecked(true);
-                    } else {
-                        check.setChecked(false);
-                    }
-                }
-
-            }
-        });
+        hope_price = bottomSheetDialog.findViewById(R.id.hope_price);
+        save = bottomSheetDialog.findViewById(R.id.save);
+        check = bottomSheetDialog.findViewById(R.id.check);
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,6 +175,37 @@ public class FavoriteFragment extends Fragment {
 
         return root;
     }
+
+    public void onItemClickListener(View v, int pos) {
+        // 아이템 클릭 이벤트 처리
+        pdItem = favoriteProductAdapter.get(pos);
+        pdItem_possion = pos;
+
+        if (v.getId() == R.id.favorite_del) {
+            setDelUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id());
+            HomeFragment hf = HomeFragment.getInstance();
+            hf.productAdapter.setFavorite(pdItem.getVendor_item_id(), false);
+            hf.productHoriAdapter.setFavorite(pdItem.getVendor_item_id(), false);
+
+        } else if (v.getId() == R.id.favorite_alarm_edit) {
+            bottomSheetDialog.show();
+            hope_price.setText("" + favoriteProductAdapter.get(pos).getHope_price());
+            hope_price.setSelection(hope_price.getText().length());
+            if("Y".equals(favoriteProductAdapter.get(pos).getHope_stock())){
+                check.setChecked(true);
+            } else {
+                check.setChecked(false);
+            }
+        } else if (v.getId() == R.id.list_view_favorite) {
+            Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
+            intent.putExtra("vendor_item_id", pdItem.getVendor_item_id());
+            v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
+        }
+    }
+
+    @Override
+    public void onItemClickListener_Hori(View v, int pos) {}
+
 
     public void setUserItemMap(String user_id, String vendor_item_id, int hope_price, String hope_stock){
 

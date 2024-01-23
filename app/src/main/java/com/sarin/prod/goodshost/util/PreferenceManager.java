@@ -1,7 +1,16 @@
 package com.sarin.prod.goodshost.util;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 데이터 저장 및 로드 클래스
@@ -21,10 +30,12 @@ public class PreferenceManager {
 
     private static final float DEFAULT_VALUE_FLOAT = -1F;
 
+    private static Gson gson = new Gson();;
+
 
     private static SharedPreferences getPreferences(Context context) {
 
-        return context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
+        return context.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
 
     }
 
@@ -132,6 +143,51 @@ public class PreferenceManager {
         editor.commit();
 
     }
+
+    public static void setStringList(Context context, String key, String newString) {
+        SharedPreferences prefs = getPreferences(context);
+
+        List<String> stringList = getStringList(context, key);
+        if (stringList == null) {
+            stringList = new ArrayList<>();
+        }
+        stringList.add(newString);
+
+        String json = gson.toJson(stringList);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(key, json);
+        editor.apply();
+    }
+
+    public static void delStringList(Context context, String key, String newString) {
+        SharedPreferences prefs = getPreferences(context);
+
+        List<String> stringList = getStringList(context, key);
+        if (stringList == null) {
+            stringList = new ArrayList<>();
+        }
+        stringList.remove(newString);
+
+        String json = gson.toJson(stringList);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(key, json);
+        editor.apply();
+    }
+
+    public static List<String> getStringList(Context context, String key) {
+        SharedPreferences prefs = getPreferences(context);
+        String json = prefs.getString(key, null);
+        Type type = new TypeToken<List<String>>() {}.getType();
+        return gson.fromJson(json, type);
+    }
+
+
+
+    private void saveStringList(List<String> stringList) {
+
+    }
+
+
 
 
     /**

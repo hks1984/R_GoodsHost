@@ -7,6 +7,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/share_round_list"
     android:layout_marginLeft="20dp"
+    android:id="@+id/list_view_hori"
     >
 
 

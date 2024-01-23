@@ -164,22 +164,26 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
         // 아이템 클릭 이벤트 처리
         pdItem = productAdapter.get(pos);
         pdItem_possion = pos;
-        Log.d(TAG, "v id: " + v.getId());
         if (v.getId() == R.id.layout_favorite) {
             if(pdItem.isIs_Favorite()){
                 setDelUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id());
                 pdItem.setIs_Favorite(false);
                 productAdapter.set(pos, pdItem);
             } else {
-                setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), 0, "Y");
+                setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), 0, "N");
                 pdItem.setIs_Favorite(true);
                 productAdapter.set(pos, pdItem);
             }
 
-        } else {
-
+        } else if (v.getId() == R.id.list_view) {
+            Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
+            intent.putExtra("vendor_item_id", pdItem.getVendor_item_id());
+            v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
         }
     }
+
+    @Override
+    public void onItemClickListener_Hori(View v, int pos) {}
 
     public void setUserItemMap(String user_id, String vendor_item_id, int hope_price, String hope_stock){
 

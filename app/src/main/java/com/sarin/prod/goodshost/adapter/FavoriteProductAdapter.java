@@ -28,18 +28,13 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
     private static Context context;
 
     static StringUtil sUtil = StringUtil.getInstance();
+    private RecyclerViewClickListener recyclerViewClickListener;
+    public FavoriteProductAdapter(List<ProductItem> items, RecyclerViewClickListener listener){
 
-    public FavoriteProductAdapter(List<ProductItem> items){
         this.items = items;
+        this.recyclerViewClickListener = listener;
     }
 
-    private OnItemClickListener onItemClickListener = null;
-    public interface OnItemClickListener {
-        void onItemClick(View v, int pos);
-    }
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.onItemClickListener = listener;
-    }
 
     @NonNull
     @Override
@@ -54,14 +49,9 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
         ProductItem item = items.get(position);
         holder.setItem(item);
 
-        holder.productItemClickListener = new RecyclerViewClickListener() {
-            @Override
-            public void onItemClickListener(View v, int position) {
-
-                Log.d(TAG, "position: " + position);
-
-            }
-        };
+        holder.favorite_del.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener(v, position));
+        holder.favorite_alarm_edit.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener(v, position));
+        holder.list_view_favorite.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener(v, position));
 
     }
 
@@ -110,14 +100,12 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
         return items.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView name, price_value, persent, favorite_hope_price, favorite_hope_stock;
         private ImageView image;
 //        private RatingBar rating;
 
-        private LinearLayout favorite_del, favorite_alarm_edit;
-
-        RecyclerViewClickListener productItemClickListener;
+        private LinearLayout favorite_del, favorite_alarm_edit, list_view_favorite;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -130,51 +118,45 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
             persent = (TextView) itemView.findViewById(R.id.persent);
             favorite_del = (LinearLayout) itemView.findViewById(R.id.favorite_del);
             favorite_alarm_edit = (LinearLayout) itemView.findViewById(R.id.favorite_alarm_edit);
-
-            favorite_del.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // 클릭 이벤트 처리
-//                    onFavoriteClick(getLayoutPosition());
-                    //존재하는 포지션인지 확인
-                    int pos = getAdapterPosition();
-                    if(pos != RecyclerView.NO_POSITION){
-                        //동작 호출 (onItemClick 함수 호출)
-                        if(onItemClickListener != null){
-                            onItemClickListener.onItemClick(v, pos);
-                        }
-                    }
-
-                }
-            });
-
-            favorite_alarm_edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // 클릭 이벤트 처리
-//                    onFavoriteClick(getLayoutPosition());
-                    //존재하는 포지션인지 확인
-                    int pos = getAdapterPosition();
-                    if(pos != RecyclerView.NO_POSITION){
-                        //동작 호출 (onItemClick 함수 호출)
-                        if(onItemClickListener != null){
-                            onItemClickListener.onItemClick(v, pos);
-                        }
-                    }
-
-                }
-            });
+            list_view_favorite = (LinearLayout) itemView.findViewById(R.id.list_view_favorite);
 
 
-//            layout_favorite.setOnClickListener(new View.OnClickListener() {
+
+//            favorite_del.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
 //                    // 클릭 이벤트 처리
-//                    onFavoriteClick(getLayoutPosition());
+////                    onFavoriteClick(getLayoutPosition());
+//                    //존재하는 포지션인지 확인
+//                    int pos = getAdapterPosition();
+//                    if(pos != RecyclerView.NO_POSITION){
+//                        //동작 호출 (onItemClick 함수 호출)
+//                        if(onItemClickListener != null){
+//                            onItemClickListener.onItemClick(v, pos);
+//                        }
+//                    }
+//
+//                }
+//            });
+//
+//            favorite_alarm_edit.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    // 클릭 이벤트 처리
+////                    onFavoriteClick(getLayoutPosition());
+//                    //존재하는 포지션인지 확인
+//                    int pos = getAdapterPosition();
+//                    if(pos != RecyclerView.NO_POSITION){
+//                        //동작 호출 (onItemClick 함수 호출)
+//                        if(onItemClickListener != null){
+//                            onItemClickListener.onItemClick(v, pos);
+//                        }
+//                    }
+//
 //                }
 //            });
 
-            itemView.setOnClickListener(this);
+
         }
 
         public void setItem(ProductItem pitem){
@@ -213,11 +195,6 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
 
         }
 
-        @Override
-        public void onClick(View v){
-            this.productItemClickListener.onItemClickListener(v,getLayoutPosition());
-        }
-
     }
 
 
@@ -227,16 +204,6 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
     public int getItemViewType(int position) {
         return position;
     }
-
-//    @Override
-//    public int getItemViewType(int position) {
-//        if (position == 0 || mList.get(position) instanceof Country) {
-//            return ITEM_TYPE_SERVICE;
-//        } else {
-//            return (position % MainActivity.ITEMS_PER_AD == 0) ? ITEM_TYPE_BANNER_AD : ITEM_TYPE_COUNTRY;
-//        }
-//    }
-
 
     public static String getNumberConverter (double number){
 

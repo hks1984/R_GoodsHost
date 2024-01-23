@@ -20,13 +20,13 @@ import java.util.List;
 
 public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder>{
 
-    private List<RecentSearcherItem> items;
+    private List<String> items;
     public static String TAG = MainApplication.TAG;
     private static Context context;
 
     static StringUtil sUtil = StringUtil.getInstance();
 
-    public RecentAdapter(List<RecentSearcherItem> items){
+    public RecentAdapter(List<String> items){
         this.items = items;
     }
 
@@ -48,28 +48,28 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        RecentSearcherItem item = items.get(position);
+        String item = items.get(position);
         holder.setItem(item);
 
         holder.categoryItemClickListener = new CategoryItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
-                Log.d(TAG, "FavoriteSearcherAdapter: " + items.get(position).getName());
+                Log.d(TAG, "FavoriteSearcherAdapter: " + items.get(position));
 
             }
         };
 
     }
 
-    public void addItems(List<RecentSearcherItem> items){
+    public void addItems(List<String> items){
         this.items.addAll(items);
         notifyDataSetChanged();
     }
-    public void addItem(RecentSearcherItem items){
+    public void addItem(String items){
         this.items.add(items);
         notifyDataSetChanged();
     }
-    public void setItems(List<RecentSearcherItem> items){
+    public void setItems(List<String> items){
         items = items;
         notifyDataSetChanged();
     }
@@ -85,7 +85,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView recentName, recentDate;
+        private TextView recentName;
 
         CategoryItemClickListener categoryItemClickListener;
 
@@ -93,14 +93,12 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
             super(itemView);
 
             recentName = (TextView) itemView.findViewById(R.id.recentName);
-            recentDate = (TextView) itemView.findViewById(R.id.recentDate);
 
             itemView.setOnClickListener(this);
         }
 
-        public void setItem(RecentSearcherItem pitem){
-            recentName.setText(pitem.getName());
-            recentDate.setText(pitem.getDate());
+        public void setItem(String pitem){
+            recentName.setText(pitem);
         }
 
         @Override

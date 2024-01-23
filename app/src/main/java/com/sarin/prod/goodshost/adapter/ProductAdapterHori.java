@@ -12,6 +12,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -32,17 +33,14 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
 
     static StringUtil sUtil = StringUtil.getInstance();
 
-    public ProductAdapterHori(List<ProductItem> items){
+    private RecyclerViewClickListener recyclerViewClickListener;
+
+    public ProductAdapterHori(List<ProductItem> items, RecyclerViewClickListener listener){
         this.items = items;
+        this.recyclerViewClickListener = listener;
+
     }
 
-    private OnItemClickListener onItemClickListener = null;
-    public interface OnItemClickListener {
-        void onItemClick(View v, int pos);
-    }
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.onItemClickListener = listener;
-    }
 
     @NonNull
     @Override
@@ -57,17 +55,23 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
         ProductItem item = items.get(position);
         holder.setItem(item);
 
-        holder.productItemClickListener = new RecyclerViewClickListener() {
-            @Override
-            public void onItemClickListener(View v, int position) {
+        // 전체 아이템 클릭 이벤트
+        // activity 또는 fragment 화면단 코드에서 onItemClickListener 메소드 추가해줘야함.
+        holder.list_view_hori.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener_Hori(v, position));
+        holder.layout_favorite.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener_Hori(v, position));
 
-                Log.d(TAG, "position: " + position);
-                Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
-                intent.putExtra("vendor_item_id", items.get(position).getVendor_item_id());
-                v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
 
-            }
-        };
+//        holder.productItemClickListener = new RecyclerViewClickListener() {
+//            @Override
+//            public void onItemClickListener(View v, int position) {
+//
+//                Log.d(TAG, "position: " + position);
+//                Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
+//                intent.putExtra("vendor_item_id", items.get(position).getVendor_item_id());
+//                v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
+//
+//            }
+//        };
 
     }
 
@@ -83,6 +87,15 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
 
     public void set (int pos, ProductItem item) {
         items.set(pos, item);
+        notifyDataSetChanged();
+    }
+
+    public void setFavorite (String vendor_item_id, boolean favorite) {
+        for(ProductItem pi : items){
+            if(vendor_item_id.equals(pi.getVendor_item_id())){
+                pi.setIs_Favorite(favorite);
+            }
+        }
         notifyDataSetChanged();
     }
 
@@ -104,14 +117,13 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
         return items.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView name, price_value, rating_total_count, persent;
         private ImageView image, favorite;
         private RatingBar rating;
 
         private LinearLayout layout_favorite;
-
-        RecyclerViewClickListener productItemClickListener;
+        private ConstraintLayout list_view_hori;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -124,22 +136,8 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
             persent = (TextView) itemView.findViewById(R.id.persent);
             favorite = (ImageView) itemView.findViewById(R.id.favorite);
             layout_favorite = (LinearLayout) itemView.findViewById(R.id.layout_favorite);
+            list_view_hori = (ConstraintLayout) itemView.findViewById(R.id.list_view_hori);
 
-            layout_favorite.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int pos = getAdapterPosition();
-                    if(pos != RecyclerView.NO_POSITION){
-                        //동작 호출 (onItemClick 함수 호출)
-                        if(onItemClickListener != null){
-                            onItemClickListener.onItemClick(v, pos);
-                        }
-                    }
-
-                }
-            });
-
-            itemView.setOnClickListener(this);
         }
 
         public void setItem(ProductItem pitem){
@@ -181,11 +179,6 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
 
         }
 
-        @Override
-        public void onClick(View v){
-            this.productItemClickListener.onItemClickListener(v,getLayoutPosition());
-        }
-
     }
 
 
@@ -195,16 +188,6 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
     public int getItemViewType(int position) {
         return position;
     }
-
-//    @Override
-//    public int getItemViewType(int position) {
-//        if (position == 0 || mList.get(position) instanceof Country) {
-//            return ITEM_TYPE_SERVICE;
-//        } else {
-//            return (position % MainActivity.ITEMS_PER_AD == 0) ? ITEM_TYPE_BANNER_AD : ITEM_TYPE_COUNTRY;
-//        }
-//    }
-
 
     public static String getNumberConverter (double number){
 

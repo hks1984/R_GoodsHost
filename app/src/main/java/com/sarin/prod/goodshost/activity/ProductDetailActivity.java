@@ -44,6 +44,7 @@ import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.databinding.ActivityProductDetailBinding;
 
 
+import com.sarin.prod.goodshost.fragment.home.HomeFragment;
 import com.sarin.prod.goodshost.item.ChartItem;
 import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.item.ReturnMsgItem;
@@ -149,18 +150,17 @@ public class ProductDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 boolean isCheckBoxChecked = check.isChecked();
                 String hope_stock = isCheckBoxChecked ? "Y" : "N";
-
                 String editTextValue = hope_price.getText().toString();
-
-                Log.d(TAG, "" + MainApplication.ANDROID_ID + "   " + vendor_item_id + "   " + sUtil.convertStringToInt(editTextValue) + "   " + hope_stock);
                 setUserItemMap(MainApplication.ANDROID_ID, vendor_item_id, sUtil.convertStringToInt(editTextValue), hope_stock);
 
+                HomeFragment hf = HomeFragment.getInstance();
+                hf.productAdapter.setFavorite(vendor_item_id, true);
+                hf.productHoriAdapter.setFavorite(vendor_item_id, true);
 
-
-
+                CategoryProductListActivity cpla = CategoryProductListActivity.getInstance();
+                cpla.productAdapter.setFavorite(vendor_item_id, true);
 
                 bottomSheetDialog.dismiss();
-
 
             }
         });

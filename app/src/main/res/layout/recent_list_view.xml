@@ -1,43 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     >
 
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:gravity="center"
+        android:background="@drawable/round_button_white_recent"
         >
 
         <TextView
             android:id="@+id/recentName"
-            android:layout_width="0dp"
-            android:layout_weight="5"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:textColor="@color/white_500"
             android:text="전체"
             style="@style/TextBlack.mediumStyle"
+            android:layout_marginRight="5dp"
             />
 
-
-        <TextView
-            android:id="@+id/recentDate"
-            android:layout_width="0dp"
-            android:layout_weight="5"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@color/gray_500"
-            android:text="전체"
-            style="@style/TextBlack.mediumStyle"
-            />
-
-
+        <ImageView
+            android:id="@+id/exit"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:src="@drawable/baseline_close_24_white" />
 
 
     </LinearLayout>

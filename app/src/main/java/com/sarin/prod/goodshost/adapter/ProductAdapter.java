@@ -28,7 +28,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     private static Context context;
     static StringUtil sUtil = StringUtil.getInstance();
     private RecyclerViewClickListener recyclerViewClickListener;
-    public ProductAdapter(List<ProductItem> items, RecyclerViewClickListener listener )
+    public ProductAdapter(List<ProductItem> items, RecyclerViewClickListener listener)
     {
         this.items = items;
         this.recyclerViewClickListener = listener;
@@ -49,7 +49,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         // 전체 아이템 클릭 이벤트
         // activity 또는 fragment 화면단 코드에서 onItemClickListener 메소드 추가해줘야함.
-        holder.LinearLayout.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener(v, position));
+        holder.list_view.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener(v, position));
         holder.layout_favorite.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener(v, position));
 
     }
@@ -61,6 +61,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     public ProductItem get(int possion) {
         return items.get(possion);
+    }
+
+    public void setFavorite (String vendor_item_id, Boolean favorite) {
+        for(ProductItem pi : items){
+            if(vendor_item_id.equals(pi.getVendor_item_id())){
+                pi.setIs_Favorite(favorite);
+            }
+        }
+        notifyDataSetChanged();
     }
 
     public void setItems(List<ProductItem> list){
@@ -93,7 +102,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         private ImageView image, favorite;
         private RatingBar rating;
 
-        private LinearLayout layout_favorite, LinearLayout;
+        private LinearLayout layout_favorite, list_view;
 
 
 
@@ -108,7 +117,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             persent = (TextView) itemView.findViewById(R.id.persent);
             favorite = (ImageView) itemView.findViewById(R.id.favorite);
             layout_favorite = (LinearLayout) itemView.findViewById(R.id.layout_favorite);
-            LinearLayout = (LinearLayout) itemView.findViewById(R.id.list_view);
+            list_view = (LinearLayout) itemView.findViewById(R.id.list_view);
 
         }
 

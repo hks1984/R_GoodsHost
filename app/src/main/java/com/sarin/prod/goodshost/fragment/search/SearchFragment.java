@@ -36,6 +36,7 @@ import com.sarin.prod.goodshost.util.LoadingProgressManager;
 import com.sarin.prod.goodshost.activity.ProductDetailActivity;
 
 import com.sarin.prod.goodshost.adapter.RecyclerViewClickListener;
+import com.sarin.prod.goodshost.util.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +65,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
     private String searchName = "";
     private int SearchProducts_page = 0;
     private List<String> favoriteSearcherList = new ArrayList<>();
-    private List<RecentSearcherItem> recentList = new ArrayList<>();
+    private List<String> recentList = new ArrayList<>();
 
     private LoadingProgressManager loadingProgressManager = LoadingProgressManager.getInstance();
     private ProductItem pdItem = new ProductItem();
@@ -140,35 +141,15 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         favoriteSearcherAdapter = new FavoriteSearcherAdapter(favoriteSearcherList);
         favoriteSearcherRecyclerView.setAdapter(favoriteSearcherAdapter);
 
-        favoriteSearcherList.add("asdf");
-        favoriteSearcherList.add("asdsdf");
-        favoriteSearcherList.add("asdsdgsdfg");
-        favoriteSearcherList.add("asffg");
-        favoriteSearcherList.add("asfsdgwefg");
-        favoriteSearcherList.add("asgregrffg");
-        favoriteSearcherList.add("asffgdfgdfgfg");
-        favoriteSearcherList.add("asdfgffg");
-        favoriteSearcherList.add("asdfeeeegffg");
-        favoriteSearcherList.add("asaaaddfgffg");
 
 
         recentRecyclerView = binding.recentRecyclerView;
-        LinearLayoutManager recentoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager recentoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recentRecyclerView.setLayoutManager(recentoutManager);
         recentAdapter = new RecentAdapter(recentList);
         recentRecyclerView.setAdapter(recentAdapter);
 
-        List<RecentSearcherItem> recentSearcherItem = new ArrayList<>();
-
-        for(int a = 0; a < 10; a++){
-            RecentSearcherItem ei = new RecentSearcherItem();
-            ei.setDate("" + a);
-            ei.setName("" + a);
-            recentSearcherItem.add(ei);
-            Log.d(TAG, "" + a);
-        }
-        Log.d(TAG, "size: " + recentSearcherItem.size());
-        recentAdapter.addItems(recentSearcherItem);
+        recentAdapter.addItems(PreferenceManager.getStringList(getContext(), "searchList"));
 
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -230,6 +211,9 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         }
     }
 
+    @Override
+    public void onItemClickListener_Hori(View v, int pos) {}
+
 
     public void getSearchProducts(String searchName){
 //        Log.d(TAG, "page: " + CategoryProducts_page);
@@ -255,6 +239,8 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                     Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
                 loadingProgressManager.hideLoading();
+                PreferenceManager.setStringList(getContext(), "searchList", searchName);
+
             }
 
             @Override

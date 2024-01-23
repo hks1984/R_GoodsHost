@@ -21,8 +21,6 @@ import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.activity.CategoryProductListActivity;
 import com.sarin.prod.goodshost.activity.ProductDetailActivity;
 import com.sarin.prod.goodshost.adapter.CategoryAdapter;
-import com.sarin.prod.goodshost.adapter.CategoryProductListAdapter;
-import com.sarin.prod.goodshost.adapter.FavoriteProductAdapter;
 import com.sarin.prod.goodshost.adapter.ProductAdapter;
 import com.sarin.prod.goodshost.adapter.ProductAdapterHori;
 import com.sarin.prod.goodshost.adapter.RecyclerViewClickListener;
@@ -44,7 +42,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeFragment extends Fragment implements RecyclerViewClickListener{
+public class HomeFragment extends Fragment implements RecyclerViewClickListener {
 
     private FragmentHomeBinding binding;
 
@@ -93,20 +91,6 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener{
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-//        final TextView textView = binding.textHome;
-//        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-
-        viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-        viewModel.getFavoriteStatus().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean isFavorite) {
-                Log.d(TAG, "1111111111111111111111111111111111111111111111");
-                // 즐겨찾기 아이콘 업데이트
-                updateFavoriteIcon(isFavorite);
-            }
-        });
 
         /**
          * 최저가 순위
@@ -115,7 +99,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener{
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 //        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2)); // 가로 2개 나열 할때.
         recyclerView.setLayoutManager(layoutManager);
-        productHoriAdapter = new ProductAdapterHori(piLIst);
+        productHoriAdapter = new ProductAdapterHori(piLIst, this);
         recyclerView.setAdapter(productHoriAdapter);
 
         /**
@@ -172,60 +156,62 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener{
         }
 
 
-        productHoriAdapter.setOnItemClickListener(new ProductAdapterHori.OnItemClickListener() {
-            @Override
-            public void onItemClick(View v, int pos) {
-                //save = bottomSheetDialog.findViewById(R.id.save);
-                pdItem = productHoriAdapter.get(pos);
-                pdItem_possion = pos;
-
-                if (v.getId() == R.id.layout_favorite) {
-                    if(pdItem.isIs_Favorite()){
-                        setDelUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id());
-                        pdItem.setIs_Favorite(false);
-                        productHoriAdapter.set(pos, pdItem);
-                    } else {
-                        setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), 0, "Y");
-                        pdItem.setIs_Favorite(true);
-                        productHoriAdapter.set(pos, pdItem);
-                    }
-
-                }
-
-            }
-        });
-
         return root;
     }
 
+    /**
+     * productAdapter : 메인화면 인기상품 클릭리스너
+     * @param v
+     * @param pos
+     */
     @Override
     public void onItemClickListener(View v, int pos) {
         // 아이템 클릭 이벤트 처리
         pdItem = productAdapter.get(pos);
         pdItem_possion = pos;
-        Log.d(TAG, "v id: " + v.getId());
         if (v.getId() == R.id.layout_favorite) {
             if(pdItem.isIs_Favorite()){
                 setDelUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id());
                 pdItem.setIs_Favorite(false);
                 productAdapter.set(pos, pdItem);
             } else {
-                setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), 0, "Y");
+                setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), 0, "N");
                 pdItem.setIs_Favorite(true);
                 productAdapter.set(pos, pdItem);
             }
-
-        } else {
-            Log.d(TAG, "position: " + pos);
+        } else if (v.getId() == R.id.list_view) {
             Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
             intent.putExtra("vendor_item_id", pdItem.getVendor_item_id());
             v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
         }
     }
 
-    private void updateFavoriteIcon(boolean isFavorite) {
-        // 즐겨찾기 아이콘을 업데이트하는 로직
-        Log.d(TAG, "updateFavoriteIcon: " + isFavorite);
+    /**
+     * productAdapter : 메인화면 세일상품 클릭리스너
+     * @param v
+     * @param pos
+     */
+    @Override
+    public void onItemClickListener_Hori(View v, int pos) {
+        // 아이템 클릭 이벤트 처리
+        pdItem = productHoriAdapter.get(pos);
+        pdItem_possion = pos;
+        if (v.getId() == R.id.layout_favorite) {
+            if(pdItem.isIs_Favorite()){
+                setDelUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id());
+                pdItem.setIs_Favorite(false);
+                productHoriAdapter.set(pos, pdItem);
+            } else {
+                setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), 0, "N");
+                pdItem.setIs_Favorite(true);
+                productHoriAdapter.set(pos, pdItem);
+            }
+
+        } else if (v.getId() == R.id.list_view_hori) {
+            Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
+            intent.putExtra("vendor_item_id", pdItem.getVendor_item_id());
+            v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
+        }
     }
 
     public void setUserItemMap(String user_id, String vendor_item_id, int hope_price, String hope_stock){
@@ -386,6 +372,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener{
                     ci.setName("전체");
                     categoryAdapter.addItem(ci);
                     categoryAdapter.addItems(categoryItem);
+                    categoryAdapter.notifyItemChanged(1);
 
                 }
                 else{
