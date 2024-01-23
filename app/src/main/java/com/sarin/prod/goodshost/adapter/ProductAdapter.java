@@ -1,8 +1,6 @@
 package com.sarin.prod.goodshost.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +10,12 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.item.ProductItem;
-import com.sarin.prod.goodshost.activity.ProductDetailActivity;
 import com.sarin.prod.goodshost.util.StringUtil;
 
 import java.util.List;
@@ -30,21 +26,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     private List<ProductItem> items;
     public static String TAG = MainApplication.TAG;
     private static Context context;
-
     static StringUtil sUtil = StringUtil.getInstance();
-
-    public ProductAdapter(List<ProductItem> items){
+    private RecyclerViewClickListener recyclerViewClickListener;
+    public ProductAdapter(List<ProductItem> items, RecyclerViewClickListener listener )
+    {
         this.items = items;
+        this.recyclerViewClickListener = listener;
     }
-
-    private OnItemClickListener onItemClickListener = null;
-    public interface OnItemClickListener {
-        void onItemClick(View v, int pos);
-    }
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.onItemClickListener = listener;
-    }
-
 
     @NonNull
     @Override
@@ -59,17 +47,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         ProductItem item = items.get(position);
         holder.setItem(item);
 
-        holder.productItemClickListener = new ProductItemClickListener() {
-            @Override
-            public void onItemClickListener(View v, int position) {
-
-                Log.d(TAG, "position: " + position);
-                Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
-                intent.putExtra("vendor_item_id", items.get(position).getVendor_item_id());
-                v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
-
-            }
-        };
+        // 전체 아이템 클릭 이벤트
+        // activity 또는 fragment 화면단 코드에서 onItemClickListener 메소드 추가해줘야함.
+        holder.LinearLayout.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener(v, position));
+        holder.layout_favorite.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener(v, position));
 
     }
 
@@ -107,14 +88,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         return items.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView name, price_value, rating_total_count, persent;
         private ImageView image, favorite;
         private RatingBar rating;
 
-        private LinearLayout layout_favorite;
+        private LinearLayout layout_favorite, LinearLayout;
 
-        ProductItemClickListener productItemClickListener;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -127,25 +108,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             persent = (TextView) itemView.findViewById(R.id.persent);
             favorite = (ImageView) itemView.findViewById(R.id.favorite);
             layout_favorite = (LinearLayout) itemView.findViewById(R.id.layout_favorite);
+            LinearLayout = (LinearLayout) itemView.findViewById(R.id.list_view);
 
-            layout_favorite.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // 클릭 이벤트 처리
-//                    onFavoriteClick(getLayoutPosition());
-                    //존재하는 포지션인지 확인
-                    int pos = getAdapterPosition();
-                    if(pos != RecyclerView.NO_POSITION){
-                        //동작 호출 (onItemClick 함수 호출)
-                        if(onItemClickListener != null){
-                            onItemClickListener.onItemClick(v, pos);
-                        }
-                    }
-
-                }
-            });
-
-            itemView.setOnClickListener(this);
         }
 
         public void setItem(ProductItem pitem){
@@ -186,30 +150,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         }
 
-        @Override
-        public void onClick(View v){
-            this.productItemClickListener.onItemClickListener(v,getLayoutPosition());
-        }
 
     }
-
-
 
 
     @Override
     public int getItemViewType(int position) {
         return position;
     }
-
-//    @Override
-//    public int getItemViewType(int position) {
-//        if (position == 0 || mList.get(position) instanceof Country) {
-//            return ITEM_TYPE_SERVICE;
-//        } else {
-//            return (position % MainActivity.ITEMS_PER_AD == 0) ? ITEM_TYPE_BANNER_AD : ITEM_TYPE_COUNTRY;
-//        }
-//    }
-
 
     public static String getNumberConverter (double number){
 

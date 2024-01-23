@@ -57,7 +57,7 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
         ProductItem item = items.get(position);
         holder.setItem(item);
 
-        holder.productItemClickListener = new ProductItemClickListener() {
+        holder.productItemClickListener = new RecyclerViewClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
 
@@ -111,7 +111,7 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
 
         private LinearLayout layout_favorite;
 
-        ProductItemClickListener productItemClickListener;
+        RecyclerViewClickListener productItemClickListener;
 
         public ViewHolder(View itemView) {
             super(itemView);

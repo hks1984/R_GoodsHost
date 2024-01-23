@@ -6,6 +6,7 @@
     android:layout_marginBottom="15dp"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
+    android:id="@+id/list_view"
     >
 
     <ImageView

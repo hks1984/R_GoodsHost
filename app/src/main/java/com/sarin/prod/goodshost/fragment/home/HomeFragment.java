@@ -19,11 +19,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.activity.CategoryProductListActivity;
+import com.sarin.prod.goodshost.activity.ProductDetailActivity;
 import com.sarin.prod.goodshost.adapter.CategoryAdapter;
 import com.sarin.prod.goodshost.adapter.CategoryProductListAdapter;
 import com.sarin.prod.goodshost.adapter.FavoriteProductAdapter;
 import com.sarin.prod.goodshost.adapter.ProductAdapter;
 import com.sarin.prod.goodshost.adapter.ProductAdapterHori;
+import com.sarin.prod.goodshost.adapter.RecyclerViewClickListener;
+
 import com.sarin.prod.goodshost.databinding.FragmentHomeBinding;
 import com.sarin.prod.goodshost.item.CategoryItem;
 import com.sarin.prod.goodshost.item.ProductItem;
@@ -41,7 +44,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements RecyclerViewClickListener{
 
     private FragmentHomeBinding binding;
 
@@ -122,7 +125,7 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager toplayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 //        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2)); // 가로 2개 나열 할때.
         recyclerViewTop.setLayoutManager(toplayoutManager);
-        productAdapter = new ProductAdapter(TopProductList);
+        productAdapter = new ProductAdapter(TopProductList, this);
         recyclerViewTop.setAdapter(productAdapter);
 
         /**
@@ -168,27 +171,6 @@ public class HomeFragment extends Fragment {
             getTopProducts(10, 0, currentCategoryCode);
         }
 
-        productAdapter.setOnItemClickListener(new ProductAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View v, int pos) {
-                //save = bottomSheetDialog.findViewById(R.id.save);
-                pdItem = productAdapter.get(pos);
-                pdItem_possion = pos;
-                if (v.getId() == R.id.layout_favorite) {
-                    if(pdItem.isIs_Favorite()){
-                        setDelUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id());
-                        pdItem.setIs_Favorite(false);
-                        productAdapter.set(pos, pdItem);
-                    } else {
-                        setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), 0, "Y");
-                        pdItem.setIs_Favorite(true);
-                        productAdapter.set(pos, pdItem);
-                    }
-
-                }
-
-            }
-        });
 
         productHoriAdapter.setOnItemClickListener(new ProductAdapterHori.OnItemClickListener() {
             @Override
@@ -214,6 +196,31 @@ public class HomeFragment extends Fragment {
         });
 
         return root;
+    }
+
+    @Override
+    public void onItemClickListener(View v, int pos) {
+        // 아이템 클릭 이벤트 처리
+        pdItem = productAdapter.get(pos);
+        pdItem_possion = pos;
+        Log.d(TAG, "v id: " + v.getId());
+        if (v.getId() == R.id.layout_favorite) {
+            if(pdItem.isIs_Favorite()){
+                setDelUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id());
+                pdItem.setIs_Favorite(false);
+                productAdapter.set(pos, pdItem);
+            } else {
+                setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), 0, "Y");
+                pdItem.setIs_Favorite(true);
+                productAdapter.set(pos, pdItem);
+            }
+
+        } else {
+            Log.d(TAG, "position: " + pos);
+            Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
+            intent.putExtra("vendor_item_id", pdItem.getVendor_item_id());
+            v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
+        }
     }
 
     private void updateFavoriteIcon(boolean isFavorite) {

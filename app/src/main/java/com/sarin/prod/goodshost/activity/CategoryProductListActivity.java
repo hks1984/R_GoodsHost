@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.adapter.CategoryProductListAdapter;
+import com.sarin.prod.goodshost.adapter.RecyclerViewClickListener;
+
 import com.sarin.prod.goodshost.adapter.ProductAdapter;
 import com.sarin.prod.goodshost.databinding.ActivityCategoryProductListBinding;
 import com.sarin.prod.goodshost.fragment.home.HomeFragment;
@@ -34,7 +36,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CategoryProductListActivity extends AppCompatActivity {
+public class CategoryProductListActivity extends AppCompatActivity implements RecyclerViewClickListener {
 
     private ActivityCategoryProductListBinding binding;
     private static String TAG = MainApplication.TAG;
@@ -82,7 +84,7 @@ public class CategoryProductListActivity extends AppCompatActivity {
         recyclerView = binding.recyclerView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        productAdapter = new ProductAdapter(piLIst);
+        productAdapter = new ProductAdapter(piLIst, this);
         recyclerView.setAdapter(productAdapter);
 
         Intent intent = getIntent();
@@ -99,27 +101,6 @@ public class CategoryProductListActivity extends AppCompatActivity {
         LinearLayout1 = binding.LinearLayout1;
 
 
-        productAdapter.setOnItemClickListener(new ProductAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View v, int pos) {
-                //save = bottomSheetDialog.findViewById(R.id.save);
-                pdItem = productAdapter.get(pos);
-                pdItem_possion = pos;
-                if (v.getId() == R.id.layout_favorite) {
-                    if(pdItem.isIs_Favorite()){
-                        setDelUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id());
-                        pdItem.setIs_Favorite(false);
-                        productAdapter.set(pos, pdItem);
-                    } else {
-                        setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), 0, "Y");
-                        pdItem.setIs_Favorite(true);
-                        productAdapter.set(pos, pdItem);
-                    }
-
-                }
-
-            }
-        });
 
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -176,6 +157,28 @@ public class CategoryProductListActivity extends AppCompatActivity {
         getCategoryList();
         initScrollListener();
 
+    }
+
+    @Override
+    public void onItemClickListener(View v, int pos) {
+        // 아이템 클릭 이벤트 처리
+        pdItem = productAdapter.get(pos);
+        pdItem_possion = pos;
+        Log.d(TAG, "v id: " + v.getId());
+        if (v.getId() == R.id.layout_favorite) {
+            if(pdItem.isIs_Favorite()){
+                setDelUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id());
+                pdItem.setIs_Favorite(false);
+                productAdapter.set(pos, pdItem);
+            } else {
+                setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), 0, "Y");
+                pdItem.setIs_Favorite(true);
+                productAdapter.set(pos, pdItem);
+            }
+
+        } else {
+
+        }
     }
 
     public void setUserItemMap(String user_id, String vendor_item_id, int hope_price, String hope_stock){

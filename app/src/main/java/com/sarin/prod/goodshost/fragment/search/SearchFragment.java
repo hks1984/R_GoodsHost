@@ -2,6 +2,7 @@ package com.sarin.prod.goodshost.fragment.search;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -25,12 +26,16 @@ import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.adapter.ProductAdapter;
 import com.sarin.prod.goodshost.adapter.FavoriteSearcherAdapter;
 import com.sarin.prod.goodshost.adapter.RecentAdapter;
+import com.sarin.prod.goodshost.adapter.RecyclerViewClickListener;
 import com.sarin.prod.goodshost.databinding.FragmentSearchBinding;
 import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.item.RecentSearcherItem;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
 import com.sarin.prod.goodshost.util.LoadingProgressManager;
+import com.sarin.prod.goodshost.activity.ProductDetailActivity;
+
+import com.sarin.prod.goodshost.adapter.RecyclerViewClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +44,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment implements RecyclerViewClickListener {
 
     private FragmentSearchBinding binding;
 
@@ -62,6 +67,9 @@ public class SearchFragment extends Fragment {
     private List<RecentSearcherItem> recentList = new ArrayList<>();
 
     private LoadingProgressManager loadingProgressManager = LoadingProgressManager.getInstance();
+    private ProductItem pdItem = new ProductItem();
+    private int pdItem_possion = 0;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -74,7 +82,7 @@ public class SearchFragment extends Fragment {
         recyclerView = binding.recyclerView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        productAdapter = new ProductAdapter(piLIst);
+        productAdapter = new ProductAdapter(piLIst, this);
         recyclerView.setAdapter(productAdapter);
 
         List<String> androids = new ArrayList<>();
@@ -194,6 +202,34 @@ public class SearchFragment extends Fragment {
         return root;
     }
 
+    @Override
+    public void onItemClickListener(View v, int pos) {
+        // 아이템 클릭 이벤트 처리
+        pdItem = productAdapter.get(pos);
+        pdItem_possion = pos;
+        Log.d(TAG, "v id: " + v.getId());
+        if (v.getId() == R.id.layout_favorite) {
+//            if(pdItem.isIs_Favorite()){
+//                setDelUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id());
+//                pdItem.setIs_Favorite(false);
+//                productAdapter.set(pos, pdItem);
+//            } else {
+//                setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), 0, "Y");
+//                pdItem.setIs_Favorite(true);
+//                productAdapter.set(pos, pdItem);
+//            }
+
+        } else {
+
+            Log.d(TAG, "position: " + pos);
+            Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
+            intent.putExtra("vendor_item_id", pdItem.getVendor_item_id());
+            v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
+
+
+        }
+    }
+
 
     public void getSearchProducts(String searchName){
 //        Log.d(TAG, "page: " + CategoryProducts_page);
@@ -210,7 +246,7 @@ public class SearchFragment extends Fragment {
             public void onResponse(Call<List<ProductItem>> call, Response<List<ProductItem>> response) {
                 if(response.isSuccessful()){
                     List<ProductItem> productItem = response.body();
-                    piLIst.addAll(productItem);
+                    productAdapter.addItems(productItem);
                     productAdapter.notifyDataSetChanged();
                 }
                 else{

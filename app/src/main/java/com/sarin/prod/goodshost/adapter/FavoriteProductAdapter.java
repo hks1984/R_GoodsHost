@@ -1,14 +1,12 @@
 package com.sarin.prod.goodshost.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
-import com.sarin.prod.goodshost.activity.ProductDetailActivity;
 import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.util.StringUtil;
 
@@ -57,7 +54,7 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
         ProductItem item = items.get(position);
         holder.setItem(item);
 
-        holder.productItemClickListener = new ProductItemClickListener() {
+        holder.productItemClickListener = new RecyclerViewClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
 
@@ -120,7 +117,7 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
 
         private LinearLayout favorite_del, favorite_alarm_edit;
 
-        ProductItemClickListener productItemClickListener;
+        RecyclerViewClickListener productItemClickListener;
 
         public ViewHolder(View itemView) {
             super(itemView);
