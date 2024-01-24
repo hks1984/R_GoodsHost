@@ -102,6 +102,12 @@ public interface RetrofitInterface {
             @Query("user_id") String user_id
     );
 
+    @GET("{path}")
+    Call<List<String>> getAutoCompleteText(
+            @Path ("path") String path,
+            @Query("search_text") String search_text
+    );
+
 
 
 

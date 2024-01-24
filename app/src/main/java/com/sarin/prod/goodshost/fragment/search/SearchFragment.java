@@ -5,6 +5,8 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -30,6 +32,7 @@ import com.sarin.prod.goodshost.adapter.RecyclerViewClickListener;
 import com.sarin.prod.goodshost.databinding.FragmentSearchBinding;
 import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.item.RecentSearcherItem;
+import com.sarin.prod.goodshost.item.ReturnMsgItem;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
 import com.sarin.prod.goodshost.util.LoadingProgressManager;
@@ -70,6 +73,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
     private LoadingProgressManager loadingProgressManager = LoadingProgressManager.getInstance();
     private ProductItem pdItem = new ProductItem();
     private int pdItem_possion = 0;
+    private ArrayAdapter<String> adapter;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -87,13 +91,28 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         recyclerView.setAdapter(productAdapter);
 
         List<String> androids = new ArrayList<>();
-        androids.add("좋아하는 색은 빨간색");
-        androids.add("좋아하는 색은 파란색");
-        androids.add("좋아하는 색은 노란색");
 
         autoCompleteTextView = binding.editTextSearchBox;
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.my_auto_complete_box, androids);
+
+        adapter = new ArrayAdapter<String>(getContext(), R.layout.my_auto_complete_box, androids);
+
         autoCompleteTextView.setAdapter(adapter);
+
+        autoCompleteTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d(TAG, "" + s.length());
+                if (s.length() >= 2) { // 예를 들어, 2글자 이상 입력된 경우에만 요청
+                    getAutoCompleteText(s.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
 
         //엔터키 이벤트 처리
         autoCompleteTextView.setOnKeyListener(new View.OnKeyListener() {
@@ -149,7 +168,11 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         recentAdapter = new RecentAdapter(recentList);
         recentRecyclerView.setAdapter(recentAdapter);
 
-        recentAdapter.addItems(PreferenceManager.getStringList(getContext(), "searchList"));
+        List<String> searchList = PreferenceManager.getStringList(getContext(), "searchList");
+        if(searchList != null && searchList.size() > 0){
+            recentAdapter.addItems(searchList);
+        }
+
 
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -252,6 +275,37 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         });
 
     }
+
+
+
+    public void getAutoCompleteText(String search_text){
+
+        retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
+
+        Call<List<String>> call = service.getAutoCompleteText("getAutoCompleteText", search_text);
+        call.enqueue(new Callback<List<String>>() {
+            @Override
+            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                if(response.isSuccessful()){
+                    List<String> searchName = response.body();
+                    adapter.addAll(searchName);
+                    adapter.notifyDataSetChanged();
+                }
+                else{
+                    Log.e(TAG, "실패 코드 확인 : " + response.code());
+                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
+                }
+            }
+            @Override
+            public void onFailure(Call<List<String>> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+
+
+    }
+
 
     boolean isLoading = false;
 
