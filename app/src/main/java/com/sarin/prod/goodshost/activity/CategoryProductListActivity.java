@@ -139,6 +139,7 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
         ctLIst.add(ci);
         categoryProductListAdapter = new CategoryProductListAdapter(ctLIst);
         categoryRecyclerView.setAdapter(categoryProductListAdapter);
+        categoryProductListAdapter.notifyItemChanged(1);
 
 
         logo = binding.logo;

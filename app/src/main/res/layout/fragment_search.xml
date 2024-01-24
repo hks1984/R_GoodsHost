@@ -15,7 +15,7 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:layout_margin="10dp"
-        android:completionThreshold="1"
+        android:completionThreshold="2"
         android:textColorHint="#555555"
         android:background="@drawable/share_search_box"
         android:drawableEnd="@drawable/baseline_search_24"

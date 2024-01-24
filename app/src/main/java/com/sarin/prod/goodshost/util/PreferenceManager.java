@@ -151,7 +151,16 @@ public class PreferenceManager {
         if (stringList == null) {
             stringList = new ArrayList<>();
         }
-        stringList.add(newString);
+
+        stringList.remove(newString);
+
+        // 새 항목을 리스트의 맨 앞에 추가
+        stringList.add(0, newString);
+
+        // 리스트 크기가 최대치를 초과하는 경우, 가장 오래된 항목(마지막 항목) 삭제
+        if (stringList.size() > 10) {
+            stringList.remove(10);
+        }
 
         String json = gson.toJson(stringList);
         SharedPreferences.Editor editor = prefs.edit();

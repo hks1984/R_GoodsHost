@@ -29,6 +29,7 @@ import com.sarin.prod.goodshost.adapter.ProductAdapter;
 import com.sarin.prod.goodshost.adapter.FavoriteSearcherAdapter;
 import com.sarin.prod.goodshost.adapter.RecentAdapter;
 import com.sarin.prod.goodshost.adapter.RecyclerViewClickListener;
+import com.sarin.prod.goodshost.adapter.SearchItemClickListener;
 import com.sarin.prod.goodshost.databinding.FragmentSearchBinding;
 import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.item.RecentSearcherItem;
@@ -42,7 +43,10 @@ import com.sarin.prod.goodshost.adapter.RecyclerViewClickListener;
 import com.sarin.prod.goodshost.util.PreferenceManager;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -75,7 +79,6 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
     private int pdItem_possion = 0;
     private ArrayAdapter<String> adapter;
 
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         SearchViewModel searchViewModel =
@@ -98,6 +101,8 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
         autoCompleteTextView.setAdapter(adapter);
 
+
+
         autoCompleteTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -105,7 +110,8 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.d(TAG, "" + s.length());
-                if (s.length() >= 2) { // 예를 들어, 2글자 이상 입력된 경우에만 요청
+                if (s.length() >= 3) { // 예를 들어, 2글자 이상 입력된 경우에만 요청
+                    searchName = s.toString();
                     getAutoCompleteText(s.toString());
                 }
             }
@@ -125,6 +131,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                     imm.hideSoftInputFromWindow(autoCompleteTextView.getWindowToken(), 0);
 
                     searchName = String.valueOf(autoCompleteTextView.getText());
+                    productAdapter.clear();
                     getSearchProducts(searchName);
                     initScrollListener();
                     return true;
@@ -144,6 +151,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                         imm.hideSoftInputFromWindow(autoCompleteTextView.getWindowToken(), 0);
 
                         searchName = String.valueOf(autoCompleteTextView.getText());
+                        productAdapter.clear();
                         getSearchProducts(searchName);
                         initScrollListener();
                         return true;
@@ -172,6 +180,24 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         if(searchList != null && searchList.size() > 0){
             recentAdapter.addItems(searchList);
         }
+
+        recentAdapter.setOnItemClickListener(new RecentAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int pos) {
+                //save = bottomSheetDialog.findViewById(R.id.save);
+                String name = recentAdapter.get(pos);
+                pdItem_possion = pos;
+                if (v.getId() == R.id.recentLayout) {
+                    Log.d(TAG, "recentName: " + name);
+                } else if (v.getId() == R.id.remove) {
+                    Log.d(TAG, "remove: " + pos);
+                    PreferenceManager.delStringList(getContext(), "searchList", name);
+                    recentAdapter.remove(pos);
+
+                }
+
+            }
+        });
 
 
 
@@ -243,6 +269,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
         loadingProgressManager.showLoading(getContext());
 
+
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
@@ -289,6 +316,9 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             public void onResponse(Call<List<String>> call, Response<List<String>> response) {
                 if(response.isSuccessful()){
                     List<String> searchName = response.body();
+                    searchName = cleanList(searchName);
+                    Log.d(TAG, "searchName : " + searchName.toString());
+                    adapter.clear();
                     adapter.addAll(searchName);
                     adapter.notifyDataSetChanged();
                 }
@@ -304,6 +334,15 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         });
 
 
+    }
+
+    public static List<String> cleanList(List<String> originalList) {
+        Set<String> set = new LinkedHashSet<>(); // 중복 제거 및 순서 유지
+
+        return originalList.stream()
+                .filter(str -> str != null && !str.isEmpty()) // null과 빈 문자열 제거
+                .filter(set::add) // 중복 제거
+                .collect(Collectors.toList()); // 결과를 List로 반환
     }
 
 

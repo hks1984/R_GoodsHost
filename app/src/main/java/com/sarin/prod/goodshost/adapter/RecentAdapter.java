@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,11 +32,11 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
         this.items = items;
     }
 
-    private RecentAdapter.OnItemClickListener onItemClickListener = null;
+    private OnItemClickListener onItemClickListener = null;
     public interface OnItemClickListener {
         void onItemClick(View v, int pos);
     }
-    public void setOnItemClickListener(RecentAdapter.OnItemClickListener listener) {
+    public void setOnItemClickListener(OnItemClickListener listener) {
         this.onItemClickListener = listener;
     }
 
@@ -51,14 +53,6 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
         String item = items.get(position);
         holder.setItem(item);
 
-        holder.categoryItemClickListener = new CategoryItemClickListener() {
-            @Override
-            public void onItemClickListener(View v, int position) {
-                Log.d(TAG, "FavoriteSearcherAdapter: " + items.get(position));
-
-            }
-        };
-
     }
 
     public void addItems(List<String> items){
@@ -73,6 +67,15 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
         items = items;
         notifyDataSetChanged();
     }
+    public void remove (int i){
+        this.items.remove(i);
+        notifyDataSetChanged();
+    }
+
+
+    public String get(int possion) {
+        return items.get(possion);
+    }
 
     public int size() {
         int i = items.size();
@@ -84,26 +87,38 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
         return items.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView recentName;
+        private ImageView remove;
+        private LinearLayout recentLayout;
 
         CategoryItemClickListener categoryItemClickListener;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
+            recentLayout = (LinearLayout) itemView.findViewById(R.id.recentLayout);
             recentName = (TextView) itemView.findViewById(R.id.recentName);
+            remove = (ImageView) itemView.findViewById(R.id.remove);
 
-            itemView.setOnClickListener(this);
+            recentLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getAdapterPosition();
+                    if(pos != RecyclerView.NO_POSITION){ if(onItemClickListener != null){ onItemClickListener.onItemClick(v, pos); } }
+                }
+            });
+            remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getAdapterPosition();
+                    if(pos != RecyclerView.NO_POSITION){ if(onItemClickListener != null){ onItemClickListener.onItemClick(v, pos); } }
+                }
+            });
+
         }
-
         public void setItem(String pitem){
             recentName.setText(pitem);
-        }
-
-        @Override
-        public void onClick(View v){
-            this.categoryItemClickListener.onItemClickListener(v,getLayoutPosition());
         }
 
     }

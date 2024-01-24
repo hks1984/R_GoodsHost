@@ -6,6 +6,7 @@
 
 
     <LinearLayout
+        android:id="@+id/recentLayout"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -18,16 +19,15 @@
             android:id="@+id/recentName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white_500"
-            android:text="전체"
-            style="@style/TextBlack.mediumStyle"
+            android:text=""
+            style="@style/TextWhite.largeStyle"
             android:layout_marginRight="5dp"
             />
 
         <ImageView
-            android:id="@+id/exit"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:id="@+id/remove"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
             android:layout_gravity="center"
             android:src="@drawable/baseline_close_24_white" />
 
