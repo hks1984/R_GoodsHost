@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -79,6 +80,8 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
     private int pdItem_possion = 0;
     private ArrayAdapter<String> adapter;
 
+    private LinearLayout recent_layout, favorite_layout, searchNoItemMsg;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         SearchViewModel searchViewModel =
@@ -86,6 +89,11 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
         binding = FragmentSearchBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        favorite_layout = binding.favoriteLayout;
+        recent_layout = binding.recentLayout;
+        searchNoItemMsg = binding.searchNoItemMsg;
+
 
         recyclerView = binding.recyclerView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -102,6 +110,31 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         autoCompleteTextView.setAdapter(adapter);
 
 
+        autoCompleteTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // AutoCompleteTextView가 클릭되었을 때의 처리
+                favorite_layout.setVisibility(View.VISIBLE);
+                recent_layout.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+                searchNoItemMsg.setVisibility(View.GONE);
+            }
+        });
+
+        autoCompleteTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    // AutoCompleteTextView가 포커스를 얻었을 때의 처리
+                    favorite_layout.setVisibility(View.VISIBLE);
+                    recent_layout.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                    searchNoItemMsg.setVisibility(View.GONE);
+                } else {
+                    // AutoCompleteTextView가 포커스를 잃었을 때의 처리
+                }
+            }
+        });
 
         autoCompleteTextView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -109,11 +142,14 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.d(TAG, "" + s.length());
-                if (s.length() >= 3) { // 예를 들어, 2글자 이상 입력된 경우에만 요청
-                    searchName = s.toString();
-                    getAutoCompleteText(s.toString());
-                }
+
+                searchName = s.toString();
+                Log.d(TAG, "searchName: " + searchName);
+
+//                if (s.length() >= 3) { // 예를 들어, 2글자 이상 입력된 경우에만 요청
+//                    searchName = s.toString();
+////                    getAutoCompleteText(s.toString());
+//                }
             }
 
             @Override
@@ -132,7 +168,11 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
                     searchName = String.valueOf(autoCompleteTextView.getText());
                     productAdapter.clear();
+                    SearchProducts_page = 0;
                     getSearchProducts(searchName);
+                    PreferenceManager.setStringList(getContext(), "searchList", searchName);
+                    recentAdapter.addItem(searchName);
+                    recentAdapter.notifyDataSetChanged();
                     initScrollListener();
                     return true;
                 }
@@ -152,7 +192,11 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
                         searchName = String.valueOf(autoCompleteTextView.getText());
                         productAdapter.clear();
+                        SearchProducts_page = 0;
                         getSearchProducts(searchName);
+                        PreferenceManager.setStringList(getContext(), "searchList", searchName);
+                        recentAdapter.addItem(searchName);
+                        recentAdapter.notifyDataSetChanged();
                         initScrollListener();
                         return true;
                     }
@@ -189,6 +233,20 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 pdItem_possion = pos;
                 if (v.getId() == R.id.recentLayout) {
                     Log.d(TAG, "recentName: " + name);
+                    autoCompleteTextView.setText(name);
+
+                    productAdapter.clear();
+                    SearchProducts_page = 0;
+                    getSearchProducts(searchName);
+                    PreferenceManager.setStringList(getContext(), "searchList", searchName);
+                    recentAdapter.addItem(searchName);
+                    recentAdapter.notifyDataSetChanged();
+
+                    // 키패드 없애기.
+                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(autoCompleteTextView.getWindowToken(), 0);
+
+
                 } else if (v.getId() == R.id.remove) {
                     Log.d(TAG, "remove: " + pos);
                     PreferenceManager.delStringList(getContext(), "searchList", name);
@@ -224,6 +282,10 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 super.onScrolled(recyclerView, dx, dy);
                 Log.d(TAG, "dy: " + dy);
                 isScrolledDown = dy < 0;
+                // 처음 리스트가 생성되었을때 스크롤을 위로 올릴때는 뷰가 숨겨지면 안된다.
+                if(dy == 0){
+                    isScrolledDown = true;
+                }
             }
         });
 
@@ -280,16 +342,27 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             public void onResponse(Call<List<ProductItem>> call, Response<List<ProductItem>> response) {
                 if(response.isSuccessful()){
                     List<ProductItem> productItem = response.body();
-                    productAdapter.addItems(productItem);
-                    productAdapter.notifyDataSetChanged();
+                    if(productItem.size() <= 0){
+                        searchNoItemMsg.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
+                    }else{
+                        productAdapter.addItems(productItem);
+                        productAdapter.notifyDataSetChanged();
+                    }
+
                 }
                 else{
                     // 실패
                     Log.e(TAG, "실패 코드 확인 : " + response.code());
                     Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
+                favorite_layout.setVisibility(View.GONE);
+                recent_layout.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+
                 loadingProgressManager.hideLoading();
-                PreferenceManager.setStringList(getContext(), "searchList", searchName);
+
+
 
             }
 

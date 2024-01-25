@@ -147,6 +147,9 @@ public class PreferenceManager {
     public static void setStringList(Context context, String key, String newString) {
         SharedPreferences prefs = getPreferences(context);
 
+        if(newString == null || "".equals(newString)){
+            return;
+        }
         List<String> stringList = getStringList(context, key);
         if (stringList == null) {
             stringList = new ArrayList<>();

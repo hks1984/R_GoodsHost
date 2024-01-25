@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +40,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.snackbar.Snackbar;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.databinding.ActivityProductDetailBinding;
@@ -55,6 +57,8 @@ import com.sarin.prod.goodshost.network.RetrofitInterface;
 import com.sarin.prod.goodshost.util.LoadingProgressManager;
 import com.sarin.prod.goodshost.util.MyMarkerView;
 import com.sarin.prod.goodshost.util.StringUtil;
+import com.sarin.prod.goodshost.util.CustomSnackbar;
+
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -158,8 +162,11 @@ public class ProductDetailActivity extends AppCompatActivity {
                 hf.productHoriAdapter.setFavorite(vendor_item_id, true);
 
                 CategoryProductListActivity cpla = CategoryProductListActivity.getInstance();
-                cpla.productAdapter.setFavorite(vendor_item_id, true);
+                if(cpla.productAdapter != null){
+                    cpla.productAdapter.setFavorite(vendor_item_id, true);
+                }
 
+                CustomSnackbar.showSnackbar(getApplicationContext(), binding.getRoot(), "등록했어요.", Gravity.CENTER);
                 bottomSheetDialog.dismiss();
 
             }

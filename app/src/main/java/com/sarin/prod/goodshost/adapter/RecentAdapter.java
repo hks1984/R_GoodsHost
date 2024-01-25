@@ -60,7 +60,8 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
         notifyDataSetChanged();
     }
     public void addItem(String items){
-        this.items.add(items);
+        this.items.remove(items);
+        this.items.add(0, items);
         notifyDataSetChanged();
     }
     public void setItems(List<String> items){

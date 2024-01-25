@@ -3,55 +3,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/black_500"
-    tools:context=".fragment.search.SearchFragment"
-    >
+    android:orientation="vertical"
+    tools:context=".fragment.search.SearchFragment">
 
     <AutoCompleteTextView
         android:id="@+id/editTextSearchBox"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
         android:layout_margin="10dp"
-        android:completionThreshold="2"
-        android:textColorHint="#555555"
         android:background="@drawable/share_search_box"
+        android:completionThreshold="2"
         android:drawableEnd="@drawable/baseline_search_24"
-        android:textCursorDrawable="@drawable/text_cursor"
-        android:singleLine="true"
         android:ems="10"
         android:hint=""
         android:inputType="text"
         android:minHeight="40dp"
-        />
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:singleLine="true"
+        android:textColorHint="#555555"
+        android:textCursorDrawable="@drawable/text_cursor" />
 
     <LinearLayout
+        android:id="@+id/recent_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginBottom="20dp"
-        >
+        android:orientation="vertical">
+
         <TextView
+            style="@style/TextWhite.bigLargeStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:textSize="22dp"
-            style="@style/TextWhite.bigLargeStyle"
-            android:textStyle="bold"
-            android:text="@string/search_recent_searches"
             android:paddingLeft="20dp"
-            />
+            android:text="@string/search_recent_searches"
+            android:textSize="22dp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
-            >
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recentRecyclerView"
@@ -63,47 +60,44 @@
         </LinearLayout>
 
 
-
     </LinearLayout>
 
     <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginBottom="20dp"
-    >
-    <TextView
+        android:id="@+id/favorite_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:textSize="22dp"
-        style="@style/TextWhite.bigLargeStyle"
-        android:textStyle="bold"
-        android:text="@string/search_favorite_searches"
-        android:paddingLeft="20dp"
-        />
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
-        >
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/favorite_searcher_list"
+        <TextView
+            style="@style/TextWhite.bigLargeStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="20dp"
+            android:text="@string/search_favorite_searches"
+            android:textSize="22dp"
+            android:textStyle="bold" />
 
-            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/favorite_searcher_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                />
+
+        </LinearLayout>
+
 
     </LinearLayout>
-
-
-
-</LinearLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -111,8 +105,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="@color/white_500"
-        />
+        android:background="@color/white_500" />
 
+    <LinearLayout
+        android:id="@+id/searchNoItemMsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        >
+
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:gravity="center"
+           android:text="@string/no_searchc_item"
+           style="@style/TextWhite.bigLargeStyle"
+
+           />
+
+    </LinearLayout>
 
 </LinearLayout>

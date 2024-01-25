@@ -124,6 +124,10 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
                 super.onScrolled(recyclerView, dx, dy);
 
                 isScrolledDown = dy < 0;
+                // 처음 리스트가 생성되었을때 스크롤을 위로 올릴때는 뷰가 숨겨지면 안된다.
+                if(dy == 0){
+                    isScrolledDown = true;
+                }
             }
         });
 
