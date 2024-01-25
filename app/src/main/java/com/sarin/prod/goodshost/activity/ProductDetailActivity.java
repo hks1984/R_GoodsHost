@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -80,11 +81,10 @@ public class ProductDetailActivity extends AppCompatActivity {
     static StringUtil sUtil = StringUtil.getInstance();
 
     private ImageView image, exit;
-    private TextView name, price_value, registration, link;
-
-    private TextView save;
+    private TextView name, price_value, registration, link, save, rocket, difference_price, average_price;
     private EditText hope_price;
     private CheckBox check;
+    private LinearLayout price_layout;
     private String vendor_item_id;
 
     private LineChart lineChart;
@@ -92,6 +92,8 @@ public class ProductDetailActivity extends AppCompatActivity {
     ProductItem _pi = new ProductItem();
 
     private SharedViewModel viewModel;
+
+    private int current_price = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +110,10 @@ public class ProductDetailActivity extends AppCompatActivity {
         lineChart = binding.detailLinechart;
         registration = binding.registration;
         link = binding.link;
+        rocket = binding.rocket;
+        difference_price = binding.differencePrice;
+        average_price = binding.averagePrice;
+        price_layout = binding.priceLayout;
 
         getProductDetail(vendor_item_id);
         getProductChart(vendor_item_id);
@@ -166,7 +172,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                     cpla.productAdapter.setFavorite(vendor_item_id, true);
                 }
 
-                CustomSnackbar.showSnackbar(getApplicationContext(), binding.getRoot(), "등록했어요.", Gravity.CENTER);
+                CustomSnackbar.showSnackbar(getApplicationContext(), binding.getRoot(), getApplicationContext().getResources().getString(R.string.favorite_save));
                 bottomSheetDialog.dismiss();
 
             }
@@ -439,9 +445,25 @@ public class ProductDetailActivity extends AppCompatActivity {
                         LineChartGraph(chartItem);
                         lineChart.setScaleEnabled(false);
 
-//                        lineChart.setTouchEnabled(false);
-//                        lineChart.getAxisRight().setAxisMaxValue(80);
-//                        lineChart.getAxisLeft().setAxisMaxValue(80);
+                        int total_price = 0;
+                        for (ChartItem ci : chartItem) {
+                            total_price += ci.getMin_value();  // 각 ChartItem의 min_value를 total_price에 더함
+                        }
+                        // 평균가 계산 (소수점 제거를 위해 int형으로 결과를 얻음)
+                        int averagePrice = chartItem.size() > 0 ? total_price / chartItem.size() : 0;  // chartItem.size()가 0이 아닐 때만 평균 계산
+
+                        // TextView에 평균가 설정 (정수로 변환된 평균가를 문자열로 변환하여 설정)
+                        average_price.setText(sUtil.replaceStringPriceToInt(averagePrice) + getApplicationContext().getResources().getString(R.string.won));
+
+                        int diff_price = averagePrice > current_price ?
+                                averagePrice - current_price :
+                                current_price - averagePrice ;
+
+                        difference_price.setText(sUtil.replaceStringPriceToInt(diff_price) + getApplicationContext().getResources().getString(R.string.won));
+
+
+                    } else {
+                        binding.priceLayout.setVisibility(View.GONE);
                     }
                 }
                 else{
@@ -483,11 +505,20 @@ public class ProductDetailActivity extends AppCompatActivity {
                     _pi = productItem;
                     name.setText(productItem.getName());
                     price_value.setText(sUtil.replaceStringPriceToInt(productItem.getPrice_value()) + getApplicationContext().getResources().getString(R.string.won));
+                    current_price = productItem.getPrice_value();
                     String url = productItem.getImage();
                     if(!url.contains("https:")){
                         url = "https:" + url;
                     }
                     Glide.with(getApplicationContext()).load(url).into(image);
+
+                    if(productItem.getRocket_baesong() != null && !"".equals(productItem.getRocket_baesong())){
+                        rocket.setVisibility(View.VISIBLE);
+                        rocket.setText(productItem.getRocket_baesong());
+                    } else {
+                        rocket.setVisibility(View.GONE);
+                    }
+
                 }
                 else{
                     // 실패

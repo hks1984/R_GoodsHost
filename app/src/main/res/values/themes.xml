@@ -39,6 +39,11 @@
         <item name="android:textColor">@color/black_500</item>
     </style>
 
+    <style name="TextBlack.titleStyle" parent="android:TextAppearance">
+        <item name="android:textSize">22dp</item>
+        <item name="android:textColor">@color/black_500</item>
+    </style>
+
     <style name="TextWhite.smallStyle" parent="android:TextAppearance">
         <item name="android:textSize">12dp</item>
         <item name="android:textColor">@color/white_500</item>
@@ -56,6 +61,11 @@
 
     <style name="TextWhite.bigLargeStyle" parent="android:TextAppearance">
         <item name="android:textSize">18dp</item>
+        <item name="android:textColor">@color/white_500</item>
+    </style>
+
+    <style name="TextWhite.titleStyle" parent="android:TextAppearance">
+        <item name="android:textSize">22dp</item>
         <item name="android:textColor">@color/white_500</item>
     </style>
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black_200">#171717</color>
+    <color name="black_300">#2C2C2C</color>
     <color name="black_500">#FF000000</color>
     <color name="black_700">#FF000000</color>
 
@@ -8,7 +9,7 @@
     <color name="white_500">#FFFFFFFF</color>
     <color name="white_700">#FFFFFFFF</color>
 
-    <color name="gray_500">#DDDDDD</color>
+    <color name="gray_500">#D6D5D5</color>
     <color name="gray_700">#7A7A7A</color>
 
     <color name="transparent">#00000000</color>

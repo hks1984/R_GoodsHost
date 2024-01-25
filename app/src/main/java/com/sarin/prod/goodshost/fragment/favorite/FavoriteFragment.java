@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.item.ReturnMsgItem;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
+import com.sarin.prod.goodshost.util.CustomSnackbar;
 import com.sarin.prod.goodshost.util.LoadingProgressManager;
 import com.sarin.prod.goodshost.util.StringUtil;
 
@@ -108,6 +110,7 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
                 pdItem.setHope_price(sUtil.convertStringToInt(editTextValue));
                 pdItem.setHope_stock(hope_stock);
                 setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), sUtil.convertStringToInt(editTextValue), hope_stock);
+                CustomSnackbar.showSnackbar(getContext(), binding.getRoot(), getContext().getResources().getString(R.string.favorite_save));
 
                 bottomSheetDialog.dismiss();
             }
