@@ -16,9 +16,11 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -80,7 +82,9 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
     private int pdItem_possion = 0;
     private ArrayAdapter<String> adapter;
 
-    private LinearLayout recent_layout, favorite_layout, searchNoItemMsg;
+    private LinearLayout recent_layout, favorite_layout, searchNoItemMsg, editBoxLinearLayout, fragment_search_linearlayout;
+
+    private ImageView searchIcon;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -93,6 +97,9 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         favorite_layout = binding.favoriteLayout;
         recent_layout = binding.recentLayout;
         searchNoItemMsg = binding.searchNoItemMsg;
+        searchIcon = binding.searchIcon;
+        editBoxLinearLayout = binding.editBoxLinearLayout;
+        fragment_search_linearlayout = binding.fragmentSearchLinearlayout;
 
 
         recyclerView = binding.recyclerView;
@@ -118,6 +125,8 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 recent_layout.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
                 searchNoItemMsg.setVisibility(View.GONE);
+                fragment_search_linearlayout.setBackgroundColor( ContextCompat.getColor(getContext(), R.color.black_500));
+
             }
         });
 
@@ -130,6 +139,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                     recent_layout.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                     searchNoItemMsg.setVisibility(View.GONE);
+                    fragment_search_linearlayout.setBackgroundColor( ContextCompat.getColor(getContext(), R.color.black_500));
                 } else {
                     // AutoCompleteTextView가 포커스를 잃었을 때의 처리
                 }
@@ -146,10 +156,10 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 searchName = s.toString();
                 Log.d(TAG, "searchName: " + searchName);
 
-//                if (s.length() >= 3) { // 예를 들어, 2글자 이상 입력된 경우에만 요청
-//                    searchName = s.toString();
-////                    getAutoCompleteText(s.toString());
-//                }
+                if (s.length() >= 2) { // 예를 들어, 2글자 이상 입력된 경우에만 요청
+                    searchName = s.toString();
+                    getAutoCompleteText(s.toString());
+                }
             }
 
             @Override
@@ -184,20 +194,16 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (event.getRawX() >= (autoCompleteTextView.getRight() - autoCompleteTextView.getCompoundDrawables()[2].getBounds().width() - autoCompleteTextView.getPaddingRight())) {
-                        // 드로어블이 클릭되었을 때의 동작을 여기에 작성합니다.
-                        // 예: 검색 기능 실행, 입력 내용 지우기 등
-                        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(autoCompleteTextView.getWindowToken(), 0);
 
-                        searchName = String.valueOf(autoCompleteTextView.getText());
-                        productAdapter.clear();
-                        SearchProducts_page = 0;
-                        getSearchProducts(searchName);
-                        PreferenceManager.setStringList(getContext(), "searchList", searchName);
-                        recentAdapter.addItem(searchName);
-                        recentAdapter.notifyDataSetChanged();
-                        initScrollListener();
+                    if (event.getRawX() >= (autoCompleteTextView.getRight() - autoCompleteTextView.getCompoundDrawables()[2].getBounds().width() - autoCompleteTextView.getPaddingRight())) {
+                        // drawableEnd 클릭 시 수행할 동작
+                        // 예: 검색 기능 실행, 입력 내용 지우기 등
+                        autoCompleteTextView.setText("");
+                        favorite_layout.setVisibility(View.VISIBLE);
+                        recent_layout.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
+                        searchNoItemMsg.setVisibility(View.GONE);
+                        fragment_search_linearlayout.setBackgroundColor( ContextCompat.getColor(getContext(), R.color.black_500));
                         return true;
                     }
                 }
@@ -205,6 +211,23 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             }
         });
 
+        searchIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(autoCompleteTextView.getWindowToken(), 0);
+
+                searchName = String.valueOf(autoCompleteTextView.getText());
+                productAdapter.clear();
+                SearchProducts_page = 0;
+                getSearchProducts(searchName);
+                PreferenceManager.setStringList(getContext(), "searchList", searchName);
+                recentAdapter.addItem(searchName);
+                recentAdapter.notifyDataSetChanged();
+                initScrollListener();
+
+            }
+        });
 
         favoriteSearcherRecyclerView = binding.favoriteSearcherList;
         LinearLayoutManager favoriteSearcheroutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -266,13 +289,16 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_SETTLING && isScrolledDown) {
                     Log.d(TAG, "1");
-                    autoCompleteTextView.setVisibility(View.VISIBLE);
+//                    autoCompleteTextView.setVisibility(View.VISIBLE);
+                    editBoxLinearLayout.setVisibility(View.VISIBLE);
 
                 }else if(newState == RecyclerView.SCROLL_STATE_SETTLING && !isScrolledDown){
                     Log.d(TAG, "2");
                     if (!piLIst.isEmpty()) {
-                        autoCompleteTextView.setVisibility(View.GONE);
+//                        autoCompleteTextView.setVisibility(View.GONE);
+                        editBoxLinearLayout.setVisibility(View.GONE);
                     }
+
 
                 }
             }
@@ -301,17 +327,18 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         pdItem_possion = pos;
         Log.d(TAG, "v id: " + v.getId());
         if (v.getId() == R.id.layout_favorite) {
-//            if(pdItem.isIs_Favorite()){
-//                setDelUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id());
-//                pdItem.setIs_Favorite(false);
-//                productAdapter.set(pos, pdItem);
-//            } else {
-//                setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), 0, "Y");
-//                pdItem.setIs_Favorite(true);
-//                productAdapter.set(pos, pdItem);
-//            }
 
-        } else {
+            if(pdItem.isIs_Favorite()){
+                setDelUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id());
+                pdItem.setIs_Favorite(false);
+                productAdapter.set(pos, pdItem);
+            } else {
+                setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), 0, "N");
+                pdItem.setIs_Favorite(true);
+                productAdapter.set(pos, pdItem);
+            }
+
+        } else if (v.getId() == R.id.list_view_hori) {
 
             Log.d(TAG, "position: " + pos);
             Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
@@ -320,6 +347,62 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
 
         }
+    }
+
+    public void setUserItemMap(String user_id, String vendor_item_id, int hope_price, String hope_stock){
+
+        retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
+
+        Call<ReturnMsgItem> call = service.setUserItemMap("setUserItemMap", user_id, vendor_item_id, hope_price, hope_stock);
+        call.enqueue(new Callback<ReturnMsgItem>() {
+            @Override
+            public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
+                if(response.isSuccessful()){
+                    ReturnMsgItem returnMsgItem = response.body();
+                    Log.d(TAG, "setUserRegister : " + returnMsgItem.toString());
+
+
+                }
+                else{
+                    Log.e(TAG, "실패 코드 확인 : " + response.code());
+                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
+                }
+            }
+            @Override
+            public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+
+
+    }
+
+    public void setDelUserItemMap(String user_id, String vendor_item_id){
+
+        retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
+
+        Call<ReturnMsgItem> call = service.setDelUserItemMap("setDelUserItemMap", user_id, vendor_item_id);
+        call.enqueue(new Callback<ReturnMsgItem>() {
+            @Override
+            public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
+                if(response.isSuccessful()){
+                    ReturnMsgItem returnMsgItem = response.body();
+//                    productAdapter.remove(pdItem_possion);
+                }
+                else{
+                    Log.e(TAG, "실패 코드 확인 : " + response.code());
+                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
+                }
+            }
+            @Override
+            public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+
+
     }
 
     @Override
@@ -335,19 +418,20 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<List<ProductItem>> call = service.getSearchProductList("getSearchProducts", searchName, SearchProducts_page++);
+        Call<List<ProductItem>> call = service.getSearchProducts("getSearchProducts", searchName, MainApplication.ANDROID_ID, SearchProducts_page++);
 
         call.enqueue(new Callback<List<ProductItem>>() {
             @Override
             public void onResponse(Call<List<ProductItem>> call, Response<List<ProductItem>> response) {
                 if(response.isSuccessful()){
                     List<ProductItem> productItem = response.body();
+                    Log.e(TAG, "productItem : " + productItem.toString());
                     if(productItem.size() <= 0){
                         searchNoItemMsg.setVisibility(View.VISIBLE);
                         recyclerView.setVisibility(View.GONE);
                     }else{
                         productAdapter.addItems(productItem);
-                        productAdapter.notifyDataSetChanged();
+                        fragment_search_linearlayout.setBackgroundColor( ContextCompat.getColor(getContext(), R.color.white_500));
                     }
 
                 }

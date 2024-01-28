@@ -25,9 +25,10 @@ public interface RetrofitInterface {
 
 
     @GET("{path}")
-    Call<List<ProductItem>> getSearchProductList(
+    Call<List<ProductItem>> getSearchProducts(
             @Path ("path") String path,
             @Query("searchName") String searchName,
+            @Query("user_id") String user_id,
             @Query("page") int page
     );
 
