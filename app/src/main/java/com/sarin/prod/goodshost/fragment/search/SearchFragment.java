@@ -338,7 +338,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 productAdapter.set(pos, pdItem);
             }
 
-        } else if (v.getId() == R.id.list_view_hori) {
+        } else if (v.getId() == R.id.list_view) {
 
             Log.d(TAG, "position: " + pos);
             Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
