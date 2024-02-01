@@ -35,6 +35,7 @@ public interface RetrofitInterface {
     @GET("{path}")
     Call<ProductItem> getProductDetail(
             @Path ("path") String path,
+            @Query("user_id") String user_id,
             @Query("vendor_item_id") String vendor_item_id
     );
 

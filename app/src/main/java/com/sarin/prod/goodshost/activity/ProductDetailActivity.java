@@ -81,7 +81,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     static StringUtil sUtil = StringUtil.getInstance();
 
     private ImageView image, exit;
-    private TextView name, price_value, registration, link, save, rocket, difference_price, average_price;
+    private TextView name, price_value, registration, link, save, rocket, difference_price, average_price, views;
     private EditText hope_price;
     private CheckBox check;
     private LinearLayout price_layout;
@@ -114,6 +114,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         difference_price = binding.differencePrice;
         average_price = binding.averagePrice;
         price_layout = binding.priceLayout;
+        views = binding.views;
 
         getProductDetail(vendor_item_id);
         getProductChart(vendor_item_id);
@@ -127,12 +128,26 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(SharedViewModel.class);
 
+        save = bottomSheetDialog.findViewById(R.id.save);
+        hope_price = bottomSheetDialog.findViewById(R.id.hope_price);
+        hope_price.setSelection(hope_price.getText().length());
+        check = bottomSheetDialog.findViewById(R.id.check);
+
+
         registration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 viewModel.setFavorite(true);
                 bottomSheetDialog.show();
+
+                hope_price.setText("" + _pi.getHope_price());
+                if("Y".equals(_pi.getHope_stock())){
+                    check.setChecked(true);
+                } else {
+                    check.setChecked(false);
+                }
+
 
             }
         });
@@ -149,10 +164,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
 
 
-        save = bottomSheetDialog.findViewById(R.id.save);
-        hope_price = bottomSheetDialog.findViewById(R.id.hope_price);
-        hope_price.setSelection(hope_price.getText().length());
-        check = bottomSheetDialog.findViewById(R.id.check);
+
 
 
         save.setOnClickListener(new View.OnClickListener() {
@@ -239,6 +251,12 @@ public class ProductDetailActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
                     ReturnMsgItem returnMsgItem = response.body();
                     Log.d(TAG, "setUserRegister : " + returnMsgItem.toString());
+
+                    // 처음 관심상품 등록 후 그 상태에서 바로 관심상품 눌렀을때 변경한 값으로 출력하도록. (서버 통신을 안하니 값을 새로안들고와서 객체에 추가)
+                    if(returnMsgItem.getCode() > 0){
+                        _pi.setHope_price(hope_price);
+                        _pi.setHope_stock(hope_stock);
+                    }
 
                 }
                 else{
@@ -495,7 +513,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<ProductItem> call = service.getProductDetail("getProductDetail", vendor_item_id);
+        Call<ProductItem> call = service.getProductDetail("getProductDetail", MainApplication.ANDROID_ID, vendor_item_id);
 
         call.enqueue(new Callback<ProductItem>() {
             @Override
@@ -505,6 +523,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                     _pi = productItem;
                     name.setText(productItem.getName());
                     price_value.setText(sUtil.replaceStringPriceToInt(productItem.getPrice_value()) + getApplicationContext().getResources().getString(R.string.won));
+                    views.setText(sUtil.replaceStringPriceToInt(productItem.getViews()));
                     current_price = productItem.getPrice_value();
                     String url = productItem.getImage();
                     if(!url.contains("https:")){

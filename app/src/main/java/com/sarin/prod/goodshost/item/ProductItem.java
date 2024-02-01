@@ -27,10 +27,25 @@ public class ProductItem {
     public int hope_price;
     public String hope_stock;
     private boolean is_Favorite;
-    public String favorite;
+    public int views;
+    public String site;
 
 
+    public int getViews() {
+        return views;
+    }
 
+    public void setViews(int views) {
+        this.views = views;
+    }
+
+    public String getSite() {
+        return site;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
+    }
 
     public boolean isIs_Favorite() {
         return is_Favorite;
@@ -243,7 +258,8 @@ public class ProductItem {
                 ", hope_price='" + hope_price + '\'' +
                 ", hope_stock='" + hope_stock + '\'' +
                 ", is_Favorite='" + is_Favorite + '\'' +
-                ", favorite='" + favorite + '\'' +
+                ", views='" + views + '\'' +
+                ", site='" + site + '\'' +
                 '}';
     }
 }

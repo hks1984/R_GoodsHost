@@ -87,7 +87,7 @@
                 android:textCursorDrawable="@drawable/text_cursor"
                 android:singleLine="true"
                 android:ems="10"
-                android:hint="현재:23,000"
+                android:hint=""
                 android:inputType="number" />
 
 
