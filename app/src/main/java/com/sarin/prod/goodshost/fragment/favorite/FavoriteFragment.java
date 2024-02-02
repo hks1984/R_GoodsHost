@@ -1,5 +1,6 @@
 package com.sarin.prod.goodshost.fragment.favorite;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -67,7 +69,7 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
 
     private BottomSheetDialog bottomSheetDialog;
     private EditText hope_price;
-    private TextView save;
+    private TextView save, discount_1, discount_2, discount_3;
     private CheckBox check;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -96,6 +98,9 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
         hope_price = bottomSheetDialog.findViewById(R.id.hope_price);
         save = bottomSheetDialog.findViewById(R.id.save);
         check = bottomSheetDialog.findViewById(R.id.check);
+        discount_1 = bottomSheetDialog.findViewById(R.id.discount_1);
+        discount_2 = bottomSheetDialog.findViewById(R.id.discount_2);
+        discount_3 = bottomSheetDialog.findViewById(R.id.discount_3);
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +120,47 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
                 bottomSheetDialog.dismiss();
             }
         });
+
+        discount_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ObjectAnimator animator = ObjectAnimator.ofFloat(v, "alpha", 1f, 0f, 1f);
+                animator.setDuration(300); // 500ms 동안 실행
+                animator.start();
+
+                int current_price = pdItem.getPrice_value();
+                hope_price.setText("" + sUtil.calculateDiscountedPrice(current_price, 10));
+
+
+
+            }
+        });
+        discount_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ObjectAnimator animator = ObjectAnimator.ofFloat(v, "alpha", 1f, 0f, 1f);
+                animator.setDuration(300); // 500ms 동안 실행
+                animator.start();
+
+                int current_price = pdItem.getPrice_value();
+                hope_price.setText("" + sUtil.calculateDiscountedPrice(current_price, 15));
+            }
+        });
+        discount_3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ObjectAnimator animator = ObjectAnimator.ofFloat(v, "alpha", 1f, 0f, 1f);
+                animator.setDuration(300); // 500ms 동안 실행
+                animator.start();
+
+                int current_price = pdItem.getPrice_value();
+                hope_price.setText("" + sUtil.calculateDiscountedPrice(current_price, 20));
+            }
+        });
+
+
+
 
         hope_price.addTextChangedListener(new TextWatcher() {
             private String current = "";

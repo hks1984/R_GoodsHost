@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -171,6 +172,10 @@ public class ProductDetailActivity extends AppCompatActivity {
         discount_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ObjectAnimator animator = ObjectAnimator.ofFloat(v, "alpha", 1f, 0f, 1f);
+                animator.setDuration(300); // 500ms 동안 실행
+                animator.start();
+
                 int current_price = _pi.getPrice_value();
                 hope_price.setText("" + sUtil.calculateDiscountedPrice(current_price, 10));
             }
@@ -178,6 +183,10 @@ public class ProductDetailActivity extends AppCompatActivity {
         discount_2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ObjectAnimator animator = ObjectAnimator.ofFloat(v, "alpha", 1f, 0f, 1f);
+                animator.setDuration(300); // 500ms 동안 실행
+                animator.start();
+
                 int current_price = _pi.getPrice_value();
                 hope_price.setText("" + sUtil.calculateDiscountedPrice(current_price, 15));
             }
@@ -185,6 +194,10 @@ public class ProductDetailActivity extends AppCompatActivity {
         discount_3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ObjectAnimator animator = ObjectAnimator.ofFloat(v, "alpha", 1f, 0f, 1f);
+                animator.setDuration(300); // 500ms 동안 실행
+                animator.start();
+                
                 int current_price = _pi.getPrice_value();
                 hope_price.setText("" + sUtil.calculateDiscountedPrice(current_price, 20));
             }
@@ -326,7 +339,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         Log.d(TAG, "chartItems: " + chartItems.toString());
         Log.d(TAG, "" + minValue + "   " + maxValue);
         LineDataSet dataSet = new LineDataSet(entries, null);
-        dataSet.setColor(Color.RED);
+        dataSet.setColor(ContextCompat.getColor(getApplicationContext(), R.color.line_200));
 //        dataSet.setValueTextColor(Color.BLUE);
 
         // 선 색에 대한 설명 부분(색 이미지 설명)을 숨김
@@ -335,7 +348,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
 
         // 선 굵기 조절
-        dataSet.setLineWidth(3f); // 굵기를 조절하고 싶은 값으로 설정
+        dataSet.setLineWidth(4f); // 굵기를 조절하고 싶은 값으로 설정
 
         // 선을 곡선으로 설정
 //        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
@@ -402,21 +415,21 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         // 최소값에 대한 LimitLine 추가
         LimitLine llMin = new LimitLine(minValue, "최저가: " + sUtil.replaceStringPriceToInt((int)minValue) + "원");
-        llMin.setLineColor(Color.BLUE);
+        llMin.setLineColor(ContextCompat.getColor(getApplicationContext(), R.color.blue_200));
         llMin.setLineWidth(1f);
         llMin.enableDashedLine(10f, 10f, 0f);
         llMin.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
-        llMin.setTextSize(10f);
-        llMin.setTextColor(Color.BLUE);
+        llMin.setTextSize(12f);
+        llMin.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.blue_200));
 
         // 최대값에 대한 LimitLine 추가
         LimitLine llMax = new LimitLine(maxValue, "최고가: " + sUtil.replaceStringPriceToInt((int)maxValue) + "원");
-        llMax.setLineColor(Color.RED);
+        llMax.setLineColor(ContextCompat.getColor(getApplicationContext(), R.color.red_200));
         llMax.setLineWidth(1f);
         llMax.enableDashedLine(10f, 10f, 0f);
         llMax.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
-        llMax.setTextSize(10f);
-        llMax.setTextColor(Color.RED);
+        llMax.setTextSize(12f);
+        llMax.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red_200));
 
         YAxis leftAxis = lineChart.getAxisLeft();
         leftAxis.removeAllLimitLines();
@@ -471,7 +484,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     public void getProductChart(String vendor_item_id){
 
-        loadingProgressManager.showLoading(MainApplication.activity);
+        loadingProgressManager.showLoading(this);
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
@@ -498,11 +511,15 @@ public class ProductDetailActivity extends AppCompatActivity {
                         // TextView에 평균가 설정 (정수로 변환된 평균가를 문자열로 변환하여 설정)
                         average_price.setText(sUtil.replaceStringPriceToInt(averagePrice) + getApplicationContext().getResources().getString(R.string.won));
 
-                        int diff_price = averagePrice > current_price ?
-                                averagePrice - current_price :
-                                current_price - averagePrice ;
+//                        int diff_price = averagePrice > current_price ?
+//                                averagePrice - current_price :
+//                                current_price - averagePrice ;
 
-                        difference_price.setText(sUtil.replaceStringPriceToInt(diff_price) + getApplicationContext().getResources().getString(R.string.won));
+                        int diff_price = current_price - averagePrice;
+
+                        String resultText = diff_price > 0 ? "+": "";
+
+                        difference_price.setText(resultText + sUtil.replaceStringPriceToInt(diff_price) + getApplicationContext().getResources().getString(R.string.won));
 
 
                     } else {

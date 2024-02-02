@@ -34,7 +34,7 @@
     <string name="detail_q_alarm_price">퀵 가격 설정</string>
     <string name="detail_alarm_solt">재입고 알림 설정</string>
     <string name="detail_save">저장하기</string>
-    <string name="detail_price_difference">할인율</string>
+    <string name="detail_price_difference">평균가 대비 시세</string>
     <string name="detail_average_price">평균시세</string>
 
     <string name="discount_1">-10%</string>

@@ -12,6 +12,10 @@
     <color name="gray_500">#D6D5D5</color>
     <color name="gray_700">#7A7A7A</color>
 
+    <color name="blue_200">#5C6BC0</color>
+    <color name="red_200">#EF5350</color>
+    <color name="line_200">#7C7A7A</color>
+
     <color name="transparent">#00000000</color>
 
 
