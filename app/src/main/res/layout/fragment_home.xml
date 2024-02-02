@@ -35,6 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="8"
             android:layout_gravity="center"
+            android:padding="5dp"
             android:src="@drawable/logo_white">
 
         </ImageView>

@@ -197,7 +197,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 ObjectAnimator animator = ObjectAnimator.ofFloat(v, "alpha", 1f, 0f, 1f);
                 animator.setDuration(300); // 500ms 동안 실행
                 animator.start();
-                
+
                 int current_price = _pi.getPrice_value();
                 hope_price.setText("" + sUtil.calculateDiscountedPrice(current_price, 20));
             }
