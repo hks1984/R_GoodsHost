@@ -48,7 +48,9 @@ import com.sarin.prod.goodshost.util.PreferenceManager;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import retrofit2.Call;
@@ -472,12 +474,22 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             @Override
             public void onResponse(Call<List<String>> call, Response<List<String>> response) {
                 if(response.isSuccessful()){
+//                    List<String> searchName = response.body();
+//                    searchName = cleanList(searchName);
+//                    Log.d(TAG, "searchName : " + searchName.toString());
+//                    adapter.clear();
+//                    adapter.addAll(searchName);
+//                    adapter.notifyDataSetChanged();
+
                     List<String> searchName = response.body();
                     searchName = cleanList(searchName);
-                    Log.d(TAG, "searchName : " + searchName.toString());
-                    adapter.clear();
-                    adapter.addAll(searchName);
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                            R.layout.my_auto_complete_box, searchName);
+                    autoCompleteTextView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
+
+
                 }
                 else{
                     Log.e(TAG, "실패 코드 확인 : " + response.code());
@@ -494,12 +506,31 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
     }
 
     public static List<String> cleanList(List<String> originalList) {
-        Set<String> set = new LinkedHashSet<>(); // 중복 제거 및 순서 유지
+        // 문자열 정제: null, 빈 문자열 제거 및 특수 문자 제거
+        List<String> cleanedList = originalList.stream()
+                .filter(str -> str != null && !str.isEmpty())
+                .map(str -> str.replaceAll("[^a-zA-Z0-9\\s가-힣]", ""))
+                .collect(Collectors.toList());
 
-        return originalList.stream()
-                .filter(str -> str != null && !str.isEmpty()) // null과 빈 문자열 제거
-                .filter(set::add) // 중복 제거
-                .collect(Collectors.toList()); // 결과를 List로 반환
+        // 문자열 빈도수 계산
+        Map<String, Long> frequencyMap = cleanedList.stream()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        // 빈도수에 따라 정렬 (빈도수가 같을 경우 원본 리스트의 순서 유지)
+        List<String> sortedList = cleanedList.stream()
+                .distinct() // 중복 제거
+                .sorted((a, b) -> {
+                    long freqA = frequencyMap.get(a);
+                    long freqB = frequencyMap.get(b);
+                    if (freqB != freqA) {
+                        return Long.compare(freqB, freqA);
+                    } else {
+                        return Integer.compare(cleanedList.indexOf(a), cleanedList.indexOf(b));
+                    }
+                })
+                .collect(Collectors.toList());
+
+        return sortedList;
     }
 
 
