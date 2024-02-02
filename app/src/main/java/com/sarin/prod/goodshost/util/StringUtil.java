@@ -1,5 +1,9 @@
 package com.sarin.prod.goodshost.util;
 
+import android.util.Log;
+
+import com.sarin.prod.goodshost.MainApplication;
+
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +13,7 @@ import java.util.regex.Pattern;
 
 public class StringUtil {
 
+    private static String TAG = MainApplication.TAG;
     private static StringUtil mInstnace = null;
 
     public static StringUtil getInstance() {
@@ -73,6 +78,28 @@ public class StringUtil {
             foundUrls.add(text.substring(urlMatcher.start(0), urlMatcher.end(0)));
         }
         return foundUrls;
+    }
+
+    /**
+     * 입력된 가격에서 10%를 차감한 가격을 계산하여 반환합니다.
+     * 입력 값이 음수인 경우, 0을 반환합니다.
+     *
+     * @param originalPrice 원래 가격
+     * @return 10% 차감된 가격, 단, 결과가 음수일 경우 0을 반환
+     */
+    public int calculateDiscountedPrice(int originalPrice, int value) {
+        Log.d(TAG, "" + value);
+        // 입력 값 검증
+        if (originalPrice < 0) {
+            return 0; // 음수 입력은 유효하지 않으므로 0 반환
+        }
+
+        // 10% 차감 계산
+        double discountAmount = originalPrice * ((double) value / 100);
+        Log.d(TAG, "" + discountAmount);
+        int discountedPrice = (int) (originalPrice - Math.floor(discountAmount)); // 소수점 버림 처리
+        Log.d(TAG, "" + discountedPrice);
+        return discountedPrice;
     }
 
 

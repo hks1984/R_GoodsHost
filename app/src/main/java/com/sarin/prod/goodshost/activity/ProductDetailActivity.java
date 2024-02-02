@@ -81,7 +81,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     static StringUtil sUtil = StringUtil.getInstance();
 
     private ImageView image, exit;
-    private TextView name, price_value, registration, link, save, rocket, difference_price, average_price, views;
+    private TextView name, price_value, registration, link, save, rocket, difference_price, average_price, views, discount_1, discount_2, discount_3;
     private EditText hope_price;
     private CheckBox check;
     private LinearLayout price_layout;
@@ -132,6 +132,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         hope_price = bottomSheetDialog.findViewById(R.id.hope_price);
         hope_price.setSelection(hope_price.getText().length());
         check = bottomSheetDialog.findViewById(R.id.check);
+        discount_1 = bottomSheetDialog.findViewById(R.id.discount_1);
+        discount_2 = bottomSheetDialog.findViewById(R.id.discount_2);
+        discount_3 = bottomSheetDialog.findViewById(R.id.discount_3);
 
 
         registration.setOnClickListener(new View.OnClickListener() {
@@ -142,6 +145,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 bottomSheetDialog.show();
 
                 hope_price.setText("" + _pi.getHope_price());
+
                 if("Y".equals(_pi.getHope_stock())){
                     check.setChecked(true);
                 } else {
@@ -164,6 +168,27 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
 
 
+        discount_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int current_price = _pi.getPrice_value();
+                hope_price.setText("" + sUtil.calculateDiscountedPrice(current_price, 10));
+            }
+        });
+        discount_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int current_price = _pi.getPrice_value();
+                hope_price.setText("" + sUtil.calculateDiscountedPrice(current_price, 15));
+            }
+        });
+        discount_3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int current_price = _pi.getPrice_value();
+                hope_price.setText("" + sUtil.calculateDiscountedPrice(current_price, 20));
+            }
+        });
 
 
 
@@ -376,7 +401,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         lineChart.getAxisLeft().setAxisMaximum(maxValue + range * 1.0f);
 
         // 최소값에 대한 LimitLine 추가
-        LimitLine llMin = new LimitLine(minValue, "최소값: " + sUtil.replaceStringPriceToInt((int)minValue) + "원");
+        LimitLine llMin = new LimitLine(minValue, "최저가: " + sUtil.replaceStringPriceToInt((int)minValue) + "원");
         llMin.setLineColor(Color.BLUE);
         llMin.setLineWidth(1f);
         llMin.enableDashedLine(10f, 10f, 0f);
@@ -385,7 +410,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         llMin.setTextColor(Color.BLUE);
 
         // 최대값에 대한 LimitLine 추가
-        LimitLine llMax = new LimitLine(maxValue, "최대값: " + sUtil.replaceStringPriceToInt((int)maxValue) + "원");
+        LimitLine llMax = new LimitLine(maxValue, "최고가: " + sUtil.replaceStringPriceToInt((int)maxValue) + "원");
         llMax.setLineColor(Color.RED);
         llMax.setLineWidth(1f);
         llMax.enableDashedLine(10f, 10f, 0f);
