@@ -3,6 +3,8 @@
     <string name="title_home">홈</string>
     <string name="title_search">검색</string>
     <string name="title_favorite">관심</string>
+    <string name="title_setting">설정</string>
+
     <string name="title_activity_detail_product">DetailProductActivity</string>
 
     <!-- 공통 -->
@@ -17,6 +19,13 @@
     <string name="top_products">인기 상품</string>
     <string name="best_totalView">모든 상품 보기</string>
     <string name="top_totalView">모든 상품 보기</string>
+
+
+    <!-- 설정화면 -->
+    <string name="setting_title_default">일반</string>
+    <string name="setting_use_info">딜다이브 사용법</string>
+    <string name="setting_title_support">고객센터</string>
+    <string name="setting_app_version">앱 버전</string>
 
     <!-- 검색화면 -->
     <string name="search_recent_searches">최근 검색어</string>
