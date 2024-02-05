@@ -7,6 +7,18 @@
     android:orientation="vertical"
     tools:context=".fragment.setting.SettingFragment">
 
+
+    <TextView
+        android:id="@+id/setting_login"
+        style="@style/TextWhite.titleStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:paddingLeft="15dp"
+        android:text="로그인 버튼."
+        android:textStyle="bold" />
+
+
     <LinearLayout
         android:id="@+id/setting_title_default"
         android:layout_width="match_parent"

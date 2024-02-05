@@ -2,6 +2,7 @@ package com.sarin.prod.goodshost.fragment.setting;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -16,17 +17,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.sarin.prod.goodshost.activity.LoginActivity;
+import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
+import com.sarin.prod.goodshost.activity.CategoryProductListActivity;
 import com.sarin.prod.goodshost.databinding.FragmentFavoriteBinding;
 import com.sarin.prod.goodshost.databinding.FragmentSettingBinding;
 import com.sarin.prod.goodshost.fragment.favorite.FavoriteViewModel;
+import com.sarin.prod.goodshost.fragment.home.HomeFragment;
+import com.sarin.prod.goodshost.util.CustomSnackbar;
 
 public class SettingFragment extends Fragment {
 
     private SettingViewModel mViewModel;
     private FragmentSettingBinding binding;
 
-    private TextView app_version;
+    private TextView app_version, setting_login;
 
     public static SettingFragment newInstance() {
         return new SettingFragment();
@@ -43,6 +49,7 @@ public class SettingFragment extends Fragment {
         View root = binding.getRoot();
 
         app_version = binding.appVersion;
+        setting_login = binding.settingLogin;
 
 
         try {
@@ -62,6 +69,15 @@ public class SettingFragment extends Fragment {
         }
 
 
+
+        setting_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), LoginActivity.class);
+                v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
+
+            }
+        });
 
 
 
