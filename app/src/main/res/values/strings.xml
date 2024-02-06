@@ -8,6 +8,9 @@
 
     <string name="title_activity_detail_product">DetailProductActivity</string>
 
+    <!-- 런쳐 화면 -->
+    <string name="splash_text">스마트한 쇼핑 딜다이브</string>
+
     <!-- 공통 -->
     <string name="logo_title">D Mall</string>
     <string name="won">원</string>

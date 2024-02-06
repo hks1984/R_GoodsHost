@@ -21,7 +21,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        WritingTextView writingTextView = findViewById(R.id.writingTextView);
+//        WritingTextView writingTextView = findViewById(R.id.writingTextView);
         moveMain(2);
     }
 
