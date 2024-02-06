@@ -5,6 +5,7 @@
     <string name="title_favorite">관심</string>
     <string name="title_setting">설정</string>
 
+
     <string name="title_activity_detail_product">DetailProductActivity</string>
 
     <!-- 공통 -->
@@ -12,6 +13,7 @@
     <string name="won">원</string>
     <string name="no_searchc_item">검색된 데이터가 없어요.\n다른 검색어로 검색해 보세요.</string>
     <string name="favorite_save">등록했어요!</string>
+    <string name="ok">확인</string>
 
 
     <!-- 홈 -->
@@ -24,6 +26,7 @@
     <!-- 설정화면 -->
     <string name="setting_title_default">일반</string>
     <string name="setting_use_info">딜다이브 사용법</string>
+    <string name="setting_use_alarm">알림 설정</string>
     <string name="setting_title_support">고객센터</string>
     <string name="setting_app_version">앱 버전</string>
 
@@ -66,41 +69,19 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="lorem_ipsum">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
-        volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
-        dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
-        litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse blandit eleifend
-        diam, vel rutrum tellus vulputate quis. Aliquam eget libero aliquet, imperdiet nisl a,
-        ornare ex. Sed rhoncus est ut libero porta lobortis. Fusce in dictum tellus.\n\n
-        Suspendisse interdum ornare ante. Aliquam nec cursus lorem. Morbi id magna felis. Vivamus
-        egestas, est a condimentum egestas, turpis nisl iaculis ipsum, in dictum tellus dolor sed
-        neque. Morbi tellus erat, dapibus ut sem a, iaculis tincidunt dui. Interdum et malesuada
-        fames ac ante ipsum primis in faucibus. Curabitur et eros porttitor, ultricies urna vitae,
-        molestie nibh. Phasellus at commodo eros, non aliquet metus. Sed maximus nisl nec dolor
-        bibendum, vel congue leo egestas.\n\n
-        Sed interdum tortor nibh, in sagittis risus mollis quis. Curabitur mi odio, condimentum sit
-        amet auctor at, mollis non turpis. Nullam pretium libero vestibulum, finibus orci vel,
-        molestie quam. Fusce blandit tincidunt nulla, quis sollicitudin libero facilisis et. Integer
-        interdum nunc ligula, et fermentum metus hendrerit id. Vestibulum lectus felis, dictum at
-        lacinia sit amet, tristique id quam. Cras eu consequat dui. Suspendisse sodales nunc ligula,
-        in lobortis sem porta sed. Integer id ultrices magna, in luctus elit. Sed a pellentesque
-        est.\n\n
-        Aenean nunc velit, lacinia sed dolor sed, ultrices viverra nulla. Etiam a venenatis nibh.
-        Morbi laoreet, tortor sed facilisis varius, nibh orci rhoncus nulla, id elementum leo dui
-        non lorem. Nam mollis ipsum quis auctor varius. Quisque elementum eu libero sed commodo. In
-        eros nisl, imperdiet vel imperdiet et, scelerisque a mauris. Pellentesque varius ex nunc,
-        quis imperdiet eros placerat ac. Duis finibus orci et est auctor tincidunt. Sed non viverra
-        ipsum. Nunc quis augue egestas, cursus lorem at, molestie sem. Morbi a consectetur ipsum, a
-        placerat diam. Etiam vulputate dignissim convallis. Integer faucibus mauris sit amet finibus
-        convallis.\n\n
-        Phasellus in aliquet mi. Pellentesque habitant morbi tristique senectus et netus et
-        malesuada fames ac turpis egestas. In volutpat arcu ut felis sagittis, in finibus massa
-        gravida. Pellentesque id tellus orci. Integer dictum, lorem sed efficitur ullamcorper,
-        libero justo consectetur ipsum, in mollis nisl ex sed nisl. Donec maximus ullamcorper
-        sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus
-        libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
-        vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
-    </string>
+    <!-- 권한 화면 -->
+    <string name="permission_dialog_main">서비스 이용을 위한\n앱 접근 권한 안내</string>
+    <string name="permission_dialog_sub">편리한 서비스 이용을 위해 아래 항목의 접근 권한이 필요해요.</string>
+    <string name="permission_dialog_required">필수 권한</string>
+    <string name="permission_dialog_required_1">기기 및 앱 기록</string>
+    <string name="permission_dialog_required_1_1">앱 버전 및 사용성 개선</string>
+    <string name="permission_dialog_required_2">사용정보 접근 권한</string>
+    <string name="permission_dialog_required_2_1">화면 공유 방지</string>
+    <string name="permission_dialog_required_3">모든 패키지 쿼리</string>
+    <string name="permission_dialog_required_3_1">단말에 설치된 앱 검사</string>
+
+    <string name="permission_dialog_optional">선택 권한</string>
+    <string name="permission_dialog_optional_1">알림</string>
+    <string name="permission_dialog_optional_1_1">푸시 알림</string>
 
 </resources>

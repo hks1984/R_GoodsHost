@@ -8,12 +8,9 @@
 
     <queries>
         <package android:name="com.coupang.mobile" />
-
         <intent>
             <action android:name="android.intent.action.VIEW" />
-
             <category android:name="android.intent.category.BROWSABLE" />
-
             <data android:scheme="https" />
         </intent>
     </queries>
@@ -30,6 +27,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.R_GoodsHost"
         tools:targetApi="31">
+
+        <activity
+            android:name=".activity.SplashActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.R_GoodsHost.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.R_GoodsHost.NoActionBar">
+        </activity>
+        <activity
+            android:name=".activity.PermissionActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.LoginActivity"
             android:exported="false"
@@ -41,16 +57,12 @@
             android:theme="@style/Transparent">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:mimeType="*/*" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND_MULTIPLE" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:mimeType="*/*" />
             </intent-filter>
         </activity>
@@ -60,17 +72,7 @@
         <activity
             android:name=".activity.CategoryProductListActivity"
             android:exported="false" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.R_GoodsHost.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
         <service
             android:name=".message.MyFirebaseMessagingService"

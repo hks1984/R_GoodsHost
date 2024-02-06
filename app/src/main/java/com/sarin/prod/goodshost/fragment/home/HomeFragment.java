@@ -325,7 +325,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
             public void onResponse(Call<List<ProductItem>> call, Response<List<ProductItem>> response) {
                 if(response.isSuccessful()){
                     List<ProductItem> productItem = response.body();
-                    Log.d(TAG, "1111111111111111111" + productItem.toString());
+//                    Log.d(TAG, "1111111111111111111" + productItem.toString());
                     productHoriAdapter.addItems(productItem);
 
                 }

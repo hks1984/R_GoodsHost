@@ -169,7 +169,7 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
                 persent.setVisibility(View.GONE); // 레이아웃 숨김
             }
 
-            Log.d(TAG, "fff : " + pitem.toString());
+//            Log.d(TAG, "fff : " + pitem.toString());
             if(pitem.isIs_Favorite()){
                 favorite.setImageResource(R.drawable.baseline_favorite_24);
             }else{

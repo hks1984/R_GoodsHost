@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black_500"
@@ -65,6 +66,38 @@
             android:gravity="center"
             android:src="@drawable/baseline_chevron_right_24_white"
             />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            style="@style/TextWhite.largeStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:gravity="left"
+            android:text="@string/setting_use_alarm"
+            />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/alarm_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:thumb="@drawable/shape_switch_thumb"
+            app:switchMinWidth="50dp"
+            android:paddingRight="15dp"
+            app:track="@drawable/shape_swich_selector" />
 
     </LinearLayout>
 
