@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             checkNotificationPermission();
+        } else {
+            PreferenceManager.setString(getApplicationContext(), "isAlarmStatus", "1");
         }
 
     }

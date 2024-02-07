@@ -12,14 +12,34 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="android:windowDisablePreview">true</item>
-        <item name="android:windowBackground">@null</item>
-        <item name="android:windowIsTranslucent">true</item>
+<!--        <item name="android:windowDisablePreview">true</item>-->
+<!--        <item name="android:windowBackground">@null</item>-->
+<!--        <item name="android:windowIsTranslucent">true</item>-->
     </style>
 
     <style name="Theme.R_GoodsHost.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="whiteStatus" parent="@style/Theme.R_GoodsHost">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@color/white_500</item>
+        <!-- 배경색이 밝으면 windowLightStatusBar 값을 true로, 어두우면 false 로 설정해야한다. -->
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+
+    <style name="Transparent" parent="@style/Theme.R_GoodsHost">
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+        <item name="android:backgroundDimEnabled">false</item>
     </style>
 
     <style name="TextBlack.smallStyle" parent="android:TextAppearance">
@@ -80,22 +100,8 @@
         <item name="android:background">@drawable/share_round_bottom_sheet_registration</item>
     </style>
 
-    <style name="Transparent" parent="@style/Theme.R_GoodsHost">
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation</item>
-        <item name="android:backgroundDimEnabled">false</item>
-    </style>
 
-    <!-- Base application theme. -->
-    <style name="Base.Theme.R_GoodsHost" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-    </style>
+
 
 
 </resources>

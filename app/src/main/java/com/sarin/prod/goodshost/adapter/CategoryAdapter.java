@@ -69,12 +69,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         }
         // 선택한 카테고리 속성 변경
         else if(selectedItem == position) {
-            Log.d(TAG, "black");
+//            Log.d(TAG, "black");
             holder.categoryName.setBackgroundResource(R.drawable.round_button_on);
             holder.categoryName.setTextColor(ContextCompat.getColor(context, R.color.white_500));
 
         } else {
-            Log.d(TAG, "white");
+//            Log.d(TAG, "white");
             holder.categoryName.setBackgroundResource(R.drawable.round_button_off);
             holder.categoryName.setTextColor(ContextCompat.getColor(context, R.color.black_500));
         }

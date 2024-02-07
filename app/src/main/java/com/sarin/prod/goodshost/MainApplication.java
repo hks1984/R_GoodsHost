@@ -1,8 +1,15 @@
 package com.sarin.prod.goodshost;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -10,6 +17,9 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.LifecycleObserver;
 
 import com.github.mikephil.charting.data.Entry;
@@ -33,6 +43,7 @@ public class MainApplication extends Application implements Application.Activity
     public static final String TAG = "SARIN_LOG";
 
     public static String ANDROID_ID = "";
+    private final static int NOTICATION_ID = 222;
     private Activity currentActivity;
     public static Context context;
     public static Activity activity;
@@ -132,6 +143,7 @@ public class MainApplication extends Application implements Application.Activity
 
 
     }
+
 
 
     /** ActivityLifecycleCallback methods. */

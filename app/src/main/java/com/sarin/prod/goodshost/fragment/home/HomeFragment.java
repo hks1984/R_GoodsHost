@@ -143,7 +143,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
         });
 
         if(categoryAdapter.size() <= 0){
-            Log.d(TAG, "categoryAdapter.size() : " + categoryAdapter.size());
+//            Log.d(TAG, "categoryAdapter.size() : " + categoryAdapter.size());
             getCategoryList();
         }
 

@@ -17,6 +17,7 @@
     <string name="no_searchc_item">검색된 데이터가 없어요.\n다른 검색어로 검색해 보세요.</string>
     <string name="favorite_save">등록했어요!</string>
     <string name="ok">확인</string>
+    <string name="no">취소</string>
 
 
     <!-- 홈 -->
@@ -32,6 +33,10 @@
     <string name="setting_use_alarm">알림 설정</string>
     <string name="setting_title_support">고객센터</string>
     <string name="setting_app_version">앱 버전</string>
+    <string name="setting_alarm_title">알림 권한 설정 안내</string>
+    <string name="setting_alarm_info">알림 권한 요청을 거부하신 관계로 직접 알림 설정을 활성화 해주셔야되요. 아래 \&apos;설정 바로가기\&apos; 버튼을 통해 알림 권한 활성화 후 사용해주세요.</string>
+    <string name="setting_alarm_set_go">설정 바로가기</string>
+
 
     <!-- 검색화면 -->
     <string name="search_recent_searches">최근 검색어</string>
@@ -66,11 +71,6 @@
     <string name="share_adding">상품을 추가하고 있어요. 잠시만 기다려주세요.</string>
     <string name="share_add_product">상품 등록이 완료되었어요.</string>
     <string name="title_activity_login">LoginActivity</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
     <!-- 권한 화면 -->
     <string name="permission_dialog_main">서비스 이용을 위한\n앱 접근 권한 안내</string>

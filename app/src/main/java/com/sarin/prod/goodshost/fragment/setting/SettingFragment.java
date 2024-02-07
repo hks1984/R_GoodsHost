@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -94,13 +95,19 @@ public class SettingFragment extends Fragment {
                     PreferenceManager.setString(getContext(), "isAlarmStatus", "1");
                     //checkAlarmStatus(1);
                     if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+                        } else {
+                            showPermissionDeniedExplanation();
+                        }
+
                     }
 
                 }else{
                     PreferenceManager.setString(getContext(), "isAlarmStatus", "0");
                     Log.d(TAG, "해제");
                 }
+                checkAlarmStatus();
 
             }
         });
@@ -118,18 +125,25 @@ public class SettingFragment extends Fragment {
             }
         });
 
-
-
-
         return root;
     }
 
     private void checkAlarmStatus() {
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            alarm_switch.setChecked(false);
+        if("1".equals(PreferenceManager.getString(getContext(), "isAlarmStatus"))){
+            // 알람 ON일 경우
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                // 사용자가 앱알림을 ON했더라도 알림 권한이 OFF 인 경우 OFF 로 재 설정.
+                alarm_switch.setChecked(false);
+                PreferenceManager.setString(getContext(), "isAlarmStatus", "0");
+            } else {
+                alarm_switch.setChecked(true);
+            }
+
         } else {
-            alarm_switch.setChecked(true);
+            // OFF일 경우
+            alarm_switch.setChecked(false);
         }
+
     }
 
     private ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
@@ -150,15 +164,15 @@ public class SettingFragment extends Fragment {
 
     private void showPermissionDeniedExplanation() {
         new AlertDialog.Builder(getContext())
-                .setTitle("알림 권한 거부됨")
-                .setMessage("알림 기능을 사용하려면 앱 설정에서 알림 권한을 활성화해야 합니다.")
-                .setPositiveButton("설정으로 이동", (dialog, which) -> {
+                .setTitle(getContext().getResources().getString(R.string.setting_alarm_title))
+                .setMessage(getContext().getResources().getString(R.string.setting_alarm_info))
+                .setPositiveButton(getContext().getResources().getString(R.string.setting_alarm_set_go), (dialog, which) -> {
                     Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                     Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
                     intent.setData(uri);
                     startActivity(intent);
                 })
-                .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton(getContext().getResources().getString(R.string.no), (dialog, which) -> dialog.dismiss())
                 .create()
                 .show();
     }
