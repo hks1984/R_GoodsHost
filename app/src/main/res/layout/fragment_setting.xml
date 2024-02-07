@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:gravity="left"
         android:paddingLeft="15dp"
-        android:text="로그인 버튼."
+        android:text=""
         android:textStyle="bold" />
 
 

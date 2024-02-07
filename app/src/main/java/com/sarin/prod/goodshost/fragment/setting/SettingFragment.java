@@ -116,14 +116,14 @@ public class SettingFragment extends Fragment {
 
 
 
-        setting_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), LoginActivity.class);
-                v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
-
-            }
-        });
+//        setting_login.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(v.getContext(), LoginActivity.class);
+//                v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
+//
+//            }
+//        });
 
         return root;
     }

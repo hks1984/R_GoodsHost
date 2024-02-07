@@ -101,7 +101,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID);
 
-        builder.setSmallIcon(R.mipmap.ic_launcher_round)
+        builder.setSmallIcon(R.mipmap.ic_launcher_foreground)
                 //.setLargeIcon(mLargeIcon)
                 // .setContent(remoteViews)
                 .setContentIntent(pendingIntent)
@@ -118,7 +118,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+        if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
+                || !"1".equals(PreferenceManager.getString(getApplicationContext(), "isAlarmStatus"))
+        ) {
+            Log.d(TAG, "알림 거부 상태.");
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -134,7 +137,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentTitle("Example Group")
                 // 그룹에 속한 알림의 수를 요약 텍스트에 반영합니다.
                 .setContentText("You have " + notificationId + " new messages")
-                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setSmallIcon(R.mipmap.ic_launcher_foreground)
                 // setGroup()을 사용하여 이 알림을 동일한 그룹에 속하게 합니다.
                 .setGroup("sarin")
                 // setGroupSummary()를 true로 설정하여 이 알림을 그룹의 요약 알림으로 만듭니다.
