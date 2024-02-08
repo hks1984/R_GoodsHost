@@ -1,11 +1,15 @@
 package com.sarin.prod.goodshost.fragment.home;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,6 +38,8 @@ import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
 import com.sarin.prod.goodshost.util.LoadingProgressManager;
 import com.sarin.prod.goodshost.util.StringUtil;
+import com.sarin.prod.goodshost.view.PopupDialogUtil;
+import com.sarin.prod.goodshost.view.PopupDialogClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -230,13 +236,18 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
 
                 }
                 else{
-                    Log.e(TAG, "실패 코드 확인 : " + response.code());
-                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
             }
             @Override
             public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t.getMessage());
+                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
             }
         });
 
@@ -257,13 +268,18 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
 //                    productAdapter.remove(pdItem_possion);
                 }
                 else{
-                    Log.e(TAG, "실패 코드 확인 : " + response.code());
-                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
             }
             @Override
             public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t.getMessage());
+                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
             }
         });
 
@@ -288,9 +304,6 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
 
                 }
                 else{
-                    // 실패
-                    Log.e(TAG, "실패 코드 확인 : " + response.code());
-                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
 
                 loadingProgressManager.hideLoading();
@@ -298,10 +311,15 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
 
             @Override
             public void onFailure(Call<List<ProductItem>> call, Throwable t) {
-                // 통신 실패
-                Log.e(TAG, "onFailure: " + t.getMessage());
-
                 loadingProgressManager.hideLoading();
+                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
             }
         });
 
@@ -330,9 +348,6 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
 
                 }
                 else{
-                    // 실패
-                    Log.e(TAG, "실패 코드 확인 : " + response.code());
-                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
 
                 loadingProgressManager.hideLoading();
@@ -340,10 +355,15 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
 
             @Override
             public void onFailure(Call<List<ProductItem>> call, Throwable t) {
-                // 통신 실패
-                Log.e(TAG, "onFailure: " + t.getMessage());
-
                 loadingProgressManager.hideLoading();
+                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
             }
         });
 
@@ -376,18 +396,23 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
 
                 }
                 else{
-                    // 실패
-                    Log.e(TAG, "실패 코드 확인 : " + response.code());
-                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
                 loadingProgressManager.hideLoading();
             }
 
             @Override
             public void onFailure(Call<List<CategoryItem>> call, Throwable t) {
-                // 통신 실패
-                Log.e(TAG, "onFailure: " + t.getMessage());
+
                 loadingProgressManager.hideLoading();
+
+                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
             }
         });
 

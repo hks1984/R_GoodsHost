@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="@color/white_500"
     tools:context=".activity.ProductDetailActivity"
     >
 
@@ -57,7 +58,7 @@
                     android:id="@+id/image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/white_500"
+                    android:background="@drawable/share_round_image_layout"
                     />
 
             </LinearLayout>
@@ -196,7 +197,7 @@
                 android:layout_marginBottom="20dp"
                 android:padding="10dp"
                 style="@style/TextBlack.smallStyle"
-                android:textColor="@color/gray_700"
+                android:textColor="@color/gray_500"
                 android:background="@drawable/round_button_gray"
 
                 />
@@ -236,7 +237,7 @@
                 android:id="@+id/favorite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/baseline_favorite_border_24_white"
+                android:src="@drawable/baseline_favorite_24"
                 android:gravity="center"
                 android:layout_marginRight="5dp"
                 />
@@ -275,7 +276,7 @@
             android:layout_weight="3.5"
             android:text="관심등록"
             android:gravity="center"
-            android:textColor="@color/white"
+            android:textColor="@color/white_500"
             style="@style/TextWhite.largeStyle"
             android:textStyle="bold"
             tools:ignore="Suspicious0dp" />
@@ -301,7 +302,7 @@
             android:layout_weight="3.5"
             android:text="상품확인"
             android:gravity="center"
-            android:textColor="@color/white"
+            android:textColor="@color/white_500"
             style="@style/TextWhite.largeStyle"
             android:textStyle="bold"
             tools:ignore="Suspicious0dp" />

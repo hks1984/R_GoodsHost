@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -41,6 +42,10 @@ import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
 import com.sarin.prod.goodshost.util.LoadingProgressManager;
 import com.sarin.prod.goodshost.activity.ProductDetailActivity;
+
+import com.sarin.prod.goodshost.view.PopupDialogUtil;
+import com.sarin.prod.goodshost.view.PopupDialogClickListener;
+
 
 import com.sarin.prod.goodshost.adapter.RecyclerViewClickListener;
 import com.sarin.prod.goodshost.util.PreferenceManager;
@@ -87,6 +92,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
     private LinearLayout recent_layout, favorite_layout, searchNoItemMsg, editBoxLinearLayout, fragment_search_linearlayout;
 
     private ImageView searchIcon;
+    private TextView search_favorite_searches_no_data;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -102,6 +108,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         searchIcon = binding.searchIcon;
         editBoxLinearLayout = binding.editBoxLinearLayout;
         fragment_search_linearlayout = binding.fragmentSearchLinearlayout;
+        search_favorite_searches_no_data = binding.searchFavoriteSearchesNoData;
 
 
         recyclerView = binding.recyclerView;
@@ -248,6 +255,9 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         List<String> searchList = PreferenceManager.getStringList(getContext(), "searchList");
         if(searchList != null && searchList.size() > 0){
             recentAdapter.addItems(searchList);
+        } else {
+            search_favorite_searches_no_data.setVisibility(View.VISIBLE);
+            recentRecyclerView.setVisibility(View.GONE);
         }
 
         recentAdapter.setOnItemClickListener(new RecentAdapter.OnItemClickListener() {
@@ -367,13 +377,18 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
                 }
                 else{
-                    Log.e(TAG, "실패 코드 확인 : " + response.code());
-                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
             }
             @Override
             public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t.getMessage());
+                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
             }
         });
 
@@ -394,13 +409,18 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 //                    productAdapter.remove(pdItem_possion);
                 }
                 else{
-                    Log.e(TAG, "실패 코드 확인 : " + response.code());
-                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
             }
             @Override
             public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t.getMessage());
+                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
             }
         });
 
@@ -438,25 +458,29 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
                 }
                 else{
-                    // 실패
-                    Log.e(TAG, "실패 코드 확인 : " + response.code());
-                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
                 favorite_layout.setVisibility(View.GONE);
                 recent_layout.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
 
+                search_favorite_searches_no_data.setVisibility(View.GONE);
+                recentRecyclerView.setVisibility(View.VISIBLE);
+
                 loadingProgressManager.hideLoading();
-
-
 
             }
 
             @Override
             public void onFailure(Call<List<ProductItem>> call, Throwable t) {
-                // 통신 실패
-                Log.e(TAG, "onFailure: " + t.getMessage());
                 loadingProgressManager.hideLoading();
+                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
             }
         });
 
@@ -492,13 +516,18 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
                 }
                 else{
-                    Log.e(TAG, "실패 코드 확인 : " + response.code());
-                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
             }
             @Override
             public void onFailure(Call<List<String>> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t.getMessage());
+                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
             }
         });
 

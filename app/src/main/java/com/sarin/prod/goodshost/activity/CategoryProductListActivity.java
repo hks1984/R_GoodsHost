@@ -36,6 +36,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.sarin.prod.goodshost.util.StringUtil;
+import com.sarin.prod.goodshost.view.PopupDialogUtil;
+import com.sarin.prod.goodshost.view.PopupDialogClickListener;
+
+
 public class CategoryProductListActivity extends AppCompatActivity implements RecyclerViewClickListener {
 
     private ActivityCategoryProductListBinding binding;
@@ -206,13 +211,18 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
 
                 }
                 else{
-                    Log.e(TAG, "실패 코드 확인 : " + response.code());
-                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
             }
             @Override
             public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t.getMessage());
+                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
             }
         });
 
@@ -233,13 +243,18 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
 //                    productAdapter.remove(pdItem_possion);
                 }
                 else{
-                    Log.e(TAG, "실패 코드 확인 : " + response.code());
-                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
             }
             @Override
             public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t.getMessage());
+                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
             }
         });
 
@@ -265,18 +280,23 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
 
                 }
                 else{
-                    // 실패
-                    Log.e(TAG, "실패 코드 확인 : " + response.code());
-                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
+
                 }
                 loadingProgressManager.hideLoading();
             }
 
             @Override
             public void onFailure(Call<List<CategoryItem>> call, Throwable t) {
-                // 통신 실패
-                Log.e(TAG, "onFailure: " + t.getMessage());
                 loadingProgressManager.hideLoading();
+
+                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
             }
         });
 
@@ -301,9 +321,7 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
 
                 }
                 else{
-                    // 실패
-                    Log.e(TAG, "실패 코드 확인 : " + response.code());
-                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
+                   
                 }
 
                 loadingProgressManager.hideLoading();
@@ -311,10 +329,16 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
 
             @Override
             public void onFailure(Call<List<ProductItem>> call, Throwable t) {
-                // 통신 실패
-                Log.e(TAG, "onFailure: " + t.getMessage());
-
+              
                 loadingProgressManager.hideLoading();
+                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
             }
         });
 
@@ -337,9 +361,7 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
                     productAdapter.addItems(productItem);
                 }
                 else{
-                    // 실패
-                    Log.e(TAG, "실패 코드 확인 : " + response.code());
-                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
+                   
                 }
                 loadingProgressManager.hideLoading();
 
@@ -347,9 +369,16 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
 
             @Override
             public void onFailure(Call<List<ProductItem>> call, Throwable t) {
-                // 통신 실패
-                Log.e(TAG, "onFailure: " + t.getMessage());
+                           
                 loadingProgressManager.hideLoading();
+                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
             }
         });
 

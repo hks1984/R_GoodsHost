@@ -23,6 +23,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
+import com.sarin.prod.goodshost.view.PopupDialogUtil;
+import com.sarin.prod.goodshost.view.PopupDialogClickListener;
+
 
 import com.bumptech.glide.Glide;
 import com.github.mikephil.charting.charts.BarChart;
@@ -298,13 +303,18 @@ public class ProductDetailActivity extends AppCompatActivity {
 
                 }
                 else{
-                    Log.e(TAG, "실패 코드 확인 : " + response.code());
-                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
             }
             @Override
             public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t.getMessage());
+                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
             }
         });
 
@@ -339,7 +349,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         Log.d(TAG, "chartItems: " + chartItems.toString());
         Log.d(TAG, "" + minValue + "   " + maxValue);
         LineDataSet dataSet = new LineDataSet(entries, null);
-        dataSet.setColor(ContextCompat.getColor(getApplicationContext(), R.color.line_200));
+        dataSet.setColor(ContextCompat.getColor(getApplicationContext(), R.color.personal));
 //        dataSet.setValueTextColor(Color.BLUE);
 
         // 선 색에 대한 설명 부분(색 이미지 설명)을 숨김
@@ -527,9 +537,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                     }
                 }
                 else{
-                    // 실패
-                    Log.e(TAG, "실패 코드 확인 : " + response.code());
-                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
 
                 loadingProgressManager.hideLoading();
@@ -537,10 +544,15 @@ public class ProductDetailActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<ChartItem>> call, Throwable t) {
-                // 통신 실패
-                Log.e(TAG, "onFailure: " + t.getMessage());
-
                 loadingProgressManager.hideLoading();
+                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
             }
         });
 
@@ -571,7 +583,10 @@ public class ProductDetailActivity extends AppCompatActivity {
                     if(!url.contains("https:")){
                         url = "https:" + url;
                     }
-                    Glide.with(getApplicationContext()).load(url).into(image);
+                    Glide.with(getApplicationContext())
+                            .load(url)
+                            .apply(RequestOptions.bitmapTransform(new RoundedCorners(20))) // 여기서 10은 코너의 반지름을 dp 단위로 지정
+                            .into(image);
 
                     if(productItem.getRocket_baesong() != null && !"".equals(productItem.getRocket_baesong())){
                         rocket.setVisibility(View.VISIBLE);
@@ -582,9 +597,6 @@ public class ProductDetailActivity extends AppCompatActivity {
 
                 }
                 else{
-                    // 실패
-                    Log.e(TAG, "실패 코드 확인 : " + response.code());
-                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
                 loadingProgressManager.hideLoading();
 
@@ -592,9 +604,15 @@ public class ProductDetailActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ProductItem> call, Throwable t) {
-                // 통신 실패
-                Log.e(TAG, "onFailure: " + t.getMessage());
                 loadingProgressManager.hideLoading();
+                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
 
             }
         });

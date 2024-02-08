@@ -9,10 +9,14 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,10 +37,16 @@ import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
 import com.sarin.prod.goodshost.util.PreferenceManager;
 import com.sarin.prod.goodshost.util.StringUtil;
+import com.sarin.prod.goodshost.view.PopupDialog;
+import com.sarin.prod.goodshost.view.PopupDialogClickListener;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import com.sarin.prod.goodshost.view.PopupDialogUtil;
+import com.sarin.prod.goodshost.view.PopupDialogClickListener;
+
 
 public class MainApplication extends Application implements Application.ActivityLifecycleCallbacks, LifecycleObserver {
 
@@ -131,13 +141,18 @@ public class MainApplication extends Application implements Application.Activity
 
                 }
                 else{
-                    Log.e(TAG, "실패 코드 확인 : " + response.code());
-                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
             }
             @Override
             public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t.getMessage());
+                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
             }
         });
 

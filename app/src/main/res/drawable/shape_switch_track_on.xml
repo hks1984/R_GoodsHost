@@ -10,5 +10,5 @@
         android:height="30dp" />
 
 
-    <solid android:color="#0095FF" />
+    <solid android:color="@color/personal" />
 </shape>

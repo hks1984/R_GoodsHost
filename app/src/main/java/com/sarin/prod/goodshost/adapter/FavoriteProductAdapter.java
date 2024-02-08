@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.item.ProductItem;
@@ -167,7 +169,10 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
             if(!url.contains("https:")){
                 url = "https:" + url;
             }
-            Glide.with(itemView.getContext()).load(url).into(image);
+            Glide.with(itemView.getContext())
+                    .load(url)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(20))) // 여기서 10은 코너의 반지름을 dp 단위로 지정
+                    .into(image);
 
             double number = Double.parseDouble(pitem.getPersent());
             if(number < 0){

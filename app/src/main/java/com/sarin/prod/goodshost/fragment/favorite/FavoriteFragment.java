@@ -25,6 +25,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.sarin.prod.goodshost.view.PopupDialogUtil;
+import com.sarin.prod.goodshost.view.PopupDialogClickListener;
+
+
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
@@ -69,7 +73,7 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
 
     private BottomSheetDialog bottomSheetDialog;
     private EditText hope_price;
-    private TextView save, discount_1, discount_2, discount_3;
+    private TextView save, discount_1, discount_2, discount_3, favorite_all_product_nodata;
     private CheckBox check;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -83,6 +87,9 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
         favorite_LinearLayout1 = binding.favoriteLinearLayout1;
         nestedScrollView = binding.nestedScrollView;
         recyclerView = binding.recyclerView;
+        favorite_all_product_nodata = binding.favoriteAllProductNodata;
+
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         favoriteProductAdapter = new FavoriteProductAdapter(piLIst, this);
@@ -101,6 +108,7 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
         discount_1 = bottomSheetDialog.findViewById(R.id.discount_1);
         discount_2 = bottomSheetDialog.findViewById(R.id.discount_2);
         discount_3 = bottomSheetDialog.findViewById(R.id.discount_3);
+
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -272,13 +280,18 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
 
                 }
                 else{
-                    Log.e(TAG, "실패 코드 확인 : " + response.code());
-                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
             }
             @Override
             public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t.getMessage());
+                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
             }
         });
 
@@ -299,13 +312,18 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
                     favoriteProductAdapter.remove(pdItem_possion);
                 }
                 else{
-                    Log.e(TAG, "실패 코드 확인 : " + response.code());
-                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
             }
             @Override
             public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t.getMessage());
+                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
             }
         });
 
@@ -330,20 +348,30 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
                     favoriteProductAdapter.addItems(productItem);
                     favoriteProductAdapter.notifyDataSetChanged();
 
+                    Log.d(TAG, "favoriteProductAdapter.size() : " + favoriteProductAdapter.size());
+                    if(favoriteProductAdapter.size() < 1){
+                        favorite_all_product_nodata.setVisibility(View.VISIBLE);
+                    } else {
+                        favorite_all_product_nodata.setVisibility(View.GONE);
+                    }
+
                 }
                 else{
-                    // 실패
-                    Log.e(TAG, "실패 코드 확인 : " + response.code());
-                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
                 loadingProgressManager.hideLoading();
             }
 
             @Override
             public void onFailure(Call<List<ProductItem>> call, Throwable t) {
-                // 통신 실패
-                Log.e(TAG, "onFailure: " + t.getMessage());
                 loadingProgressManager.hideLoading();
+                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
             }
         });
 

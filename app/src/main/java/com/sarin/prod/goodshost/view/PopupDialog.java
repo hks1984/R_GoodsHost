@@ -1,13 +1,14 @@
-package com.sarin.prod.util;
+package com.sarin.prod.goodshost.view;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.sarin.prod.R;
+import com.sarin.prod.goodshost.R;
 
 public class PopupDialog extends Dialog {
 
@@ -16,6 +17,7 @@ public class PopupDialog extends Dialog {
     private TextView tvTitle, tvNegative, tvPositive;
     private String text;
     private String title;
+    private String type;
 
     public PopupDialog(@NonNull Context context, PopupDialogClickListener popupDialogClickListener) {
         super(context);
@@ -30,6 +32,10 @@ public class PopupDialog extends Dialog {
 
     public void setTitle (String title) {
         this.title = title;
+    }
+
+    public void setType (String type)  {
+        this.type = type;
     }
 
     @Override
@@ -58,6 +64,11 @@ public class PopupDialog extends Dialog {
             this.popupDialogClickListener.onNegativeClick();
             dismiss();
         });
+
+        if("ONE".equals(type)){
+            tvPositive.setVisibility(View.GONE);
+        }
+
     }
 
 

@@ -38,7 +38,7 @@
 
 
         <TextView
-            style="@style/TextWhite.largeStyle"
+            style="@style/TextWhite.titleStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
@@ -46,14 +46,16 @@
             android:gravity="center"
             android:text="@string/permission_dialog_main"
             android:textSize="20dp"
+            android:textStyle="bold"
             />
 
         <TextView
-            style="@style/TextWhite.largeStyle"
+            style="@style/TextWhite.bigLargeStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="14dp"
+            android:layout_marginBottom="20dp"
             android:gravity="left"
+            android:textStyle="bold"
             android:text="@string/permission_dialog_sub" />
 
         <TextView
@@ -63,6 +65,7 @@
             android:layout_marginBottom="5dp"
             android:gravity="left"
             android:text="@string/permission_dialog_required"
+            android:textStyle="bold"
             android:textSize="16dp" />
 
 
@@ -95,12 +98,13 @@
                 android:orientation="vertical">
 
                 <TextView
-                    style="@style/TextWhite.mediumStyle"
+                    style="@style/TextWhite.largeStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dp"
                     android:gravity="left"
                     android:text="@string/permission_dialog_required_1"
+                    android:textStyle="bold"
                     android:textSize="16dp" />
 
                 <TextView
@@ -115,17 +119,13 @@
             </LinearLayout>
         </LinearLayout>
 
-
-
-
-
-
         <TextView
             style="@style/TextWhite.largeStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:gravity="left"
+            android:textStyle="bold"
             android:text="@string/permission_dialog_optional"
             android:textSize="16dp" />
 
@@ -138,7 +138,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="20dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -157,12 +157,13 @@
                 android:orientation="vertical">
 
                 <TextView
-                    style="@style/TextWhite.mediumStyle"
+                    style="@style/TextWhite.largeStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dp"
                     android:gravity="left"
                     android:text="@string/permission_dialog_optional_1"
+                    android:textStyle="bold"
                     android:textSize="16dp" />
 
                 <TextView
@@ -175,7 +176,18 @@
                     android:textSize="14dp" />
 
             </LinearLayout>
+
+
         </LinearLayout>
+
+        <TextView
+            style="@style/TextWhite.largeStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:gravity="left"
+            android:textStyle="bold"
+            android:text="@string/permission_dialog_optional_1_2" />
 
 
     </LinearLayout>

@@ -36,6 +36,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.sarin.prod.goodshost.view.PopupDialogUtil;
+import com.sarin.prod.goodshost.view.PopupDialogClickListener;
+
+
+
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static String TAG = MainApplication.TAG;
@@ -107,7 +112,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setDefaults(NotificationCompat.DEFAULT_SOUND | NotificationCompat.DEFAULT_VIBRATE)
-                .setColor(getApplicationContext().getResources().getColor(R.color.black))
+                .setColor(getApplicationContext().getResources().getColor(R.color.black_500))
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setGroup("sarin")
                 // 사용자가 탭을 클릭하면 자동 제거
@@ -165,13 +170,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                 }
                 else{
-                    Log.e(TAG, "실패 코드 확인 : " + response.code());
-                    Log.e(TAG, "연결 주소 확인 : " + response.raw().request().url().url());
                 }
             }
             @Override
             public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t.getMessage());
+                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
             }
         });
 

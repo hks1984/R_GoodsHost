@@ -15,6 +15,7 @@
         android:layout_height="100dp"
         android:layout_gravity="center"
         android:scaleType="centerInside"
+        android:background="@drawable/share_round_image_layout"
         />
 
     <LinearLayout
