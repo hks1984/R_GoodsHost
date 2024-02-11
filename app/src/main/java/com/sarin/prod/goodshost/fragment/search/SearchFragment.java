@@ -345,7 +345,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 pdItem.setIs_Favorite(false);
                 productAdapter.set(pos, pdItem);
             } else {
-                setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), 0, "N");
+                setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), "Y", 0, "N");
                 pdItem.setIs_Favorite(true);
                 productAdapter.set(pos, pdItem);
             }
@@ -361,12 +361,12 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         }
     }
 
-    public void setUserItemMap(String user_id, String vendor_item_id, int hope_price, String hope_stock){
+    public void setUserItemMap(String user_id, String vendor_item_id, String hope_low_price, int hope_price, String hope_stock){
 
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<ReturnMsgItem> call = service.setUserItemMap("setUserItemMap", user_id, vendor_item_id, hope_price, hope_stock);
+        Call<ReturnMsgItem> call = service.setUserItemMap("setUserItemMap", user_id, vendor_item_id, hope_low_price, hope_price, hope_stock);
         call.enqueue(new Callback<ReturnMsgItem>() {
             @Override
             public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {

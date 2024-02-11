@@ -216,7 +216,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 boolean isCheckBoxChecked = check.isChecked();
                 String hope_stock = isCheckBoxChecked ? "Y" : "N";
                 String editTextValue = hope_price.getText().toString();
-                setUserItemMap(MainApplication.ANDROID_ID, vendor_item_id, sUtil.convertStringToInt(editTextValue), hope_stock);
+                setUserItemMap(MainApplication.ANDROID_ID, vendor_item_id, "Y", sUtil.convertStringToInt(editTextValue), hope_stock);
 
                 HomeFragment hf = HomeFragment.getInstance();
                 hf.productAdapter.setFavorite(vendor_item_id, true);
@@ -282,12 +282,12 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     }
 
-    public void setUserItemMap(String user_id, String vendor_item_id, int hope_price, String hope_stock){
+    public void setUserItemMap(String user_id, String vendor_item_id, String hope_low_price, int hope_price, String hope_stock){
 
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<ReturnMsgItem> call = service.setUserItemMap("setUserItemMap", user_id, vendor_item_id, hope_price, hope_stock);
+        Call<ReturnMsgItem> call = service.setUserItemMap("setUserItemMap", user_id, vendor_item_id, hope_low_price, hope_price, hope_stock);
         call.enqueue(new Callback<ReturnMsgItem>() {
             @Override
             public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {

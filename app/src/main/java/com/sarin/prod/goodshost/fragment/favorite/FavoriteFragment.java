@@ -122,7 +122,7 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
 
                 pdItem.setHope_price(sUtil.convertStringToInt(editTextValue));
                 pdItem.setHope_stock(hope_stock);
-                setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), sUtil.convertStringToInt(editTextValue), hope_stock);
+                setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), "Y", sUtil.convertStringToInt(editTextValue), hope_stock);
                 CustomSnackbar.showSnackbar(getContext(), binding.getRoot(), getContext().getResources().getString(R.string.favorite_save));
 
                 bottomSheetDialog.dismiss();
@@ -264,12 +264,12 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
     public void onItemClickListener_Hori(View v, int pos) {}
 
 
-    public void setUserItemMap(String user_id, String vendor_item_id, int hope_price, String hope_stock){
+    public void setUserItemMap(String user_id, String vendor_item_id, String hope_low_price, int hope_price, String hope_stock){
 
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<ReturnMsgItem> call = service.setUserItemMap("setUserItemMap", user_id, vendor_item_id, hope_price, hope_stock);
+        Call<ReturnMsgItem> call = service.setUserItemMap("setUserItemMap", user_id, vendor_item_id, hope_low_price, hope_price, hope_stock);
         call.enqueue(new Callback<ReturnMsgItem>() {
             @Override
             public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {

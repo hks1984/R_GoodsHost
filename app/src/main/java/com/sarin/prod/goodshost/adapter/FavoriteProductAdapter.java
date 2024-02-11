@@ -103,7 +103,7 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView name, price_value, persent, favorite_hope_price, favorite_hope_stock;
+        private TextView name, price_value, persent, favorite_hope_price, favorite_hope_stock, favorite_hope_low_price;
         private ImageView image;
 //        private RatingBar rating;
 
@@ -117,10 +117,12 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
             image = (ImageView) itemView.findViewById(R.id.imagew);
             favorite_hope_price = (TextView) itemView.findViewById(R.id.favorite_hope_price);
             favorite_hope_stock = (TextView) itemView.findViewById(R.id.favorite_hope_stock);
+            favorite_hope_low_price = (TextView) itemView.findViewById(R.id.favorite_hope_low_price);
             persent = (TextView) itemView.findViewById(R.id.persent);
             favorite_del = (LinearLayout) itemView.findViewById(R.id.favorite_del);
             favorite_alarm_edit = (LinearLayout) itemView.findViewById(R.id.favorite_alarm_edit);
             list_view_favorite = (LinearLayout) itemView.findViewById(R.id.list_view_favorite);
+
 
 
 
@@ -181,6 +183,13 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
                 persent.setText(numString + "% off"); // 할인율 표시
             } else {
                 persent.setVisibility(View.GONE); // 레이아웃 숨김
+            }
+
+
+            if("Y".equals(pitem.getHope_low_price())){
+                favorite_hope_low_price.setVisibility(View.VISIBLE);
+            } else {
+                favorite_hope_low_price.setVisibility(View.GONE); // 레이아웃 숨김
             }
 
             if(pitem.getHope_price() > 0){

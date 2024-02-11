@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sarin.prod.goodshost.activity.LoginActivity;
@@ -33,6 +34,7 @@ import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.MainActivity;
 import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.activity.CategoryProductListActivity;
+import com.sarin.prod.goodshost.activity.WebViewActivity;
 import com.sarin.prod.goodshost.databinding.FragmentFavoriteBinding;
 import com.sarin.prod.goodshost.databinding.FragmentSettingBinding;
 import com.sarin.prod.goodshost.fragment.favorite.FavoriteViewModel;
@@ -47,6 +49,8 @@ public class SettingFragment extends Fragment {
     private FragmentSettingBinding binding;
 
     private TextView app_version, setting_login;
+
+    private LinearLayout setting_privacy;
     SwitchCompat alarm_switch;
 
     public static SettingFragment newInstance() {
@@ -65,6 +69,7 @@ public class SettingFragment extends Fragment {
 
         app_version = binding.appVersion;
         setting_login = binding.settingLogin;
+        setting_privacy = binding.settingPrivacy;
 
 
         try {
@@ -113,7 +118,14 @@ public class SettingFragment extends Fragment {
         });
 
 
-
+        setting_privacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), WebViewActivity.class);
+                intent.putExtra("url", "https://api.dealdive.co.kr/dealdive/privacy");
+                v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
+            }
+        });
 
 
 //        setting_login.setOnClickListener(new View.OnClickListener() {

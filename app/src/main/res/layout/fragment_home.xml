@@ -124,12 +124,12 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:orientation="horizontal"
-                    android:paddingLeft="30dp"
-                    android:paddingRight="30dp">
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp">
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/gray_500" />
+                        android:background="@color/gray_200" />
 
                 </LinearLayout>
 
@@ -222,12 +222,12 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:orientation="horizontal"
-                    android:paddingLeft="30dp"
-                    android:paddingRight="30dp">
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp">
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/gray_500" />
+                        android:background="@color/gray_200" />
 
                 </LinearLayout>
 

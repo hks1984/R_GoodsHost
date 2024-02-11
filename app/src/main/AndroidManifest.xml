@@ -8,9 +8,12 @@
 
     <queries>
         <package android:name="com.coupang.mobile" />
+
         <intent>
             <action android:name="android.intent.action.VIEW" />
+
             <category android:name="android.intent.category.BROWSABLE" />
+
             <data android:scheme="https" />
         </intent>
     </queries>
@@ -27,7 +30,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.R_GoodsHost"
         tools:targetApi="31">
-
+        <activity
+            android:name=".activity.WebViewActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.SplashActivity"
             android:exported="true"
@@ -35,14 +40,14 @@
             android:theme="@style/Theme.R_GoodsHost.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
             android:exported="false"
-            android:theme="@style/Theme.R_GoodsHost.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.R_GoodsHost.NoActionBar"></activity>
         <activity
             android:name=".activity.PermissionActivity"
             android:exported="false" />
@@ -57,29 +62,32 @@
             android:theme="@style/Transparent">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="*/*" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND_MULTIPLE" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="*/*" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activity.ProductDetailActivity"
-            android:theme="@style/whiteStatus"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/whiteStatus" />
         <activity
             android:name=".activity.CategoryProductListActivity"
-            android:theme="@style/whiteStatus"
-            android:exported="false" />
-
+            android:exported="false"
+            android:theme="@style/whiteStatus" />
 
         <service
             android:name=".message.MyFirebaseMessagingService"
-            android:exported="true"
-            android:directBootAware="true">
+            android:directBootAware="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

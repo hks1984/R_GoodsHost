@@ -24,12 +24,21 @@ public class ProductItem {
     public String persent;
     public String rank;
 
+    public String hope_low_price;
     public int hope_price;
     public String hope_stock;
     private boolean is_Favorite;
     public int views;
     public String site;
 
+
+    public String getHope_low_price() {
+        return hope_low_price;
+    }
+
+    public void setHope_low_price(String hope_low_price) {
+        this.hope_low_price = hope_low_price;
+    }
 
     public int getViews() {
         return views;
@@ -255,6 +264,7 @@ public class ProductItem {
                 ", updateSeparator='" + updateSeparator + '\'' +
                 ", persent='" + persent + '\'' +
                 ", rank='" + rank + '\'' +
+                ", hope_low_price='" + hope_low_price + '\'' +
                 ", hope_price='" + hope_price + '\'' +
                 ", hope_stock='" + hope_stock + '\'' +
                 ", is_Favorite='" + is_Favorite + '\'' +

@@ -80,6 +80,7 @@ public interface RetrofitInterface {
             @Path ("path") String path,
             @Query("user_id") String user_id,
             @Query("vendor_item_id") String vendor_item_id,
+            @Query("hope_low_price") String hope_low_price,
             @Query("hope_price") int hope_price,
             @Query("hope_stock") String hope_stock
     );

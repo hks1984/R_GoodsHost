@@ -17,9 +17,9 @@ public class RetrofitClientInstance {
     private static Retrofit retrofit;
 
     // BaseUrl등록
-    private static final String BASE_URL = "http://192.168.10.70:8080/dealdive/";
+//    private static final String BASE_URL = "http://192.168.10.70:8080/dealdive/";
 //    private static final String BASE_URL = "http://192.168.0.2:8080/dealdive/";
-//    private static final String BASE_URL = "https://api.dealdive.co.kr/dealdive/";
+    private static final String BASE_URL = "https://api.dealdive.co.kr/dealdive/";
 
     private static RetrofitClientInstance mInstnace = null;
 
