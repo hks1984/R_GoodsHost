@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -107,7 +108,9 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
         private ImageView image;
 //        private RatingBar rating;
 
-        private LinearLayout favorite_del, favorite_alarm_edit, list_view_favorite;
+        private LinearLayout favorite_del, favorite_alarm_edit;
+
+        private ConstraintLayout list_view_favorite;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -121,7 +124,7 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
             persent = (TextView) itemView.findViewById(R.id.persent);
             favorite_del = (LinearLayout) itemView.findViewById(R.id.favorite_del);
             favorite_alarm_edit = (LinearLayout) itemView.findViewById(R.id.favorite_alarm_edit);
-            list_view_favorite = (LinearLayout) itemView.findViewById(R.id.list_view_favorite);
+            list_view_favorite = (ConstraintLayout) itemView.findViewById(R.id.list_view_favorite);
 
 
 
@@ -180,7 +183,7 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
             if(number < 0){
                 String numString = getNumberConverter(number);
                 persent.setVisibility(View.VISIBLE); // 레이아웃 표시
-                persent.setText(numString + "% off"); // 할인율 표시
+                persent.setText(numString + "%"); // 할인율 표시
             } else {
                 persent.setVisibility(View.GONE); // 레이아웃 숨김
             }

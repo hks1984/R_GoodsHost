@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -47,7 +48,7 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_list_view_horizontal , parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_list_view_horizontal_costom , parent, false);
         context = parent.getContext();
         return new ViewHolder(itemView);
     }
@@ -144,8 +145,6 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
 
         public void setItem(ProductItem pitem){
             name.setText(pitem.getName());
-            price_value.setText(sUtil.replaceStringPriceToInt(pitem.getPrice_value()) + context.getResources().getString(R.string.won));
-//            String url = "https:" + pitem.getImage();
             String url = pitem.getImage();
             if(!url.contains("https:")){
                 url = "https:" + url;
@@ -169,9 +168,14 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
             if(number < 0){
                 String numString = getNumberConverter(number);
                 persent.setVisibility(View.VISIBLE); // 레이아웃 표시
-                persent.setText(numString + "% off"); // 할인율 표시
+                persent.setText(numString + "%"); // 할인율 표시
             } else {
                 persent.setVisibility(View.GONE); // 레이아웃 숨김
+            }
+
+            price_value.setText(sUtil.replaceStringPriceToInt(pitem.getPrice_value()) + context.getResources().getString(R.string.won));
+            if(number < 0) {
+                price_value.setTextColor(ContextCompat.getColor(context, R.color.personal));
             }
 
 //            Log.d(TAG, "fff : " + pitem.toString());

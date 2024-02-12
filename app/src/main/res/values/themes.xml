@@ -42,6 +42,11 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+    <style name="TextBlack.bigSmallStyle" parent="android:TextAppearance">
+        <item name="android:textSize">10dp</item>
+        <item name="android:textColor">@color/black_500</item>
+    </style>
+
     <style name="TextBlack.smallStyle" parent="android:TextAppearance">
         <item name="android:textSize">12dp</item>
         <item name="android:textColor">@color/black_500</item>

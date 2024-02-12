@@ -1,165 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list_view_favorite"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/share_round_list"
-    android:layout_marginBottom="15dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:id="@+id/list_view_favorite"
+    android:layout_marginBottom="10dp"
+    android:padding="5dp"
     >
+
 
     <ImageView
         android:id="@+id/imagew"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:scaleType="centerInside"
-        android:background="@drawable/share_round_image_layout"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="0dp"
-        android:layout_weight="7.5"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="2dp">
-
-        <TextView
-            android:id="@+id/persent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:textColor="@color/personal"
-            android:text=""
-            style="@style/TextBlack.mediumStyle"
-            android:layout_marginBottom="5dp"
-            android:textStyle="bold"
-            android:visibility="gone"
-            />
-
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:text=""
-            android:layout_marginBottom="5dp"
-            style="@style/TextBlack.mediumStyle"
-            android:textStyle="bold"
-            android:maxLines="2"
-            android:ellipsize="end"
-             />
-
-        <TextView
-            android:id="@+id/price_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:text=""
-            android:layout_marginBottom="5dp"
-            style="@style/TextBlack.mediumStyle"
-            android:textStyle="bold"
-             />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            >
-
-            <TextView
-                android:id="@+id/favorite_hope_low_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/favorite_low_price_alarm"
-                style="@style/TextBlack.smallStyle"
-                android:layout_gravity="center"
-                android:background="@drawable/round_button_tag_gray"
-                android:padding="5dp"
-                android:layout_marginRight="10dp"
-                />
-
-            <TextView
-                android:id="@+id/favorite_hope_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="12,000"
-                style="@style/TextBlack.smallStyle"
-                android:layout_gravity="center"
-                android:background="@drawable/round_button_tag_gray"
-                android:padding="5dp"
-                android:layout_marginRight="10dp"
-                />
-
-            <TextView
-                android:id="@+id/favorite_hope_stock"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/favorite_stock_alarm"
-                style="@style/TextBlack.smallStyle"
-                android:layout_gravity="center"
-                android:background="@drawable/round_button_tag_gray"
-                android:padding="5dp"
-                android:layout_marginRight="10dp"
-                />
-
-        </LinearLayout>
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layout_favorite"
-        android:orientation="vertical"
-        android:layout_width="0dp"
-        android:layout_weight="2.5"
-        android:layout_height="match_parent"
+        android:id="@+id/favorite_del"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="5dp"
         android:gravity="center"
-        android:layout_gravity="center"
+        android:background="@drawable/share_circle_favorite"
+        app:layout_constraintTop_toTopOf="@id/imagew"
+        app:layout_constraintStart_toStartOf="@id/imagew"
         >
 
-        <LinearLayout
-            android:id="@+id/favorite_del"
-            android:orientation="vertical"
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_weight="5"
-            android:layout_height="0dp"
-            android:layout_gravity="center"
-            >
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/baseline_close_24"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/favorite_alarm_edit"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_weight="5"
-            android:layout_height="0dp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            >
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/baseline_edit_notifications_24"
-                />
-
-        </LinearLayout>
-
-
+            android:layout_height="match_parent"
+            android:padding="7dp"
+            android:src="@drawable/baseline_close_24" />
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/favorite_alarm_edit"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:background="@drawable/share_circle_favorite"
+        app:layout_constraintBottom_toBottomOf="@id/imagew"
+        app:layout_constraintEnd_toEndOf="@id/imagew">
 
-</LinearLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="7dp"
+            android:src="@drawable/baseline_edit_notifications_24" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/name"
+        style="@style/TextBlack.mediumStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLines="3"
+        android:text="22222222"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/imagew" />
+
+    <TextView
+        android:id="@+id/persent"
+        style="@style/TextBlack.mediumStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_vertical"
+        android:paddingRight="7dp"
+        android:text="11111111"
+        android:textColor="@color/personal"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/name" />
+
+    <TextView
+        android:id="@+id/price_value"
+        style="@style/TextBlack.mediumStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_vertical"
+        android:text=""
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/persent"
+        app:layout_constraintTop_toBottomOf="@id/name" />
+
+
+    <TextView
+        android:id="@+id/favorite_hope_low_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/favorite_low_price_alarm"
+        style="@style/TextBlack.bigSmallStyle"
+        android:layout_gravity="center"
+        android:background="@drawable/round_button_tag_gray"
+        android:padding="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/price_value"
+        />
+
+    <TextView
+        android:id="@+id/favorite_hope_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12,000"
+        style="@style/TextBlack.bigSmallStyle"
+        android:layout_gravity="center"
+        android:background="@drawable/round_button_tag_gray"
+        android:padding="5dp"
+        app:layout_constraintStart_toEndOf="@id/favorite_hope_low_price"
+        app:layout_constraintTop_toBottomOf="@id/price_value"
+        />
+
+    <TextView
+        android:id="@+id/favorite_hope_stock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/favorite_stock_alarm"
+        style="@style/TextBlack.bigSmallStyle"
+        android:layout_gravity="center"
+        android:background="@drawable/round_button_tag_gray"
+        android:padding="5dp"
+        app:layout_constraintStart_toEndOf="@id/favorite_hope_price"
+        app:layout_constraintTop_toBottomOf="@id/price_value"
+        />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

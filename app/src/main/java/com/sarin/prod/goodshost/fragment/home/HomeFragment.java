@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -103,8 +104,8 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
          */
         recyclerView = binding.recyclerView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-//        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2)); // 가로 2개 나열 할때.
         recyclerView.setLayoutManager(layoutManager);
+//        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1)); // 가로 2개 나열 할때.
         productHoriAdapter = new ProductAdapterHori(piLIst, this);
         recyclerView.setAdapter(productHoriAdapter);
 
@@ -112,9 +113,9 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
          * 인기 상품
          */
         recyclerViewTop = binding.recyclerViewTop;
-        LinearLayoutManager toplayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-//        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2)); // 가로 2개 나열 할때.
-        recyclerViewTop.setLayoutManager(toplayoutManager);
+//        LinearLayoutManager toplayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+//        recyclerViewTop.setLayoutManager(toplayoutManager);
+        recyclerViewTop.setLayoutManager(new GridLayoutManager(getContext(), 2)); // 가로 2개 나열 할때.
         productAdapter = new ProductAdapter(TopProductList, this);
         recyclerViewTop.setAdapter(productAdapter);
 
@@ -185,7 +186,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
                 pdItem.setIs_Favorite(true);
                 productAdapter.set(pos, pdItem);
             }
-        } else if (v.getId() == R.id.list_view) {
+        } else if (v.getId() == R.id.list_view_hori) {
             Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
             intent.putExtra("vendor_item_id", pdItem.getVendor_item_id());
             v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동

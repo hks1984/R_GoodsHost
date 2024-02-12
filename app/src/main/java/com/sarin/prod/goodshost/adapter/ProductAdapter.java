@@ -10,6 +10,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -39,7 +41,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_list_view , parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_list_view_horizontal , parent, false);
         context = parent.getContext();
         return new ViewHolder(itemView);
     }
@@ -51,7 +53,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         // 전체 아이템 클릭 이벤트
         // activity 또는 fragment 화면단 코드에서 onItemClickListener 메소드 추가해줘야함.
-        holder.list_view.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener(v, position));
+        holder.list_view_hori.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener(v, position));
         holder.layout_favorite.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener(v, position));
 
     }
@@ -104,7 +106,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         private ImageView image, favorite;
         private RatingBar rating;
 
-        private LinearLayout layout_favorite, list_view;
+        private LinearLayout layout_favorite;
+        private ConstraintLayout list_view_hori;
 
 
 
@@ -119,14 +122,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             persent = (TextView) itemView.findViewById(R.id.persent);
             favorite = (ImageView) itemView.findViewById(R.id.favorite);
             layout_favorite = (LinearLayout) itemView.findViewById(R.id.layout_favorite);
-            list_view = (LinearLayout) itemView.findViewById(R.id.list_view);
+            list_view_hori = (ConstraintLayout) itemView.findViewById(R.id.list_view_hori);
 
         }
 
         public void setItem(ProductItem pitem){
+
             name.setText(pitem.getName());
-            price_value.setText(sUtil.replaceStringPriceToInt(pitem.getPrice_value()) + context.getResources().getString(R.string.won));
-//            String url = "https:" + pitem.getImage();
             String url = pitem.getImage();
             if(!url.contains("https:")){
                 url = "https:" + url;
@@ -150,9 +152,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             if(number < 0){
                 String numString = getNumberConverter(number);
                 persent.setVisibility(View.VISIBLE); // 레이아웃 표시
-                persent.setText(numString + "% off"); // 할인율 표시
+                persent.setText(numString + "%"); // 할인율 표시
             } else {
                 persent.setVisibility(View.GONE); // 레이아웃 숨김
+            }
+
+            price_value.setText(sUtil.replaceStringPriceToInt(pitem.getPrice_value()) + context.getResources().getString(R.string.won));
+            if(number < 0) {
+                price_value.setTextColor(ContextCompat.getColor(context, R.color.personal));
             }
 
             if(pitem.isIs_Favorite()){

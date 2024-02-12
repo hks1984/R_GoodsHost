@@ -114,6 +114,8 @@
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -181,28 +183,26 @@
                     android:paddingBottom="10dp"
                     />
                 <!-- aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa -->
+
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="?attr/actionBarSize"
+                    android:orientation="horizontal"
                     android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:orientation="horizontal">
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:background="@color/white_500"
+                    >
 
-                    <LinearLayout
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/categoryRecyclerView"
                         android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        android:orientation="horizontal"
-                        android:background="@color/white_500"
-                        >
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/categoryRecyclerView"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
-
-                    </LinearLayout>
+                        android:layout_height="match_parent"/>
 
                 </LinearLayout>
+
+
 
                 <!-- aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa -->
 
@@ -212,6 +212,8 @@
                     android:layout_height="wrap_content"
                     android:overScrollMode="never"
                     android:nestedScrollingEnabled="false"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

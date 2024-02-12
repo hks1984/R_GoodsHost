@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -90,8 +91,9 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
         favorite_all_product_nodata = binding.favoriteAllProductNodata;
 
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+//        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3)); // 가로 2개 나열 할때.
         favoriteProductAdapter = new FavoriteProductAdapter(piLIst, this);
         recyclerView.setAdapter(favoriteProductAdapter);
 

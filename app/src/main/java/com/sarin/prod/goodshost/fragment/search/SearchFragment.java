@@ -24,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -112,8 +113,9 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
 
         recyclerView = binding.recyclerView;
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+//        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2)); // 가로 2개 나열 할때.
         productAdapter = new ProductAdapter(piLIst, this);
         recyclerView.setAdapter(productAdapter);
 
@@ -350,7 +352,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 productAdapter.set(pos, pdItem);
             }
 
-        } else if (v.getId() == R.id.list_view) {
+        } else if (v.getId() == R.id.list_view_hori) {
 
             Log.d(TAG, "position: " + pos);
             Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
