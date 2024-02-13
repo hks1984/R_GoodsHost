@@ -73,6 +73,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String title = data.get("title");
         String body = data.get("body");
 
+        Log.d(TAG, "title: " + title);
+        Log.d(TAG, "body: " + body);
+
         PendingIntent pendingIntent;
         Intent notificationIntent = new Intent();
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
