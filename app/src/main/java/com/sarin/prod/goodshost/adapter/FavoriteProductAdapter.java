@@ -120,7 +120,7 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
             image = (ImageView) itemView.findViewById(R.id.imagew);
             favorite_hope_price = (TextView) itemView.findViewById(R.id.favorite_hope_price);
             favorite_hope_stock = (TextView) itemView.findViewById(R.id.favorite_hope_stock);
-            favorite_hope_low_price = (TextView) itemView.findViewById(R.id.favorite_hope_low_price);
+//            favorite_hope_low_price = (TextView) itemView.findViewById(R.id.favorite_hope_low_price);
             persent = (TextView) itemView.findViewById(R.id.persent);
             favorite_del = (LinearLayout) itemView.findViewById(R.id.favorite_del);
             favorite_alarm_edit = (LinearLayout) itemView.findViewById(R.id.favorite_alarm_edit);
@@ -189,11 +189,11 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
             }
 
 
-            if("Y".equals(pitem.getHope_low_price())){
-                favorite_hope_low_price.setVisibility(View.VISIBLE);
-            } else {
-                favorite_hope_low_price.setVisibility(View.GONE); // 레이아웃 숨김
-            }
+//            if("Y".equals(pitem.getHope_low_price())){
+//                favorite_hope_low_price.setVisibility(View.VISIBLE);
+//            } else {
+//                favorite_hope_low_price.setVisibility(View.GONE); // 레이아웃 숨김
+//            }
 
             if(pitem.getHope_price() > 0){
                 favorite_hope_price.setVisibility(View.VISIBLE);

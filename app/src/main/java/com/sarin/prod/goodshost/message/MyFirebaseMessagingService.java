@@ -70,11 +70,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Map<String, String> data = remoteMessage.getData();
 
         // 데이터 페이로드에서 필요한 정보 추출
+        String type = data.get("type");
         String title = data.get("title");
         String body = data.get("body");
+        String link = data.get("link");
 
+        Log.d(TAG, "type: " + type);
         Log.d(TAG, "title: " + title);
         Log.d(TAG, "body: " + body);
+        Log.d(TAG, "link: " + link);
 
         PendingIntent pendingIntent;
         Intent notificationIntent = new Intent();

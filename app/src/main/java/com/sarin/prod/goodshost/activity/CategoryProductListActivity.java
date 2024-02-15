@@ -187,7 +187,7 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
                 productAdapter.set(pos, pdItem);
             }
 
-        } else if (v.getId() == R.id.list_view) {
+        } else if (v.getId() == R.id.list_view_hori) {
             Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
             intent.putExtra("vendor_item_id", pdItem.getVendor_item_id());
             v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
