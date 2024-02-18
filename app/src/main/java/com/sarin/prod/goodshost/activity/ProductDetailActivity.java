@@ -110,6 +110,13 @@ public class ProductDetailActivity extends AppCompatActivity {
         Intent tp_intent = getIntent();
         vendor_item_id = tp_intent.getStringExtra("vendor_item_id");
 
+        String url = tp_intent.getStringExtra("url");
+        if(url != null && !url.isEmpty()){
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(url));
+            startActivity(intent);
+        }
+
         name = binding.name;
         price_value = binding.priceValue;
         image = binding.image;

@@ -350,7 +350,6 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
                     favoriteProductAdapter.addItems(productItem);
                     favoriteProductAdapter.notifyDataSetChanged();
 
-                    Log.d(TAG, "favoriteProductAdapter.size() : " + favoriteProductAdapter.size());
                     if(favoriteProductAdapter.size() < 1){
                         favorite_all_product_nodata.setVisibility(View.VISIBLE);
                     } else {

@@ -29,6 +29,7 @@ import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
 import com.sarin.prod.goodshost.util.PreferenceManager;
 import com.sarin.prod.goodshost.util.StringUtil;
+import com.sarin.prod.goodshost.activity.ProductDetailActivity;
 
 import java.util.Map;
 
@@ -83,7 +84,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent pendingIntent;
         Intent notificationIntent = new Intent();
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        //notificationIntent.setClass(this, MainActivity.class);
+        notificationIntent.setClass(this, ProductDetailActivity.class);
+        notificationIntent.putExtra("url", link);
 
         int notificationId = (int) System.currentTimeMillis();
 
@@ -113,7 +115,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID);
 
-        builder.setSmallIcon(R.mipmap.ic_launcher_foreground)
+        builder.setSmallIcon(R.drawable.icon3)
                 //.setLargeIcon(mLargeIcon)
                 // .setContent(remoteViews)
                 .setContentIntent(pendingIntent)
@@ -149,7 +151,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentTitle("Example Group")
                 // 그룹에 속한 알림의 수를 요약 텍스트에 반영합니다.
                 .setContentText("You have " + notificationId + " new messages")
-                .setSmallIcon(R.mipmap.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.icon3)
                 // setGroup()을 사용하여 이 알림을 동일한 그룹에 속하게 합니다.
                 .setGroup("sarin")
                 // setGroupSummary()를 true로 설정하여 이 알림을 그룹의 요약 알림으로 만듭니다.

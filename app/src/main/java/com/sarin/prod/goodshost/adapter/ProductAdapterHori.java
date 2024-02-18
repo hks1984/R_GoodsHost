@@ -153,9 +153,10 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
                     .load(url)
                     .apply(RequestOptions.bitmapTransform(new RoundedCorners(20))) // 여기서 10은 코너의 반지름을 dp 단위로 지정
                     .into(image);
-            if(pitem.getRating() == null){
+            if(pitem.getRating() == null || "".equals(pitem.getRating())){
                 pitem.setRating("0");
             }
+            Log.d(TAG,"1111111111111: " + pitem.getRating());
             rating.setRating(Float.parseFloat(pitem.getRating()));
             String ratingTotalCount = sUtil.replaceStringPriceToInt(pitem.getRating_total_count());
             if (ratingTotalCount != null && !ratingTotalCount.isEmpty()) {

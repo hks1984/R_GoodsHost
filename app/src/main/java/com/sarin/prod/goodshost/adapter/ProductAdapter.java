@@ -137,7 +137,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     .load(url)
                     .apply(RequestOptions.bitmapTransform(new RoundedCorners(20))) // 여기서 10은 코너의 반지름을 dp 단위로 지정
                     .into(image);
-            if(pitem.getRating() == null){
+            if(pitem.getRating() == null || "".equals(pitem.getRating())){
                 pitem.setRating("0");
             }
             rating.setRating(Float.parseFloat(pitem.getRating()));
