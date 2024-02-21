@@ -86,14 +86,25 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
         View root = binding.getRoot();
 
         favorite_LinearLayout1 = binding.favoriteLinearLayout1;
-        nestedScrollView = binding.nestedScrollView;
         recyclerView = binding.recyclerView;
-        favorite_all_product_nodata = binding.favoriteAllProductNodata;
 
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3); // 3은 그리드의 열 수입니다.
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if(favoriteProductAdapter.getItemViewType(position) == 0            // 헤더 또는 푸터일 경우 가로 레이아웃 풀로 사용
+                        || favoriteProductAdapter.getItemViewType(position) == 2
+                ){
+                    return 3;
+                } else {        // 아이템 리스트의 경우 3개씩 출력하기 위해 1로 설정
+                    return 1;
+                }
 
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-//        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3)); // 가로 2개 나열 할때.
+            }
+        });
+
+        recyclerView.setLayoutManager(gridLayoutManager);
+
         favoriteProductAdapter = new FavoriteProductAdapter(piLIst, this);
         recyclerView.setAdapter(favoriteProductAdapter);
 
@@ -208,28 +219,28 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
         });
 
 
-        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener()
-        {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY)
-            {
-                if (v.getChildAt(v.getChildCount() - 1) != null)
-                {
-                    if (scrollY > oldScrollY && Math.abs(oldScrollY - scrollY) < 10)
-                    {
-                        // 스크롤 아래로
-                        favorite_LinearLayout1.setVisibility(View.GONE);
-                        if (scrollY >= (v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight()))
-                        {
-                            // 스크롤 마지막 도착.
-                        }
-                    } else if (oldScrollY > scrollY && Math.abs(oldScrollY - scrollY) < 10){
-                        // 스크롤 위로
-                        favorite_LinearLayout1.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
-        });
+//        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener()
+//        {
+//            @Override
+//            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY)
+//            {
+//                if (v.getChildAt(v.getChildCount() - 1) != null)
+//                {
+//                    if (scrollY > oldScrollY && Math.abs(oldScrollY - scrollY) < 10)
+//                    {
+//                        // 스크롤 아래로
+//                        favorite_LinearLayout1.setVisibility(View.GONE);
+//                        if (scrollY >= (v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight()))
+//                        {
+//                            // 스크롤 마지막 도착.
+//                        }
+//                    } else if (oldScrollY > scrollY && Math.abs(oldScrollY - scrollY) < 10){
+//                        // 스크롤 위로
+//                        favorite_LinearLayout1.setVisibility(View.VISIBLE);
+//                    }
+//                }
+//            }
+//        });
 
 
         return root;
@@ -350,11 +361,11 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
                     favoriteProductAdapter.addItems(productItem);
                     favoriteProductAdapter.notifyDataSetChanged();
 
-                    if(favoriteProductAdapter.size() < 1){
-                        favorite_all_product_nodata.setVisibility(View.VISIBLE);
-                    } else {
-                        favorite_all_product_nodata.setVisibility(View.GONE);
-                    }
+//                    if(favoriteProductAdapter.size() < 1){
+//                        favorite_all_product_nodata.setVisibility(View.VISIBLE);
+//                    } else {
+//                        favorite_all_product_nodata.setVisibility(View.GONE);
+//                    }
 
                 }
                 else{

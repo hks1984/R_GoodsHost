@@ -14,7 +14,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.sarin.prod.goodshost.MainApplication;
@@ -25,7 +24,7 @@ import com.sarin.prod.goodshost.util.StringUtil;
 import java.util.List;
 
 
-public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProductAdapter.ViewHolder>{
+public class FavoriteProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<ProductItem> items;
     public static String TAG = MainApplication.TAG;
@@ -33,6 +32,11 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
 
     static StringUtil sUtil = StringUtil.getInstance();
     private RecyclerViewClickListener recyclerViewClickListener;
+
+    public static int TYPE_HEADER = 0;
+    public static int TYPE_ITEM = 1;
+    public static int TYPE_FOOTER = 2;
+
     public FavoriteProductAdapter(List<ProductItem> items, RecyclerViewClickListener listener){
 
         this.items = items;
@@ -42,20 +46,45 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_favorite_list_view , parent, false);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         context = parent.getContext();
-        return new ViewHolder(itemView);
+        RecyclerView.ViewHolder holder;
+        View view;
+        Log.d(TAG, "viewType: " + viewType);
+        if (viewType == TYPE_HEADER) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_favorite_header, parent, false);
+            holder = new HeaderViewHolder(view);
+        } else if (viewType == TYPE_FOOTER) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_favorite_footer, parent, false);
+            holder = new FooterViewHolder(view);
+        } else {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_favorite_list, parent, false);
+            holder = new ViewHolder(view);
+        }
+        return holder;
+
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ProductItem item = items.get(position);
-        holder.setItem(item);
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
-        holder.favorite_del.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener(v, position));
-        holder.favorite_alarm_edit.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener(v, position));
-        holder.list_view_favorite.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener(v, position));
+
+        if (holder instanceof HeaderViewHolder) {
+            HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
+        } else if (holder instanceof FooterViewHolder) {
+            FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
+        } else {
+            // Item을 하나, 하나 보여주는(bind 되는) 함수입니다.
+            ViewHolder itemViewHolder = (ViewHolder) holder;
+            ProductItem item = items.get(position);
+            itemViewHolder.setItem(item);
+
+            itemViewHolder.favorite_del.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener(v, position));
+            itemViewHolder.favorite_alarm_edit.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener(v, position));
+            itemViewHolder.list_view_favorite.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener(v, position));
+        }
+
 
     }
 
@@ -104,6 +133,8 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
         return items.size();
     }
 
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView name, price_value, persent, favorite_hope_price, favorite_hope_stock, favorite_hope_low_price;
         private ImageView image;
@@ -126,43 +157,6 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
             favorite_del = (LinearLayout) itemView.findViewById(R.id.favorite_del);
             favorite_alarm_edit = (LinearLayout) itemView.findViewById(R.id.favorite_alarm_edit);
             list_view_favorite = (ConstraintLayout) itemView.findViewById(R.id.list_view_favorite);
-
-
-
-
-//            favorite_del.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    // 클릭 이벤트 처리
-////                    onFavoriteClick(getLayoutPosition());
-//                    //존재하는 포지션인지 확인
-//                    int pos = getAdapterPosition();
-//                    if(pos != RecyclerView.NO_POSITION){
-//                        //동작 호출 (onItemClick 함수 호출)
-//                        if(onItemClickListener != null){
-//                            onItemClickListener.onItemClick(v, pos);
-//                        }
-//                    }
-//
-//                }
-//            });
-//
-//            favorite_alarm_edit.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    // 클릭 이벤트 처리
-////                    onFavoriteClick(getLayoutPosition());
-//                    //존재하는 포지션인지 확인
-//                    int pos = getAdapterPosition();
-//                    if(pos != RecyclerView.NO_POSITION){
-//                        //동작 호출 (onItemClick 함수 호출)
-//                        if(onItemClickListener != null){
-//                            onItemClickListener.onItemClick(v, pos);
-//                        }
-//                    }
-//
-//                }
-//            });
 
 
         }
@@ -217,12 +211,36 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<FavoriteProduct
 
     }
 
+    public class HeaderViewHolder extends RecyclerView.ViewHolder {
 
+
+        HeaderViewHolder(View headerView) {
+            super(headerView);
+
+
+        }
+    }
+
+    public class FooterViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView favorite_all_product_nodata;
+        FooterViewHolder(View footerView) {
+            super(footerView);
+            favorite_all_product_nodata = (TextView) itemView.findViewById(R.id.favorite_all_product_nodata);
+        }
+    }
 
 
     @Override
     public int getItemViewType(int position) {
-        return position;
+
+        Log.d(TAG, position + "/" + items.size());
+        if (position == 0)
+            return TYPE_HEADER;
+        else if (position == items.size() -1)
+            return TYPE_FOOTER;
+        else
+            return TYPE_ITEM;
     }
 
     public static String getNumberConverter (double number){

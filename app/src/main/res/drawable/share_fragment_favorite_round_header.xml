@@ -7,6 +7,9 @@
     <padding
         android:top="5dp"
         android:bottom="5dp" />
-    <corners android:radius="20dp" />
+    <corners
+        android:topLeftRadius="20dp"
+        android:topRightRadius="20dp"
+        />
     <solid android:color="@color/white_500" />
 </shape>
