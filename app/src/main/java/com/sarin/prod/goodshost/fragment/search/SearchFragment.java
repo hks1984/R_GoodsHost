@@ -304,13 +304,16 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 if (newState == RecyclerView.SCROLL_STATE_SETTLING && isScrolledDown) {
                     Log.d(TAG, "1");
 //                    autoCompleteTextView.setVisibility(View.VISIBLE);
-                    editBoxLinearLayout.setVisibility(View.VISIBLE);
+//                    editBoxLinearLayout.setVisibility(View.VISIBLE);
+                    VisibleSlideDown(editBoxLinearLayout);
 
                 }else if(newState == RecyclerView.SCROLL_STATE_SETTLING && !isScrolledDown){
                     Log.d(TAG, "2");
                     if (!piLIst.isEmpty()) {
 //                        autoCompleteTextView.setVisibility(View.GONE);
-                        editBoxLinearLayout.setVisibility(View.GONE);
+//                        editBoxLinearLayout.setVisibility(View.GONE);
+
+                        GoneSlideUp(editBoxLinearLayout);
                     }
 
 
@@ -629,4 +632,26 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             isScrollListenerAdded = false;
         }
     }
+
+
+    public void GoneSlideUp(View view) {
+        view.setVisibility(View.GONE);
+        view.setTranslationY(view.getHeight());
+        view.animate()
+                .translationY(0)
+                .setDuration(1000)
+                .setListener(null);
+    }
+    public void VisibleSlideDown(View view) {
+        view.setVisibility(View.VISIBLE); // 뷰를 보이게 합니다.
+        view.setTranslationY(-view.getHeight()); // 뷰를 화면 위로 위치시킵니다.
+        // 애니메이션으로 뷰를 원래 위치로 이동시킵니다.
+        view.animate()
+                .translationY(0)
+                .setDuration(1000)
+                .setListener(null);
+    }
+
+
+
 }
