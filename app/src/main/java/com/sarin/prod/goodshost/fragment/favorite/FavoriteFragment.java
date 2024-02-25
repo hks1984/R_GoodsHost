@@ -69,12 +69,12 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
     private LoadingProgressManager loadingProgressManager = LoadingProgressManager.getInstance();
     private StringUtil sUtil = StringUtil.getInstance();
 
-    private LinearLayout favorite_LinearLayout1;
+    private LinearLayout favorite_LinearLayout1, favorite_all_product_nodata;
     private NestedScrollView nestedScrollView;
 
     private BottomSheetDialog bottomSheetDialog;
     private EditText hope_price;
-    private TextView save, discount_1, discount_2, discount_3, favorite_all_product_nodata;
+    private TextView save, discount_1, discount_2, discount_3;
     private CheckBox check;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -87,6 +87,7 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
 
         favorite_LinearLayout1 = binding.favoriteLinearLayout1;
         recyclerView = binding.recyclerView;
+        favorite_all_product_nodata = binding.favoriteAllProductNodata;
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3); // 3은 그리드의 열 수입니다.
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -358,14 +359,17 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
             public void onResponse(Call<List<ProductItem>> call, Response<List<ProductItem>> response) {
                 if(response.isSuccessful()){
                     List<ProductItem> productItem = response.body();
+
                     favoriteProductAdapter.addItems(productItem);
                     favoriteProductAdapter.notifyDataSetChanged();
 
-//                    if(favoriteProductAdapter.size() < 1){
-//                        favorite_all_product_nodata.setVisibility(View.VISIBLE);
-//                    } else {
-//                        favorite_all_product_nodata.setVisibility(View.GONE);
-//                    }
+                    if(favoriteProductAdapter.size() < 1){
+                        favorite_all_product_nodata.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
+                    } else {
+                        favorite_all_product_nodata.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                    }
 
                 }
                 else{

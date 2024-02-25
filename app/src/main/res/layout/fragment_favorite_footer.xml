@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="30dp"
-            android:text="@string/favorite_all_product_nodata"
+            android:text=""
             android:visibility="gone" />
 
     </LinearLayout>

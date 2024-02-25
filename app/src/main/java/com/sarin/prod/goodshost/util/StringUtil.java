@@ -8,6 +8,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -100,6 +101,30 @@ public class StringUtil {
         int discountedPrice = (int) (originalPrice - Math.floor(discountAmount)); // 소수점 버림 처리
         Log.d(TAG, "" + discountedPrice);
         return discountedPrice;
+    }
+
+    public String getTimeAgo(long pastTimeMillis) {
+        long currentTimeMillis = System.currentTimeMillis();
+        long timeDiff = currentTimeMillis - pastTimeMillis;
+
+        // 시간 차이를 분, 시간, 일 단위로 계산
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(timeDiff);
+        long hours = TimeUnit.MILLISECONDS.toHours(timeDiff);
+        long days = TimeUnit.MILLISECONDS.toDays(timeDiff);
+
+        if (minutes < 1) {
+            return "방금 전";
+        } else if (minutes < 60) {
+            return minutes + "분 전";
+        } else if (hours < 24) {
+            return hours + "시간 전";
+        } else if (days < 30) {
+            return days + "일 전";
+        } else if (days < 365) {
+            return days / 30 + "달 전";
+        } else {
+            return days / 365 + "년 전";
+        }
     }
 
 

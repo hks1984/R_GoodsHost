@@ -1,32 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:background="@color/black_500"
-    tools:context=".fragment.favorite.FavoriteFragment"
-    >
+    android:orientation="vertical"
+    tools:context=".fragment.favorite.FavoriteFragment">
 
 
     <LinearLayout
         android:id="@+id/favorite_LinearLayout1"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:orientation="horizontal"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        >
+        android:orientation="horizontal">
 
 
         <ImageView
             android:id="@+id/menu"
             android:layout_width="0dp"
             android:layout_height="25dp"
-            android:layout_weight="1"
             android:layout_gravity="center"
-            >
+            android:layout_weight="1">
 
         </ImageView>
 
@@ -34,8 +31,8 @@
             android:id="@+id/logo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="8"
             android:layout_gravity="center"
+            android:layout_weight="8"
             android:padding="5dp"
             android:src="@drawable/logo_white">
 
@@ -45,9 +42,8 @@
             android:id="@+id/dummy"
             android:layout_width="0dp"
             android:layout_height="25dp"
-            android:layout_weight="1"
             android:layout_gravity="center"
-            >
+            android:layout_weight="1">
 
         </ImageView>
 
@@ -56,8 +52,48 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white_500"
-        />
+        android:layout_height="wrap_content"
+        android:background="@color/white_500" />
+
+    <LinearLayout
+        android:id="@+id/favorite_all_product_nodata"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/share_round_list"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/gmall_top1"
+            style="@style/TextBlack.mediumStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="20dp"
+            android:text="@string/logo_title"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/favorite_all_product"
+            style="@style/TextBlack.largeStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingBottom="10dp"
+            android:text="@string/favorite_all_product"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/favorite_no_data"
+            style="@style/TextBlack.largeStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="30dp"
+            android:text="@string/favorite_all_product_nodata"
+            android:visibility="gone" />
+
+    </LinearLayout>
 
 </LinearLayout>

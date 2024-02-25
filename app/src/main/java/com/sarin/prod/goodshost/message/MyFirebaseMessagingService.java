@@ -22,6 +22,9 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.sarin.prod.goodshost.MainApplication;
 
 import com.sarin.prod.goodshost.R;
+import com.sarin.prod.goodshost.activity.AlarmActivity;
+import com.sarin.prod.goodshost.db.AlarmDatabaseManager;
+import com.sarin.prod.goodshost.item.ProductAlarmItem;
 import com.sarin.prod.goodshost.item.ReturnMsgItem;
 import com.sarin.prod.goodshost.item.UserItem;
 import com.sarin.prod.goodshost.network.RetrofitApi;
@@ -50,6 +53,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     StringUtil stringUtil = StringUtil.getInstance();
 
+    private static AlarmDatabaseManager alarmDatabaseManager;
+
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
@@ -68,23 +73,45 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
+        alarmDatabaseManager = AlarmDatabaseManager.getInstance(getApplicationContext());
+
         Map<String, String> data = remoteMessage.getData();
 
         // 데이터 페이로드에서 필요한 정보 추출
         String type = data.get("type");
         String title = data.get("title");
         String body = data.get("body");
+        String image = data.get("image");
         String link = data.get("link");
+
+        if(!image.contains("https:")){
+            image = "https:" + image;
+        }
+
 
         Log.d(TAG, "type: " + type);
         Log.d(TAG, "title: " + title);
         Log.d(TAG, "body: " + body);
+        Log.d(TAG, "image: " + image);
         Log.d(TAG, "link: " + link);
+
+        ProductAlarmItem pai = new ProductAlarmItem();
+        pai.setProduct_title(title);
+        pai.setProduct_name(body);
+        pai.setProduct_image(image);
+
+        long rtn = alarmDatabaseManager.insert(pai);
+        if(rtn < 0){
+            Log.d(TAG, "실패 DB insert : " + rtn);
+        } else {
+            Log.d(TAG, "성공 DB insert : " + rtn);
+        }
+
 
         PendingIntent pendingIntent;
         Intent notificationIntent = new Intent();
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        notificationIntent.setClass(this, ProductDetailActivity.class);
+        notificationIntent.setClass(this, AlarmActivity.class);
         notificationIntent.putExtra("url", link);
 
         int notificationId = (int) System.currentTimeMillis();

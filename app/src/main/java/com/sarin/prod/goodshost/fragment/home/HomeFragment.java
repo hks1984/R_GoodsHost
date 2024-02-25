@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
+import com.sarin.prod.goodshost.activity.AlarmActivity;
 import com.sarin.prod.goodshost.activity.CategoryProductListActivity;
 import com.sarin.prod.goodshost.activity.ProductDetailActivity;
 import com.sarin.prod.goodshost.adapter.CategoryAdapter;
@@ -62,7 +63,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
     public static ProductAdapter productAdapter;
     public static ProductAdapterHori productHoriAdapter;
     public static CategoryAdapter categoryAdapter;
-    private static ImageView favorite;
+    private static ImageView favorite, alarm;
     private static TextView gmall_best_totalView, gmall_top_totalView;
 
     private List<ProductItem> piLIst = new ArrayList<>();
@@ -98,6 +99,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        alarm = binding.alarm;
 
         /**
          * 최저가 순위
@@ -145,6 +147,15 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), CategoryProductListActivity.class);
                 intent.putExtra("flag", "top");
+                v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
+            }
+        });
+
+
+        alarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), AlarmActivity.class);
                 v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
             }
         });
