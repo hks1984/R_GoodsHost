@@ -360,16 +360,19 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
                 if(response.isSuccessful()){
                     List<ProductItem> productItem = response.body();
 
-                    favoriteProductAdapter.addItems(productItem);
-                    favoriteProductAdapter.notifyDataSetChanged();
-
-                    if(favoriteProductAdapter.size() < 1){
+                    Log.d(TAG, "productItem.size() : " + productItem.size());
+                    if(productItem.size() < 1){
                         favorite_all_product_nodata.setVisibility(View.VISIBLE);
                         recyclerView.setVisibility(View.GONE);
                     } else {
                         favorite_all_product_nodata.setVisibility(View.GONE);
                         recyclerView.setVisibility(View.VISIBLE);
                     }
+
+                    favoriteProductAdapter.addItems(productItem);
+                    favoriteProductAdapter.notifyDataSetChanged();
+
+
 
                 }
                 else{

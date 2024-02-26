@@ -77,7 +77,7 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         } else {
             // Item을 하나, 하나 보여주는(bind 되는) 함수입니다.
             ViewHolder itemViewHolder = (ViewHolder) holder;
-            ProductItem item = items.get(position);
+            ProductItem item = items.get(position - 1);
             itemViewHolder.setItem(item);
 
             itemViewHolder.favorite_del.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener(v, position));
@@ -114,12 +114,12 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public void remove(int position){
-        items.remove(position);
+        items.remove(position - 1);
         notifyDataSetChanged();
     }
 
     public ProductItem get(int position){
-        return items.get(position);
+        return items.get(position - 1);
     }
 
 
@@ -130,7 +130,8 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public int getItemCount() {
-        return items.size();
+
+        return items.size() + 2;
     }
 
 
@@ -223,10 +224,9 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     public class FooterViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView favorite_all_product_nodata;
         FooterViewHolder(View footerView) {
             super(footerView);
-            favorite_all_product_nodata = (TextView) itemView.findViewById(R.id.favorite_all_product_nodata);
+
         }
     }
 
@@ -237,7 +237,7 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         Log.d(TAG, position + "/" + items.size());
         if (position == 0)
             return TYPE_HEADER;
-        else if (position == items.size() -1)
+        else if (position == items.size() +1)
             return TYPE_FOOTER;
         else
             return TYPE_ITEM;

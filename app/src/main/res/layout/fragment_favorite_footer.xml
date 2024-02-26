@@ -15,17 +15,15 @@
         android:layout_height="wrap_content"
         android:background="@drawable/share_fragment_favorite_round_footer"
         android:orientation="vertical"
-        android:layout_marginBottom="20dp">
+        >
 
         <TextView
-            android:id="@+id/favorite_all_product_nodata"
             style="@style/TextBlack.largeStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:padding="30dp"
             android:text=""
-            android:visibility="gone" />
+             />
 
     </LinearLayout>
 
