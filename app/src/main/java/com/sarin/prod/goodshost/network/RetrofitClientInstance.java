@@ -15,12 +15,6 @@ public class RetrofitClientInstance {
 
     public static String TAG = MainApplication.TAG;
     private static Retrofit retrofit;
-
-    // BaseUrl등록
-    private static final String BASE_URL = "http://192.168.10.70:8080/dealdive/";
-//    private static final String BASE_URL = "http://192.168.0.2:8080/dealdive/";
-//    private static final String BASE_URL = "https://api.dealdive.co.kr/dealdive/";
-
     private static RetrofitClientInstance mInstnace = null;
 
     public static RetrofitClientInstance getInstance() {
@@ -33,7 +27,7 @@ public class RetrofitClientInstance {
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {
             retrofit = new retrofit2.Retrofit.Builder()
-                    .baseUrl(BASE_URL)
+                    .baseUrl(MainApplication.BASE_URL)
                     // Json을 변환해줄 Gson변환기 등록
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();

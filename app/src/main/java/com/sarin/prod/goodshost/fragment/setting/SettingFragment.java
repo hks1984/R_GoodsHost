@@ -122,7 +122,8 @@ public class SettingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), WebViewActivity.class);
-                intent.putExtra("url", "https://api.dealdive.co.kr/dealdive/privacy");
+                String url = MainApplication.BASE_URL;
+                intent.putExtra("url", url + "privacy");
                 v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
             }
         });
