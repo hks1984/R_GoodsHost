@@ -165,7 +165,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
                 searchName = s.toString();
-                Log.d(TAG, "searchName: " + searchName);
+                
 
                 if (s.length() >= 2) { // 예를 들어, 2글자 이상 입력된 경우에만 요청
                     searchName = s.toString();
@@ -269,7 +269,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 String name = recentAdapter.get(pos);
                 pdItem_possion = pos;
                 if (v.getId() == R.id.recentLayout) {
-                    Log.d(TAG, "recentName: " + name);
+                    
                     autoCompleteTextView.setText(name);
 
                     productAdapter.clear();
@@ -285,7 +285,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
 
                 } else if (v.getId() == R.id.remove) {
-                    Log.d(TAG, "remove: " + pos);
+                    
                     PreferenceManager.delStringList(getContext(), "searchList", name);
                     recentAdapter.remove(pos);
 
@@ -302,13 +302,13 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_SETTLING && isScrolledDown) {
-                    Log.d(TAG, "1");
+                    
 //                    autoCompleteTextView.setVisibility(View.VISIBLE);
 //                    editBoxLinearLayout.setVisibility(View.VISIBLE);
                     VisibleSlideDown(editBoxLinearLayout);
 
                 }else if(newState == RecyclerView.SCROLL_STATE_SETTLING && !isScrolledDown){
-                    Log.d(TAG, "2");
+                    
                     if (!piLIst.isEmpty()) {
 //                        autoCompleteTextView.setVisibility(View.GONE);
 //                        editBoxLinearLayout.setVisibility(View.GONE);
@@ -323,7 +323,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                Log.d(TAG, "dy: " + dy);
+                
                 isScrolledDown = dy < 0;
                 // 처음 리스트가 생성되었을때 스크롤을 위로 올릴때는 뷰가 숨겨지면 안된다.
                 if(dy == 0){
@@ -342,7 +342,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         // 아이템 클릭 이벤트 처리
         pdItem = productAdapter.get(pos);
         pdItem_possion = pos;
-        Log.d(TAG, "v id: " + v.getId());
+        
         if (v.getId() == R.id.layout_favorite) {
 
             if(pdItem.isIs_Favorite()){
@@ -357,7 +357,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
         } else if (v.getId() == R.id.list_view_hori) {
 
-            Log.d(TAG, "position: " + pos);
+            
             Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
             intent.putExtra("vendor_item_id", pdItem.getVendor_item_id());
             v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
@@ -377,7 +377,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
                 if(response.isSuccessful()){
                     ReturnMsgItem returnMsgItem = response.body();
-                    Log.d(TAG, "setUserRegister : " + returnMsgItem.toString());
+                    
 
 
                 }
@@ -437,7 +437,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
 
     public void getSearchProducts(String searchName){
-//        Log.d(TAG, "page: " + CategoryProducts_page);
+
 
         loadingProgressManager.showLoading(getContext());
 
@@ -452,7 +452,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             public void onResponse(Call<List<ProductItem>> call, Response<List<ProductItem>> response) {
                 if(response.isSuccessful()){
                     List<ProductItem> productItem = response.body();
-                    Log.e(TAG, "productItem : " + productItem.toString());
+
                     if(productItem.size() <= 0){
                         searchNoItemMsg.setVisibility(View.VISIBLE);
                         recyclerView.setVisibility(View.GONE);
@@ -505,7 +505,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 if(response.isSuccessful()){
 //                    List<String> searchName = response.body();
 //                    searchName = cleanList(searchName);
-//                    Log.d(TAG, "searchName : " + searchName.toString());
+
 //                    adapter.clear();
 //                    adapter.addAll(searchName);
 //                    adapter.notifyDataSetChanged();
@@ -606,7 +606,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
     private void loadMore() {
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         int position = linearLayoutManager.findFirstVisibleItemPosition();
-        Log.d(TAG, "position: " + position);
+        
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override

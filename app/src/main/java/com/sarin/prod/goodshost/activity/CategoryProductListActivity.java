@@ -208,7 +208,7 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
             public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
                 if(response.isSuccessful()){
                     ReturnMsgItem returnMsgItem = response.body();
-                    Log.d(TAG, "setUserRegister : " + returnMsgItem.toString());
+                    
 
 
                 }
@@ -264,7 +264,7 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
     }
 
     public void getCategoryList(){
-//        Log.d(TAG, "page: " + CategoryProducts_page);
+
 
         loadingProgressManager.showLoading(this);
 
@@ -425,7 +425,7 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
     private void loadMore() {
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         int position = linearLayoutManager.findFirstVisibleItemPosition();
-        Log.d(TAG, "position: " + position);
+        
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override

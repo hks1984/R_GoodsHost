@@ -121,7 +121,7 @@
         android:layout_gravity="center"
         android:background="@drawable/round_button_tag_gray"
         android:padding="5dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/price_value"
         />
 
@@ -134,8 +134,10 @@
         android:layout_gravity="center"
         android:background="@drawable/round_button_tag_gray"
         android:padding="5dp"
-        app:layout_constraintStart_toEndOf="@id/favorite_hope_price"
+        app:layout_constraintLeft_toRightOf="@id/favorite_hope_price"
         app:layout_constraintTop_toBottomOf="@id/price_value"
+        app:layout_goneMarginStart="0dp"
+        android:layout_marginStart="5dp"
         />
 
 

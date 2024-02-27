@@ -72,7 +72,7 @@ public class MainApplication extends Application implements Application.Activity
     public void onCreate(){
 
         super.onCreate();
-        //Log.d(TAG, "MainApplication START");
+        
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         context = this;
 
@@ -98,18 +98,18 @@ public class MainApplication extends Application implements Application.Activity
             ANDROID_ID = userId;
         }
 
-        Log.d(TAG,"ANDROID_ID : " + ANDROID_ID);
+        
 
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
             public void onComplete(@NonNull Task<String> task) {
-//                Log.d(TAG,"task.isSuccessful() : " + task.isSuccessful());
+
                 if(task.isSuccessful() == false) {
-//                    Log.d(TAG,"Fetching FCM registration token failed : " + task.getException());
+
                     return;
                 }
                 String token = task.getResult();
-//                Log.d(TAG,"Fetching FCM token : " + token);
+
                 if(!stringUtil.nullCheck(token)){
                     UserItem userItem = new UserItem();
                     userItem.setUser_id(ANDROID_ID);
@@ -120,7 +120,7 @@ public class MainApplication extends Application implements Application.Activity
         });
 
         this.registerActivityLifecycleCallbacks(this);
-        //Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
+        
 
     }
 
@@ -135,7 +135,7 @@ public class MainApplication extends Application implements Application.Activity
             public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
                 if(response.isSuccessful()){
                     ReturnMsgItem returnMsgItem = response.body();
-                    Log.d(TAG, "setUserRegister : " + returnMsgItem.toString());
+                    
 
                     PreferenceManager.setString(getApplicationContext(), "userId", MainApplication.ANDROID_ID);
 
@@ -165,15 +165,15 @@ public class MainApplication extends Application implements Application.Activity
     @Override
     public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
 
-//        Log.d(TAG, "onActivityCreated: " + activity.getLocalClassName());
+
     }
 
     @Override
     public void onActivityStarted(@NonNull Activity activity) {
-//        Log.d(TAG, "onActivityStarted: " + activity.getLocalClassName());
+
         this.activity = activity;
         if (++count == 1) {
-//            Log.d(TAG, "포그라운드." + activity.getLocalClassName());
+
 
         }
 
@@ -187,10 +187,10 @@ public class MainApplication extends Application implements Application.Activity
 
     @Override
     public void onActivityStopped(@NonNull Activity activity) {
-//        Log.d(TAG, "onActivityStopped: " + activity.getLocalClassName());
+
 
         if (--count == 0) {
-//            Log.d(TAG, "백그라운드." + activity.getLocalClassName());
+
 
         }
     }

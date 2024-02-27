@@ -92,7 +92,6 @@ public class AlarmDatabaseManager {
             pai.setProduct_name(product_name);
             pai.setProduct_image(product_image);
 
-            Log.d(TAG, pai.toString());
             aList.add(pai);
         }
 

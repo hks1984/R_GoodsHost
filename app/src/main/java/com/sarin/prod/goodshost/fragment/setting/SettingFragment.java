@@ -96,7 +96,7 @@ public class SettingFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 if (isChecked) {
-                    Log.d(TAG, "사용");
+                    
                     PreferenceManager.setString(getContext(), "isAlarmStatus", "1");
                     //checkAlarmStatus(1);
                     if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
@@ -110,7 +110,7 @@ public class SettingFragment extends Fragment {
 
                 }else{
                     PreferenceManager.setString(getContext(), "isAlarmStatus", "0");
-                    Log.d(TAG, "해제");
+                    
                 }
                 checkAlarmStatus();
 

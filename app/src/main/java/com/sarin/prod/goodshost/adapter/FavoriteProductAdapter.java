@@ -51,7 +51,7 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         context = parent.getContext();
         RecyclerView.ViewHolder holder;
         View view;
-        Log.d(TAG, "viewType: " + viewType);
+
         if (viewType == TYPE_HEADER) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_favorite_header, parent, false);
             holder = new HeaderViewHolder(view);
@@ -104,7 +104,7 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public void set(int position, ProductItem productItem){
-        items.set(position, productItem);
+        items.set(position - 1, productItem);
         notifyDataSetChanged();
     }
 
@@ -234,7 +234,7 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public int getItemViewType(int position) {
 
-        Log.d(TAG, position + "/" + items.size());
+
         if (position == 0)
             return TYPE_HEADER;
         else if (position == items.size() +1)

@@ -53,7 +53,7 @@ public class FavoriteSearcherAdapter extends RecyclerView.Adapter<FavoriteSearch
         holder.categoryItemClickListener = new CategoryItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
-                Log.d(TAG, "FavoriteSearcherAdapter: " + items.get(position));
+
 
             }
         };

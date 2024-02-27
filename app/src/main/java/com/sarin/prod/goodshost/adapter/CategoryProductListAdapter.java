@@ -82,7 +82,7 @@ public class CategoryProductListAdapter extends RecyclerView.Adapter<CategoryPro
         holder.categoryItemClickListener = new CategoryItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
-                Log.d(TAG, "category: " + items.get(position).api_code + "   " + items.get(position).name);
+
                 selectedItem = position;
                 notifyDataSetChanged();
 

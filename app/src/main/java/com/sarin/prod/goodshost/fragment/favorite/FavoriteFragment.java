@@ -132,7 +132,7 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
 
                 String editTextValue = hope_price.getText().toString();
 
-                Log.d(TAG, "" + MainApplication.ANDROID_ID + "   " + pdItem.getVendor_item_id() + "   " + sUtil.convertStringToInt(editTextValue) + "   " + hope_stock);
+                
 
                 pdItem.setHope_price(sUtil.convertStringToInt(editTextValue));
                 pdItem.setHope_stock(hope_stock);
@@ -220,30 +220,6 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
         });
 
 
-//        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener()
-//        {
-//            @Override
-//            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY)
-//            {
-//                if (v.getChildAt(v.getChildCount() - 1) != null)
-//                {
-//                    if (scrollY > oldScrollY && Math.abs(oldScrollY - scrollY) < 10)
-//                    {
-//                        // 스크롤 아래로
-//                        favorite_LinearLayout1.setVisibility(View.GONE);
-//                        if (scrollY >= (v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight()))
-//                        {
-//                            // 스크롤 마지막 도착.
-//                        }
-//                    } else if (oldScrollY > scrollY && Math.abs(oldScrollY - scrollY) < 10){
-//                        // 스크롤 위로
-//                        favorite_LinearLayout1.setVisibility(View.VISIBLE);
-//                    }
-//                }
-//            }
-//        });
-
-
         return root;
     }
 
@@ -289,7 +265,7 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
             public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
                 if(response.isSuccessful()){
                     ReturnMsgItem returnMsgItem = response.body();
-                    Log.d(TAG, "setUserRegister : " + returnMsgItem.toString());
+                    
                      favoriteProductAdapter.set(pdItem_possion, pdItem);
 
                 }
@@ -345,7 +321,7 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
     }
 
     public void getFavoriteProducts(String user_id){
-//        Log.d(TAG, "page: " + CategoryProducts_page);
+
 
         loadingProgressManager.showLoading(getContext());
 
@@ -360,7 +336,7 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
                 if(response.isSuccessful()){
                     List<ProductItem> productItem = response.body();
 
-                    Log.d(TAG, "productItem.size() : " + productItem.size());
+                    
                     if(productItem.size() < 1){
                         favorite_all_product_nodata.setVisibility(View.VISIBLE);
                         recyclerView.setVisibility(View.GONE);

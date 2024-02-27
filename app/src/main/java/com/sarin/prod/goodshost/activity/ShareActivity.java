@@ -54,7 +54,7 @@ public class ShareActivity extends AppCompatActivity {
 //                handleSendText(intent);
                 String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
                 add.setText(getApplicationContext().getResources().getString(R.string.share_adding));
-                Log.d(TAG, "ShareActivity sharedText: " + sharedText);
+                
 
                 setUserSelectProduct(MainApplication.ANDROID_ID, sharedText);
 
@@ -83,7 +83,7 @@ public class ShareActivity extends AppCompatActivity {
             public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
                 if(response.isSuccessful()){
                     ReturnMsgItem returnMsgItem = response.body();
-                    Log.d(TAG, "setUserSelectProduct : " + returnMsgItem.toString());
+                    
 
                     if(returnMsgItem.getCode() > 0){
                         add.setText(getApplicationContext().getResources().getString(R.string.share_add_product));

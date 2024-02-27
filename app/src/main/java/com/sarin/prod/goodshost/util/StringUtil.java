@@ -89,7 +89,7 @@ public class StringUtil {
      * @return 10% 차감된 가격, 단, 결과가 음수일 경우 0을 반환
      */
     public int calculateDiscountedPrice(int originalPrice, int value) {
-        Log.d(TAG, "" + value);
+        
         // 입력 값 검증
         if (originalPrice < 0) {
             return 0; // 음수 입력은 유효하지 않으므로 0 반환
@@ -97,9 +97,9 @@ public class StringUtil {
 
         // 10% 차감 계산
         double discountAmount = originalPrice * ((double) value / 100);
-        Log.d(TAG, "" + discountAmount);
+        
         int discountedPrice = (int) (originalPrice - Math.floor(discountAmount)); // 소수점 버림 처리
-        Log.d(TAG, "" + discountedPrice);
+        
         return discountedPrice;
     }
 

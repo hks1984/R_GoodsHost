@@ -89,11 +89,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
 
-        Log.d(TAG, "type: " + type);
-        Log.d(TAG, "title: " + title);
-        Log.d(TAG, "body: " + body);
-        Log.d(TAG, "image: " + image);
-        Log.d(TAG, "link: " + link);
+        
+        
+        
+        
+        
 
         ProductAlarmItem pai = new ProductAlarmItem();
         pai.setProduct_title(title);
@@ -102,9 +102,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         long rtn = alarmDatabaseManager.insert(pai);
         if(rtn < 0){
-            Log.d(TAG, "실패 DB insert : " + rtn);
+            
         } else {
-            Log.d(TAG, "성공 DB insert : " + rtn);
+            
         }
 
 
@@ -162,7 +162,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
                 || !"1".equals(PreferenceManager.getString(getApplicationContext(), "isAlarmStatus"))
         ) {
-            Log.d(TAG, "알림 거부 상태.");
+            
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -200,7 +200,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
                 if(response.isSuccessful()){
                     ReturnMsgItem returnMsgItem = response.body();
-                    Log.d(TAG, "setUserRegister : " + returnMsgItem.toString());
+                    
 
                     PreferenceManager.setString(getApplicationContext(), "userId", MainApplication.ANDROID_ID);
 

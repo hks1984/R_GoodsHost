@@ -63,19 +63,6 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
         holder.list_view_hori.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener_Hori(v, position));
         holder.layout_favorite.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener_Hori(v, position));
 
-
-//        holder.productItemClickListener = new RecyclerViewClickListener() {
-//            @Override
-//            public void onItemClickListener(View v, int position) {
-//
-//                Log.d(TAG, "position: " + position);
-//                Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
-//                intent.putExtra("vendor_item_id", items.get(position).getVendor_item_id());
-//                v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
-//
-//            }
-//        };
-
     }
 
     public void addItems(List<ProductItem> items){
@@ -156,7 +143,7 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
             if(pitem.getRating() == null || "".equals(pitem.getRating())){
                 pitem.setRating("0");
             }
-            Log.d(TAG,"1111111111111: " + pitem.getRating());
+            
             rating.setRating(Float.parseFloat(pitem.getRating()));
             String ratingTotalCount = sUtil.replaceStringPriceToInt(pitem.getRating_total_count());
             if (ratingTotalCount != null && !ratingTotalCount.isEmpty()) {
@@ -179,7 +166,7 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
                 price_value.setTextColor(ContextCompat.getColor(context, R.color.personal));
             }
 
-//            Log.d(TAG, "fff : " + pitem.toString());
+
             if(pitem.isIs_Favorite()){
                 favorite.setImageResource(R.drawable.baseline_favorite_24);
             }else{

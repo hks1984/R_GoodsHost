@@ -90,7 +90,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private TextView name, price_value, registration, link, save, rocket, difference_price, average_price, views, discount_1, discount_2, discount_3;
     private EditText hope_price;
     private CheckBox check;
-    private LinearLayout price_layout;
+    private LinearLayout price_layout, no_linechart;
     private String vendor_item_id;
 
     private LineChart lineChart;
@@ -123,6 +123,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         average_price = binding.averagePrice;
         price_layout = binding.priceLayout;
         views = binding.views;
+        no_linechart = binding.noLinechart;
 
         getProductDetail(vendor_item_id);
         getProductChart(vendor_item_id);
@@ -295,7 +296,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
                 if(response.isSuccessful()){
                     ReturnMsgItem returnMsgItem = response.body();
-                    Log.d(TAG, "setUserRegister : " + returnMsgItem.toString());
+                    
 
                     // 처음 관심상품 등록 후 그 상태에서 바로 관심상품 눌렀을때 변경한 값으로 출력하도록. (서버 통신을 안하니 값을 새로안들고와서 객체에 추가)
                     if(returnMsgItem.getCode() > 0){
@@ -341,15 +342,15 @@ public class ProductDetailActivity extends AppCompatActivity {
             if (!xLabelMap.containsKey(date)) {
                 xLabelMap.put(date, index++);
 
-                Log.d(TAG, "date : " + date);
+                
             }
             entries.add(new Entry(xLabelMap.get(date), value));
 
 
         }
-        Log.d(TAG, "chartItems: " + chartItems.size());
-        Log.d(TAG, "chartItems: " + chartItems.toString());
-        Log.d(TAG, "" + minValue + "   " + maxValue);
+        
+        
+        
         LineDataSet dataSet = new LineDataSet(entries, null);
         dataSet.setColor(ContextCompat.getColor(getApplicationContext(), R.color.personal));
 //        dataSet.setValueTextColor(Color.BLUE);
@@ -388,11 +389,11 @@ public class ProductDetailActivity extends AppCompatActivity {
 //        lineChart.getXAxis().setValueFormatter(new ValueFormatter() {
 //            @Override
 //            public String getAxisLabel(float value, AxisBase axis) {
-//                Log.d(TAG, "!!!!!!!!!!!!!!!!!!!!!");
+
 //                int intValue = (int) value;
 //                for (Map.Entry<String, Integer> entry : xLabelMap.entrySet()) {
 //                    if (entry.getValue().equals(intValue)) {
-//                        Log.d(TAG, "entry.getKey(): " + entry.getKey() + "   value: " + value);
+
 //                        return entry.getKey();
 //                    }
 //                }
@@ -508,8 +509,8 @@ public class ProductDetailActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
                     List<ChartItem> chartItem = response.body();
 
-                    Log.d(TAG, vendor_item_id + " "+ chartItem.toString());
-                    if(chartItem.size() > 0){
+                    
+                    if(chartItem != null && chartItem.size() > 0){
                         LineChartGraph(chartItem);
                         lineChart.setScaleEnabled(false);
 
@@ -536,6 +537,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
                     } else {
                         binding.priceLayout.setVisibility(View.GONE);
+                        no_linechart.setVisibility(View.VISIBLE);
                     }
                 }
                 else{
@@ -563,7 +565,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
 
     public void getProductDetail(String vendor_item_id){
-//        Log.d(TAG, "page: " + CategoryProducts_page);
+
 
         loadingProgressManager.showLoading(this);
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();

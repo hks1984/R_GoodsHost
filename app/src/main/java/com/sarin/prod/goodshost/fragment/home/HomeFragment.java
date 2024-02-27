@@ -161,7 +161,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
         });
 
         if(categoryAdapter.size() <= 0){
-//            Log.d(TAG, "categoryAdapter.size() : " + categoryAdapter.size());
+
             getCategoryList();
         }
 
@@ -243,7 +243,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
             public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
                 if(response.isSuccessful()){
                     ReturnMsgItem returnMsgItem = response.body();
-                    Log.d(TAG, "setUserRegister : " + returnMsgItem.toString());
+                    
 
 
                 }
@@ -340,7 +340,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
 
 
     public void getBestSalesProducts(int cnt, int page){
-//        Log.d(TAG, "page: " + CategoryProducts_page);
+
 
 
         loadingProgressManager.showLoading(getContext());
@@ -355,7 +355,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
             public void onResponse(Call<List<ProductItem>> call, Response<List<ProductItem>> response) {
                 if(response.isSuccessful()){
                     List<ProductItem> productItem = response.body();
-//                    Log.d(TAG, "1111111111111111111" + productItem.toString());
+
                     productHoriAdapter.addItems(productItem);
 
                 }
@@ -384,7 +384,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
 
 
     public void getCategoryList(){
-//        Log.d(TAG, "page: " + CategoryProducts_page);
+
 //        loadingDialogManager.showLoading(requireActivity().getSupportFragmentManager());
 
         loadingProgressManager.showLoading(getContext());
