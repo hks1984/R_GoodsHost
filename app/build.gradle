@@ -11,15 +11,15 @@ android {
         applicationId "com.sarin.prod.goodshost"
         minSdk 26
         targetSdk 34
-        versionCode 3
-        versionName "240228"
+        versionCode 4
+        versionName "240229"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         debug {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 

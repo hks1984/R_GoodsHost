@@ -303,17 +303,16 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_SETTLING && isScrolledDown) {
                     
-//                    autoCompleteTextView.setVisibility(View.VISIBLE);
-//                    editBoxLinearLayout.setVisibility(View.VISIBLE);
-                    VisibleSlideDown(editBoxLinearLayout);
+                    autoCompleteTextView.setVisibility(View.VISIBLE);
+                    editBoxLinearLayout.setVisibility(View.VISIBLE);
+//                    VisibleSlideDown(editBoxLinearLayout);
 
                 }else if(newState == RecyclerView.SCROLL_STATE_SETTLING && !isScrolledDown){
                     
                     if (!piLIst.isEmpty()) {
-//                        autoCompleteTextView.setVisibility(View.GONE);
-//                        editBoxLinearLayout.setVisibility(View.GONE);
-
-                        GoneSlideUp(editBoxLinearLayout);
+                        autoCompleteTextView.setVisibility(View.GONE);
+                        editBoxLinearLayout.setVisibility(View.GONE);
+//                        GoneSlideUp(editBoxLinearLayout);
                     }
 
 
