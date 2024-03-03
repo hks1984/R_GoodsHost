@@ -6,15 +6,19 @@
     <color name="black_700">#FF000000</color>
 
     <color name="white_300">#D5D4D4</color>
-    <color name="white_500">#FAF9F9</color>
+    <color name="white_500">#FCFCFC</color>
     <color name="white_700">#FFFFFFFF</color>
 
     <color name="gray_200_tran">#80D6D5D5</color>
+    <color name="gray_100">#ECECEC</color>
     <color name="gray_200">#D6D5D5</color>
     <color name="gray_500">#7A7A7A</color>
     <color name="gray_700">#424242</color>
 
-    <color name="personal">#800020</color>
+    <color name="personal">#F44336</color>
+
+    <color name="test">#EFEFEF</color>
+
 
     <color name="blue_200">#5C6BC0</color>
     <color name="red_200">#EF5350</color>

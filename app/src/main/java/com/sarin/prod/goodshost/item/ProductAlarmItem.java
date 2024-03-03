@@ -5,6 +5,7 @@ public class ProductAlarmItem {
     private String product_title;
     private String product_name;
     private String product_image;
+    private String link;
 
     public String getC_date() {
         return c_date;
@@ -38,6 +39,14 @@ public class ProductAlarmItem {
         this.product_image = product_image;
     }
 
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
     @Override
     public String toString() {
         return "ProductAlarmItem{" +
@@ -45,6 +54,7 @@ public class ProductAlarmItem {
                 ", product_title='" + product_title + '\'' +
                 ", product_name='" + product_name + '\'' +
                 ", product_image='" + product_image + '\'' +
+                ", link='" + link + '\'' +
                 '}';
     }
 }

@@ -89,16 +89,16 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
         recyclerView = binding.recyclerView;
         favorite_all_product_nodata = binding.favoriteAllProductNodata;
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3); // 3은 그리드의 열 수입니다.
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 6);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
                 if(favoriteProductAdapter.getItemViewType(position) == 0            // 헤더 또는 푸터일 경우 가로 레이아웃 풀로 사용
                         || favoriteProductAdapter.getItemViewType(position) == 2
                 ){
-                    return 3;
+                    return 6;
                 } else {        // 아이템 리스트의 경우 3개씩 출력하기 위해 1로 설정
-                    return 1;
+                    return 3;
                 }
 
             }

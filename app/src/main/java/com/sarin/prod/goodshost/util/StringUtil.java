@@ -5,6 +5,7 @@ import android.util.Log;
 import com.sarin.prod.goodshost.MainApplication;
 
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -112,18 +113,30 @@ public class StringUtil {
         long hours = TimeUnit.MILLISECONDS.toHours(timeDiff);
         long days = TimeUnit.MILLISECONDS.toDays(timeDiff);
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
+
+//        if (minutes < 1) {
+//            return "방금 전";
+//        } else if (minutes < 60) {
+//            return minutes + "분 전";
+//        } else if (hours < 24) {
+//            return hours + "시간 전";
+//        } else if (days < 30) {
+//            return days + "일 전";
+//        } else if (days < 365) {
+//            return days / 30 + "달 전";
+//        } else {
+//            return days / 365 + "년 전";
+//        }
+
         if (minutes < 1) {
             return "방금 전";
         } else if (minutes < 60) {
             return minutes + "분 전";
         } else if (hours < 24) {
             return hours + "시간 전";
-        } else if (days < 30) {
-            return days + "일 전";
-        } else if (days < 365) {
-            return days / 30 + "달 전";
         } else {
-            return days / 365 + "년 전";
+            return dateFormat.format(pastTimeMillis);
         }
     }
 

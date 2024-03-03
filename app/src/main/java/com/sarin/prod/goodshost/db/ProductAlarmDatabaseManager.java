@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.item.ProductAlarmItem;
@@ -13,7 +12,7 @@ import com.sarin.prod.goodshost.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AlarmDatabaseManager {
+public class ProductAlarmDatabaseManager {
 
     private static String TAG = MainApplication.TAG;
     static final String DB_PACKAGE = "dealdive.db";   //DB이름
@@ -22,21 +21,21 @@ public class AlarmDatabaseManager {
 
     Context myContext = null;
 
-    private static AlarmDatabaseManager myDBManager = null;
+    private static ProductAlarmDatabaseManager myDBManager = null;
     private SQLiteDatabase mydatabase = null;
     private StringUtil sUtil = StringUtil.getInstance();
 
-    public static AlarmDatabaseManager getInstance(Context context)
+    public static ProductAlarmDatabaseManager getInstance(Context context)
     {
         if(myDBManager == null)
         {
-            myDBManager = new AlarmDatabaseManager(context);
+            myDBManager = new ProductAlarmDatabaseManager(context);
         }
 
         return myDBManager;
     }
 
-    private AlarmDatabaseManager(Context context)
+    private ProductAlarmDatabaseManager(Context context)
     {
         myContext = context;
 
@@ -50,6 +49,7 @@ public class AlarmDatabaseManager {
                 + ", product_title TEXT "
                 + ", product_name TEXT "
                 + ", product_image TEXT "
+                + ", link TEXT "
                 + ");");
     }
 
@@ -61,6 +61,7 @@ public class AlarmDatabaseManager {
         addRowValue.put("product_title", productAlarmItem.getProduct_title()); // 제품 제목 예시
         addRowValue.put("product_name", productAlarmItem.getProduct_name()); // 제품 이름 예시
         addRowValue.put("product_image", productAlarmItem.getProduct_image()); // 제품 URL 예시
+        addRowValue.put("link", productAlarmItem.getLink()); // 제품 URL 예시
 
         // 실패 시 -1 리턴
         return mydatabase.insert(TABLE_PACKAGE, null, addRowValue);
@@ -85,12 +86,14 @@ public class AlarmDatabaseManager {
             String product_title = cursor.getString(i++) ;
             String product_name = cursor.getString(i++) ;
             String product_image = cursor.getString(i++) ;
+            String link = cursor.getString(i++);
 
             ProductAlarmItem pai = new ProductAlarmItem();
             pai.setC_date(c_date);
             pai.setProduct_title(product_title);
             pai.setProduct_name(product_name);
             pai.setProduct_image(product_image);
+            pai.setLink(link);
 
             aList.add(pai);
         }

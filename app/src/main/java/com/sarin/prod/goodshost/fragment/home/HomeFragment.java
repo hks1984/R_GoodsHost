@@ -137,6 +137,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
                 Intent intent = new Intent(v.getContext(), CategoryProductListActivity.class);
                 intent.putExtra("flag", "best");
                 v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
+                getActivity().overridePendingTransition(R.anim.from_right_enter, R.anim.none);
 
             }
         });
@@ -148,6 +149,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
                 Intent intent = new Intent(v.getContext(), CategoryProductListActivity.class);
                 intent.putExtra("flag", "top");
                 v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
+                getActivity().overridePendingTransition(R.anim.from_right_enter, R.anim.none);
             }
         });
 
@@ -157,6 +159,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), AlarmActivity.class);
                 v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
+                getActivity().overridePendingTransition(R.anim.from_up_enter, R.anim.none);
             }
         });
 

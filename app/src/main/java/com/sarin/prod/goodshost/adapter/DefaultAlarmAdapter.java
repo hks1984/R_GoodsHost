@@ -5,13 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -19,60 +16,54 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
+import com.sarin.prod.goodshost.item.DefaultAlarmItem;
 import com.sarin.prod.goodshost.item.ProductAlarmItem;
-import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.util.StringUtil;
 
 import java.util.List;
 
 
-public class ProductAlarmAdapter extends RecyclerView.Adapter<ProductAlarmAdapter.ViewHolder>{
+public class DefaultAlarmAdapter extends RecyclerView.Adapter<DefaultAlarmAdapter.ViewHolder>{
 
-    private List<ProductAlarmItem> items;
+    private List<DefaultAlarmItem> items;
     public static String TAG = MainApplication.TAG;
     private static Context context;
     static StringUtil sUtil = StringUtil.getInstance();
     private RecyclerViewClickListener recyclerViewClickListener;
-    public ProductAlarmAdapter(List<ProductAlarmItem> items, RecyclerViewClickListener listener)
+    public DefaultAlarmAdapter(List<DefaultAlarmItem> items)
     {
         this.items = items;
-        this.recyclerViewClickListener = listener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_product_alarm_list , parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_default_alarm_list , parent, false);
         context = parent.getContext();
         return new ViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ProductAlarmItem item = items.get(position);
+        DefaultAlarmItem item = items.get(position);
         holder.setItem(item);
-
-        // 전체 아이템 클릭 이벤트
-        // activity 또는 fragment 화면단 코드에서 onItemClickListener 메소드 추가해줘야함.
-//        holder.list_view_hori.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener(v, position));
-//        holder.layout_favorite.setOnClickListener(v -> recyclerViewClickListener.onItemClickListener(v, position));
 
     }
 
-    public void addItems(List<ProductAlarmItem> items){
+    public void addItems(List<DefaultAlarmItem> items){
         this.items.addAll( items);
         notifyDataSetChanged();
     }
 
-    public ProductAlarmItem get(int possion) {
+    public DefaultAlarmItem get(int possion) {
         return items.get(possion);
     }
-    public void setItems(List<ProductAlarmItem> list){
+    public void setItems(List<DefaultAlarmItem> list){
         items = list;
         notifyDataSetChanged();
     }
 
-    public void set (int pos, ProductAlarmItem item) {
+    public void set (int pos, DefaultAlarmItem item) {
         items.set(pos, item);
         notifyDataSetChanged();
     }
@@ -94,7 +85,6 @@ public class ProductAlarmAdapter extends RecyclerView.Adapter<ProductAlarmAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView name, body, c_date;
-        private ImageView imagew;
         private ConstraintLayout full_layout;
 
         public ViewHolder(View itemView) {
@@ -103,26 +93,14 @@ public class ProductAlarmAdapter extends RecyclerView.Adapter<ProductAlarmAdapte
             name = (TextView) itemView.findViewById(R.id.name);
             body = (TextView) itemView.findViewById(R.id.body);
             c_date = (TextView) itemView.findViewById(R.id.c_date);
-            imagew = (ImageView) itemView.findViewById(R.id.imagew);
             full_layout = (ConstraintLayout) itemView.findViewById(R.id.full_layout);
 
         }
 
-        public void setItem(ProductAlarmItem pitem){
+        public void setItem(DefaultAlarmItem pitem){
 
-            name.setText(pitem.getProduct_title());
-            body.setText(pitem.getProduct_name());
-            String url = pitem.getProduct_image();
-            if(!sUtil.nullCheck(url)){
-                if(!url.contains("https:")){
-                    url = "https:" + url;
-                }
-            }
-            Glide.with(itemView.getContext())
-                    .load(url)
-                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(20))) // 여기서 10은 코너의 반지름을 dp 단위로 지정
-                    .into(imagew);
-
+            name.setText(pitem.getDefault_title());
+            body.setText(pitem.getDefault_body());
             String timeAgo = sUtil.getTimeAgo(Long.parseLong(pitem.getC_date()));
             c_date.setText(timeAgo);
 
@@ -131,32 +109,12 @@ public class ProductAlarmAdapter extends RecyclerView.Adapter<ProductAlarmAdapte
 
     }
 
-
     @Override
     public int getItemViewType(int position) {
         return position;
     }
 
-    public static String getNumberConverter (double number){
 
-        String convertedString = "";
-        // 문자열을 Double로 변환
-        try{
-            // 반올림
-            number = Math.round(number);
-            // 마이너스 제거 (절대값 사용)
-            number = Math.abs(number);
-
-            // 숫자를 문자열로 변환
-            convertedString = String.valueOf((int)number);
-            // 결과 출력
-//            System.out.println("변환된 문자열: " + convertedString);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-
-        return convertedString;
-    }
 
 }
 

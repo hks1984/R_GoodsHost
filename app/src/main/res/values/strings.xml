@@ -94,4 +94,13 @@
     <string name="permission_dialog_optional_1_1">푸시 알림</string>
     <string name="permission_dialog_optional_1_2">▷ 최저가, 재입고 등의 알림 서비스를 받기 위해서는 알림 설정을 꼭 허용해주세요.</string>
 
+
+    <!-- 알림 -->
+    <string name="dmall_alarm_title">알림</string>
+    <string name="product_alarm">상품 알림</string>
+    <string name="default_alarm">일반 알림</string>
+    <string name="alarm_nodata">아직 받은 알림이 없어요.</string>
+
+
+
 </resources>

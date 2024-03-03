@@ -102,6 +102,8 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
             @Override
             public void onClick(View v) {
                 finish();
+                overridePendingTransition(R.anim.none, R.anim.to_right_exit);
+
             }
         });
 
@@ -462,4 +464,14 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
         categoryCode = "";
 
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (isFinishing()) {
+            // back 버튼으로 화면 종료가 야기되면 동작한다.
+            overridePendingTransition(R.anim.none, R.anim.to_right_exit);
+        }
+    }
+
 }

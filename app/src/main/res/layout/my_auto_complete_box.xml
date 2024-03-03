@@ -4,8 +4,8 @@
     android:layout_height="wrap_content"
     android:paddingTop="20dp"
     android:paddingLeft="15dp"
-    style="@style/TextWhite.bigLargeStyle"
+    style="@style/TextBlack.bigLargeStyle"
     android:textStyle="bold"
-    android:textColor="@color/white_500"
-    android:background="@color/black_500"
+    android:textColor="@color/black_500"
+    android:background="@color/white_500"
     />

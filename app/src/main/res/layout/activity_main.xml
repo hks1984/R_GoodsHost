@@ -22,7 +22,7 @@
         android:id="@+id/nav_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/black_200"
+        android:background="@color/white_500"
         app:itemIconTint="@drawable/bottomnavigation_select_color"
         app:itemTextColor="@drawable/bottomnavigation_select_color"
         app:menu="@menu/bottom_nav_menu"

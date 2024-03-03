@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black_500"
+    android:background="@color/white_500"
     android:orientation="vertical"
     android:id="@+id/fragment_search_linearlayout"
     tools:context=".fragment.search.SearchFragment">
@@ -12,7 +12,6 @@
         android:id="@+id/editBoxLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
         android:orientation="horizontal">
 
         <AutoCompleteTextView
@@ -27,8 +26,9 @@
             android:hint=""
             android:inputType="text"
             android:minHeight="40dp"
-            android:paddingLeft="30dp"
+            android:paddingLeft="20dp"
             android:paddingRight="20dp"
+            android:layout_margin="20dp"
             android:singleLine="true"
             android:textColorHint="#555555"
             android:textCursorDrawable="@drawable/text_cursor" />
@@ -36,11 +36,12 @@
         <ImageView
             android:id="@+id/searchIcon"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_weight="1"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
-            android:src="@drawable/baseline_search_24_white"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/baseline_search_24"
             />
 
     </LinearLayout>
@@ -53,7 +54,7 @@
         android:orientation="vertical">
 
         <TextView
-            style="@style/TextWhite.bigLargeStyle"
+            style="@style/TextBlack.bigLargeStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -81,7 +82,7 @@
                 android:id="@+id/search_favorite_searches_no_data"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/TextWhite.largeStyle"
+                style="@style/TextBlack.largeStyle"
                 android:text="@string/search_favorite_searches_no_data"
                 android:visibility="gone"
                 android:gravity="center"
@@ -102,7 +103,7 @@
         android:orientation="vertical">
 
         <TextView
-            style="@style/TextWhite.bigLargeStyle"
+            style="@style/TextBlack.bigLargeStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -156,7 +157,7 @@
            android:layout_height="wrap_content"
            android:gravity="center"
            android:text="@string/no_searchc_item"
-           style="@style/TextWhite.bigLargeStyle"
+           style="@style/TextBlack.bigLargeStyle"
 
            />
 

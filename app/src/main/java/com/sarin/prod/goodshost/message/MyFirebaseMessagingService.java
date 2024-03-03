@@ -1,7 +1,6 @@
 package com.sarin.prod.goodshost.message;
 
 import android.Manifest;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -9,8 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.provider.Settings;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -23,16 +20,16 @@ import com.sarin.prod.goodshost.MainApplication;
 
 import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.activity.AlarmActivity;
-import com.sarin.prod.goodshost.db.AlarmDatabaseManager;
+import com.sarin.prod.goodshost.db.DefaultAlarmDatabaseManager;
+import com.sarin.prod.goodshost.db.ProductAlarmDatabaseManager;
+import com.sarin.prod.goodshost.item.DefaultAlarmItem;
 import com.sarin.prod.goodshost.item.ProductAlarmItem;
 import com.sarin.prod.goodshost.item.ReturnMsgItem;
 import com.sarin.prod.goodshost.item.UserItem;
-import com.sarin.prod.goodshost.network.RetrofitApi;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
 import com.sarin.prod.goodshost.util.PreferenceManager;
 import com.sarin.prod.goodshost.util.StringUtil;
-import com.sarin.prod.goodshost.activity.ProductDetailActivity;
 
 import java.util.Map;
 
@@ -53,7 +50,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     StringUtil stringUtil = StringUtil.getInstance();
 
-    private static AlarmDatabaseManager alarmDatabaseManager;
+    private static ProductAlarmDatabaseManager productAlarmDatabaseManager;
+    private static DefaultAlarmDatabaseManager defaultAlarmDatabaseManager;
 
     @Override
     public void onNewToken(@NonNull String token) {
@@ -73,7 +71,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        alarmDatabaseManager = AlarmDatabaseManager.getInstance(getApplicationContext());
+        productAlarmDatabaseManager = ProductAlarmDatabaseManager.getInstance(getApplicationContext());
+        defaultAlarmDatabaseManager = DefaultAlarmDatabaseManager.getInstance(getApplicationContext());
 
         Map<String, String> data = remoteMessage.getData();
 
@@ -84,35 +83,40 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String image = data.get("image");
         String link = data.get("link");
 
-        if(!image.contains("https:")){
-            image = "https:" + image;
-        }
-
-
-        
-        
-        
-        
-        
-
-        ProductAlarmItem pai = new ProductAlarmItem();
-        pai.setProduct_title(title);
-        pai.setProduct_name(body);
-        pai.setProduct_image(image);
-
-        long rtn = alarmDatabaseManager.insert(pai);
-        if(rtn < 0){
-            
-        } else {
-            
-        }
-
 
         PendingIntent pendingIntent;
         Intent notificationIntent = new Intent();
-        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        notificationIntent.setClass(this, AlarmActivity.class);
-        notificationIntent.putExtra("url", link);
+
+        if("prod".equals(type)) {
+            image = image.contains("https:") ? image : "https:" + image;
+
+            ProductAlarmItem pai = new ProductAlarmItem();
+            pai.setProduct_title(title);
+            pai.setProduct_name(body);
+            pai.setProduct_image(image);
+            pai.setLink(link);
+
+            long rtn = productAlarmDatabaseManager.insert(pai);
+
+            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            notificationIntent.setClass(this, AlarmActivity.class);
+            notificationIntent.putExtra("url", link);
+
+
+
+        } else if("default".equals(type)){
+            DefaultAlarmItem dai = new DefaultAlarmItem();
+            dai.setDefault_title(title);
+            dai.setDefault_body(body);
+
+            long rtn = defaultAlarmDatabaseManager.insert(dai);
+
+            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            notificationIntent.setClass(this, AlarmActivity.class);
+
+        }
+
+
 
         int notificationId = (int) System.currentTimeMillis();
 

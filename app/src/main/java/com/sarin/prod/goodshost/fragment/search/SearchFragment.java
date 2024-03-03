@@ -136,7 +136,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 recent_layout.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
                 searchNoItemMsg.setVisibility(View.GONE);
-                fragment_search_linearlayout.setBackgroundColor( ContextCompat.getColor(getContext(), R.color.black_500));
+//                fragment_search_linearlayout.setBackgroundColor( ContextCompat.getColor(getContext(), R.color.white_500));
 
             }
         });
@@ -150,7 +150,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                     recent_layout.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                     searchNoItemMsg.setVisibility(View.GONE);
-                    fragment_search_linearlayout.setBackgroundColor( ContextCompat.getColor(getContext(), R.color.black_500));
+//                    fragment_search_linearlayout.setBackgroundColor( ContextCompat.getColor(getContext(), R.color.white_500));
                 } else {
                     // AutoCompleteTextView가 포커스를 잃었을 때의 처리
                 }
@@ -214,7 +214,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                         recent_layout.setVisibility(View.VISIBLE);
                         recyclerView.setVisibility(View.GONE);
                         searchNoItemMsg.setVisibility(View.GONE);
-                        fragment_search_linearlayout.setBackgroundColor( ContextCompat.getColor(getContext(), R.color.black_500));
+//                        fragment_search_linearlayout.setBackgroundColor( ContextCompat.getColor(getContext(), R.color.white_500));
                         return true;
                     }
                 }
@@ -303,16 +303,16 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_SETTLING && isScrolledDown) {
                     
-                    autoCompleteTextView.setVisibility(View.VISIBLE);
-                    editBoxLinearLayout.setVisibility(View.VISIBLE);
-//                    VisibleSlideDown(editBoxLinearLayout);
+//                    autoCompleteTextView.setVisibility(View.VISIBLE);
+//                    editBoxLinearLayout.setVisibility(View.VISIBLE);
+                    VisibleSlideDown(editBoxLinearLayout);
 
                 }else if(newState == RecyclerView.SCROLL_STATE_SETTLING && !isScrolledDown){
                     
                     if (!piLIst.isEmpty()) {
-                        autoCompleteTextView.setVisibility(View.GONE);
-                        editBoxLinearLayout.setVisibility(View.GONE);
-//                        GoneSlideUp(editBoxLinearLayout);
+//                        autoCompleteTextView.setVisibility(View.GONE);
+//                        editBoxLinearLayout.setVisibility(View.GONE);
+                        GoneSlideUp(editBoxLinearLayout);
                     }
 
 
@@ -638,17 +638,20 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         view.setTranslationY(view.getHeight());
         view.animate()
                 .translationY(0)
-                .setDuration(1000)
+                .setDuration(300)
                 .setListener(null);
     }
     public void VisibleSlideDown(View view) {
-        view.setVisibility(View.VISIBLE); // 뷰를 보이게 합니다.
-        view.setTranslationY(-view.getHeight()); // 뷰를 화면 위로 위치시킵니다.
-        // 애니메이션으로 뷰를 원래 위치로 이동시킵니다.
-        view.animate()
-                .translationY(0)
-                .setDuration(1000)
-                .setListener(null);
+        if(view.getVisibility() != View.VISIBLE){
+            view.setVisibility(View.VISIBLE); // 뷰를 보이게 합니다.
+            view.setTranslationY(-view.getHeight()); // 뷰를 화면 위로 위치시킵니다.
+            // 애니메이션으로 뷰를 원래 위치로 이동시킵니다.
+            view.animate()
+                    .translationY(0)
+                    .setDuration(300)
+                    .setListener(null);
+        }
+
     }
 
 

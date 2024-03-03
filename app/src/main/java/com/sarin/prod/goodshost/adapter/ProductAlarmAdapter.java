@@ -32,11 +32,17 @@ public class ProductAlarmAdapter extends RecyclerView.Adapter<ProductAlarmAdapte
     public static String TAG = MainApplication.TAG;
     private static Context context;
     static StringUtil sUtil = StringUtil.getInstance();
-    private RecyclerViewClickListener recyclerViewClickListener;
-    public ProductAlarmAdapter(List<ProductAlarmItem> items, RecyclerViewClickListener listener)
+    private ProductAlarmAdapter.OnItemClickListener onItemClickListener = null;
+    public interface OnItemClickListener {
+        void onItemClick(View v, int pos);
+    }
+    public void setOnItemClickListener(ProductAlarmAdapter.OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
+
+    public ProductAlarmAdapter(List<ProductAlarmItem> items)
     {
         this.items = items;
-        this.recyclerViewClickListener = listener;
     }
 
     @NonNull
@@ -106,6 +112,15 @@ public class ProductAlarmAdapter extends RecyclerView.Adapter<ProductAlarmAdapte
             imagew = (ImageView) itemView.findViewById(R.id.imagew);
             full_layout = (ConstraintLayout) itemView.findViewById(R.id.full_layout);
 
+            full_layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getAdapterPosition();
+                    if(pos != RecyclerView.NO_POSITION){ if(onItemClickListener != null){ onItemClickListener.onItemClick(v, pos); } }
+                }
+            });
+
+
         }
 
         public void setItem(ProductAlarmItem pitem){
@@ -137,26 +152,6 @@ public class ProductAlarmAdapter extends RecyclerView.Adapter<ProductAlarmAdapte
         return position;
     }
 
-    public static String getNumberConverter (double number){
-
-        String convertedString = "";
-        // 문자열을 Double로 변환
-        try{
-            // 반올림
-            number = Math.round(number);
-            // 마이너스 제거 (절대값 사용)
-            number = Math.abs(number);
-
-            // 숫자를 문자열로 변환
-            convertedString = String.valueOf((int)number);
-            // 결과 출력
-//            System.out.println("변환된 문자열: " + convertedString);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-
-        return convertedString;
-    }
 
 }
 

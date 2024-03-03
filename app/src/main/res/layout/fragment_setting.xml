@@ -4,14 +4,59 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black_500"
+    android:background="@color/white_500"
     android:orientation="vertical"
     tools:context=".fragment.setting.SettingFragment">
 
 
+    <LinearLayout
+        android:id="@+id/LinearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:orientation="horizontal"
+        android:background="@color/white_500"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        >
+
+        <ImageView
+            android:id="@+id/menu"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_weight="1"
+            android:layout_gravity="left|center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="설정"
+            style="@style/TextBlack.mediumStyle"
+            android:textStyle="bold"
+            />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_weight="1"
+            android:layout_gravity="right|center"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            />
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/setting_login"
-        style="@style/TextWhite.titleStyle"
+        style="@style/TextBlack.titleStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="left"
@@ -29,7 +74,7 @@
         android:layout_marginTop="20dp">
 
         <TextView
-            style="@style/TextWhite.titleStyle"
+            style="@style/TextBlack.titleStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -51,7 +96,7 @@
         android:layout_marginTop="20dp">
 
         <TextView
-            style="@style/TextWhite.largeStyle"
+            style="@style/TextBlack.largeStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="8"
@@ -64,7 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:gravity="center"
-            android:src="@drawable/baseline_chevron_right_24_white"
+            android:src="@drawable/baseline_chevron_right_24_black"
             />
 
     </LinearLayout>
@@ -79,7 +124,7 @@
         android:layout_marginTop="20dp">
 
         <TextView
-            style="@style/TextWhite.largeStyle"
+            style="@style/TextBlack.largeStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="8"
@@ -113,7 +158,7 @@
         android:layout_marginTop="20dp">
 
         <TextView
-            style="@style/TextWhite.titleStyle"
+            style="@style/TextBlack.titleStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -135,7 +180,7 @@
         android:layout_marginTop="20dp">
 
         <TextView
-            style="@style/TextWhite.largeStyle"
+            style="@style/TextBlack.largeStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="8"
@@ -148,7 +193,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:gravity="center"
-            android:src="@drawable/baseline_chevron_right_24_white"
+            android:src="@drawable/baseline_chevron_right_24_black"
             />
 
     </LinearLayout>
@@ -163,7 +208,7 @@
         android:layout_marginTop="20dp">
 
         <TextView
-            style="@style/TextWhite.largeStyle"
+            style="@style/TextBlack.largeStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="8"
@@ -173,7 +218,7 @@
 
         <TextView
             android:id="@+id/app_version"
-            style="@style/TextWhite.largeStyle"
+            style="@style/TextBlack.largeStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="2"
