@@ -16,8 +16,8 @@ import java.util.List;
 public class AlarmDatabaseManager {
 
     private static String TAG = MainApplication.TAG;
-    static final String DB_PACKAGE = "alarm.db";   //DB이름
-    static final String TABLE_PACKAGE = "DealDive"; //Table 이름
+    static final String DB_PACKAGE = "dealdive.db";   //DB이름
+    static final String TABLE_PACKAGE = "ProductAlarm"; //Table 이름
     static final int DB_VERSION = 1;			//DB 버전
 
     Context myContext = null;
