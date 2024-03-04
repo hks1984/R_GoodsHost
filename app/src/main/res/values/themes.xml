@@ -2,9 +2,9 @@
     <!-- Base application theme. -->
     <style name="Theme.R_GoodsHost" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/black_500</item>
-        <item name="colorPrimaryVariant">@color/black_700</item>
-        <item name="colorOnPrimary">@color/white_500</item>
+        <item name="colorPrimary">@color/white_500</item>
+        <item name="colorPrimaryVariant">@color/white_500</item>
+        <item name="colorOnPrimary">@color/black_500</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
@@ -15,6 +15,7 @@
 <!--        <item name="android:windowDisablePreview">true</item>-->
 <!--        <item name="android:windowBackground">@null</item>-->
 <!--        <item name="android:windowIsTranslucent">true</item>-->
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="Theme.R_GoodsHost.NoActionBar">
@@ -22,12 +23,12 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="whiteStatus" parent="@style/Theme.R_GoodsHost">
+    <style name="blackStatus" parent="@style/Theme.R_GoodsHost">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@color/white_500</item>
+        <item name="android:statusBarColor">@color/black_500</item>
         <!-- 배경색이 밝으면 windowLightStatusBar 값을 true로, 어두우면 false 로 설정해야한다. -->
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
 

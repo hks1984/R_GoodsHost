@@ -40,7 +40,7 @@
             android:name=".activity.SplashActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.R_GoodsHost.NoActionBar">
+            android:theme="@style/blackStatus" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -81,11 +81,11 @@
         <activity
             android:name=".activity.ProductDetailActivity"
             android:exported="false"
-            android:theme="@style/whiteStatus" />
+            />
         <activity
             android:name=".activity.CategoryProductListActivity"
             android:exported="false"
-            android:theme="@style/whiteStatus" />
+            />
 
         <service
             android:name=".message.MyFirebaseMessagingService"

@@ -2,7 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/shape_my">
     <stroke android:width="2dp"
-        android:color="@color/black_500"
+        android:color="@color/white_500"
         />
     <padding
         android:top="5dp"
@@ -13,5 +13,5 @@
         android:topLeftRadius="20dp"
         android:topRightRadius="20dp"
         />
-    <solid android:color="@color/black_500" />
+    <solid android:color="@color/white_500" />
 </shape>

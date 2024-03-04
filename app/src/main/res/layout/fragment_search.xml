@@ -41,7 +41,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="20dp"
-            android:src="@drawable/baseline_search_24"
+            android:src="@drawable/search"
             />
 
     </LinearLayout>

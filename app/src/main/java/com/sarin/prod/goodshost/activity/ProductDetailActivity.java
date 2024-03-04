@@ -21,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -86,8 +87,9 @@ public class ProductDetailActivity extends AppCompatActivity {
     private LoadingProgressManager loadingProgressManager = LoadingProgressManager.getInstance();
     static StringUtil sUtil = StringUtil.getInstance();
 
-    private ImageView image, exit;
-    private TextView name, price_value, registration, link, save, rocket, difference_price, average_price, views, discount_1, discount_2, discount_3;
+    private ImageView image, exit, favorite, share;
+    private TextView name, price_value, registration, link, save, rocket, difference_price, average_price, views, discount_1, discount_2, discount_3, rating_total_count;
+    private RatingBar rating;
     private EditText hope_price;
     private CheckBox check;
     private LinearLayout price_layout, no_linechart;
@@ -116,14 +118,18 @@ public class ProductDetailActivity extends AppCompatActivity {
         price_value = binding.priceValue;
         image = binding.image;
         lineChart = binding.detailLinechart;
-        registration = binding.registration;
+//        registration = binding.registration;
         link = binding.link;
         rocket = binding.rocket;
         difference_price = binding.differencePrice;
         average_price = binding.averagePrice;
         price_layout = binding.priceLayout;
-        views = binding.views;
+//        views = binding.views;
         no_linechart = binding.noLinechart;
+        share = binding.share;
+        favorite = binding.favorite;
+        rating_total_count = binding.ratingTotalCount;
+        rating = binding.rating;
 
         getProductDetail(vendor_item_id);
         getProductChart(vendor_item_id);
@@ -139,14 +145,13 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         save = bottomSheetDialog.findViewById(R.id.save);
         hope_price = bottomSheetDialog.findViewById(R.id.hope_price);
-        hope_price.setSelection(hope_price.getText().length());
         check = bottomSheetDialog.findViewById(R.id.check);
         discount_1 = bottomSheetDialog.findViewById(R.id.discount_1);
         discount_2 = bottomSheetDialog.findViewById(R.id.discount_2);
         discount_3 = bottomSheetDialog.findViewById(R.id.discount_3);
 
 
-        registration.setOnClickListener(new View.OnClickListener() {
+        favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -161,9 +166,23 @@ public class ProductDetailActivity extends AppCompatActivity {
                     check.setChecked(false);
                 }
 
-
             }
         });
+
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent Sharing_intent = new Intent(Intent.ACTION_SEND);
+                Sharing_intent.setType("text/plain");
+
+                Sharing_intent.putExtra(Intent.EXTRA_TEXT, _pi.getCoupang_link());
+
+                Intent Sharing = Intent.createChooser(Sharing_intent, "공유하기");
+                startActivity(Sharing);
+            }
+        });
+        출처: https://goatlab.tistory.com/entry/Android-Studio-공유하기-기능-Android-Sharesheet [GOATLAB:티스토리]
+
 
         link.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,7 +194,6 @@ public class ProductDetailActivity extends AppCompatActivity {
 
             }
         });
-
 
         discount_1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -231,6 +249,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 }
 
                 CustomSnackbar.showSnackbar(getApplicationContext(), binding.getRoot(), getApplicationContext().getResources().getString(R.string.favorite_save));
+                favorite.setImageResource(R.drawable.baseline_favorite_24);
                 bottomSheetDialog.dismiss();
 
             }
@@ -271,7 +290,16 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
 
-
+        hope_price.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // EditText가 클릭되었을 때 실행될 코드
+                Log.d(TAG, "hope_price.getText().length() 1: " + hope_price.getText().length());
+                if (hope_price.getText().length() > 0) {
+                    hope_price.setSelection(hope_price.getText().length()); // 커서를 텍스트의 가장 우측으로 이동
+                }
+            }
+        });
 
         exit = binding.exit;
         exit.setOnClickListener(new View.OnClickListener() {
@@ -323,7 +351,6 @@ public class ProductDetailActivity extends AppCompatActivity {
 
 
     }
-
 
     private void LineChartGraph(List<ChartItem> chartItems) {
         List<Entry> entries = new ArrayList<>();
@@ -581,7 +608,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                     _pi = productItem;
                     name.setText(productItem.getName());
                     price_value.setText(sUtil.replaceStringPriceToInt(productItem.getPrice_value()) + getApplicationContext().getResources().getString(R.string.won));
-                    views.setText(sUtil.replaceStringPriceToInt(productItem.getViews()));
+//                    views.setText(sUtil.replaceStringPriceToInt(productItem.getViews()));
                     current_price = productItem.getPrice_value();
                     String url = productItem.getImage();
                     if(!url.contains("https:")){
@@ -592,11 +619,26 @@ public class ProductDetailActivity extends AppCompatActivity {
                             .apply(RequestOptions.bitmapTransform(new RoundedCorners(20))) // 여기서 10은 코너의 반지름을 dp 단위로 지정
                             .into(image);
 
+                    rating.setRating(Float.parseFloat(productItem.getRating()));
+                    String ratingTotalCount = sUtil.replaceStringPriceToInt(productItem.getRating_total_count());
+                    if (ratingTotalCount != null && !ratingTotalCount.isEmpty()) {
+                        rating_total_count.setText("(" + ratingTotalCount + ")");
+                    } else {
+                        rating_total_count.setText("");
+                    }
+
+
                     if(productItem.getRocket_baesong() != null && !"".equals(productItem.getRocket_baesong())){
                         rocket.setVisibility(View.VISIBLE);
                         rocket.setText(productItem.getRocket_baesong());
                     } else {
                         rocket.setVisibility(View.GONE);
+                    }
+
+                    if(productItem.isIs_Favorite()){
+                        favorite.setImageResource(R.drawable.baseline_favorite_24);
+                    }else{
+                        favorite.setImageResource(R.drawable.baseline_favorite_border_24);
                     }
 
                 }

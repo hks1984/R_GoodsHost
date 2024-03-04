@@ -74,7 +74,7 @@
                     style="@style/TextBlack.mediumStyle"
                     android:textStyle="bold"
                     android:text="Now on SALE"
-                    android:textColor="@color/personal"
+                    android:textColor="@color/personal_2"
                     android:paddingLeft="20dp"
                     />
 
@@ -148,7 +148,7 @@
                     style="@style/TextBlack.mediumStyle"
                     android:textStyle="bold"
                     android:text="믿고 사는"
-                    android:textColor="@color/personal"
+                    android:textColor="@color/personal_2"
                     android:paddingLeft="20dp"
                     />
 
