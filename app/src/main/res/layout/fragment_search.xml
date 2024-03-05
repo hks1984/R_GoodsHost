@@ -28,7 +28,9 @@
             android:minHeight="40dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:layout_margin="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="20dp"
             android:singleLine="true"
             android:textColorHint="#555555"
             android:textCursorDrawable="@drawable/text_cursor" />
@@ -39,8 +41,8 @@
             android:layout_height="40dp"
             android:layout_weight="1"
             android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="35dp"
             android:src="@drawable/search"
             />
 
@@ -113,19 +115,13 @@
             android:textStyle="bold" />
 
         <LinearLayout
+            android:id="@+id/favorite_searcher_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
             android:orientation="horizontal">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/favorite_searcher_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                />
 
         </LinearLayout>
 

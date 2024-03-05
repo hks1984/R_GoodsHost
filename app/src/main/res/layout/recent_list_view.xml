@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:background="@drawable/round_button_white_recent"
+        android:background="@drawable/round_button_black_recent"
         >
 
         <TextView
@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
-            style="@style/TextBlack.largeStyle"
+            style="@style/TextBlack.mediumStyle"
             android:layout_marginRight="5dp"
             />
 

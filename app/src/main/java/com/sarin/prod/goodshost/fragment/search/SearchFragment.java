@@ -3,6 +3,7 @@ package com.sarin.prod.goodshost.fragment.search;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -70,7 +71,6 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
     public static String TAG = MainApplication.TAG;
 
     private static RecyclerView recyclerView;
-    private static RecyclerView favoriteSearcherRecyclerView;
     private static RecyclerView recentRecyclerView;
     private RecyclerView.OnScrollListener scrollListener;
     private boolean isScrollListenerAdded = false;
@@ -90,7 +90,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
     private int pdItem_possion = 0;
     private ArrayAdapter<String> adapter;
 
-    private LinearLayout recent_layout, favorite_layout, searchNoItemMsg, editBoxLinearLayout, fragment_search_linearlayout;
+    private LinearLayout recent_layout, favorite_layout, searchNoItemMsg, editBoxLinearLayout, fragment_search_linearlayout, favorite_searcher_list;
 
     private ImageView searchIcon;
     private TextView search_favorite_searches_no_data;
@@ -110,6 +110,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         editBoxLinearLayout = binding.editBoxLinearLayout;
         fragment_search_linearlayout = binding.fragmentSearchLinearlayout;
         search_favorite_searches_no_data = binding.searchFavoriteSearchesNoData;
+        favorite_searcher_list = binding.favoriteSearcherList;
 
 
         recyclerView = binding.recyclerView;
@@ -126,6 +127,9 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         adapter = new ArrayAdapter<String>(getContext(), R.layout.my_auto_complete_box, androids);
 
         autoCompleteTextView.setAdapter(adapter);
+
+
+        getPopularSearch();
 
 
         autoCompleteTextView.setOnClickListener(new View.OnClickListener() {
@@ -239,14 +243,6 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
             }
         });
-
-        favoriteSearcherRecyclerView = binding.favoriteSearcherList;
-        LinearLayoutManager favoriteSearcheroutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        favoriteSearcherRecyclerView.setLayoutManager(favoriteSearcheroutManager);
-        favoriteSearcherAdapter = new FavoriteSearcherAdapter(favoriteSearcherList);
-        favoriteSearcherRecyclerView.setAdapter(favoriteSearcherAdapter);
-
-
 
         recentRecyclerView = binding.recentRecyclerView;
         LinearLayoutManager recentoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -492,6 +488,90 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
 
 
+    public void getPopularSearch(){
+
+        retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
+
+        Call<List<String>> call = service.getPopularSearch("getPopularSearch");
+        call.enqueue(new Callback<List<String>>() {
+            @Override
+            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                if(response.isSuccessful()){
+                    List<String> searchName = response.body();
+
+                    Log.d(TAG, "searchName: " + searchName.toString());
+
+                    for (int i = 0; i < searchName.size(); i++) {
+                        // 새 TextView 생성
+                        String word = searchName.get(i);
+                        TextView textView = new TextView(getContext());
+
+                        // TextView에 텍스트 설정
+                        textView.setText(word);
+
+                        // TextView에 필요한 기타 속성 설정 (예: 글꼴 크기, 색상 등)
+                        textView.setTextSize(14);
+                        textView.setTextColor(ContextCompat.getColor(getContext(), R.color.black_500)); // 글꼴 색상을 검정색으로 설정
+
+                        // LinearLayout에 TextView 추가
+                        favorite_searcher_list.addView(textView);
+
+                        // TextView에 LayoutParams 설정 (예: 마진, 패딩 등)
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.WRAP_CONTENT, // 너비 설정
+                                LinearLayout.LayoutParams.WRAP_CONTENT // 높이 설정
+                        );
+                        layoutParams.setMargins(10, 10, 10, 10); // 마진 설정 (단위: dp)
+                        textView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.round_button_black_recent));
+                        textView.setLayoutParams(layoutParams);
+
+                        textView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                // 클릭 이벤트 처리 코드
+
+                                autoCompleteTextView.setText(word);
+
+                                productAdapter.clear();
+                                SearchProducts_page = 0;
+                                getSearchProducts(word);
+                                PreferenceManager.setStringList(getContext(), "searchList", word);
+                                recentAdapter.addItem(word);
+                                recentAdapter.notifyDataSetChanged();
+
+                                // 키패드 없애기.
+                                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(autoCompleteTextView.getWindowToken(), 0);
+
+                            }
+                        });
+
+
+                    }
+
+
+                }
+                else{
+                }
+            }
+            @Override
+            public void onFailure(Call<List<String>> call, Throwable t) {
+                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
+            }
+        });
+
+
+    }
+
+
     public void getAutoCompleteText(String search_text){
 
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
@@ -537,6 +617,8 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
 
     }
+
+
 
     public static List<String> cleanList(List<String> originalList) {
         // 문자열 정제: null, 빈 문자열 제거 및 특수 문자 제거

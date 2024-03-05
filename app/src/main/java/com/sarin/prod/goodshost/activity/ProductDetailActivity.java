@@ -3,6 +3,8 @@ package com.sarin.prod.goodshost.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -26,6 +28,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.sarin.prod.goodshost.adapter.ProductAdapterHori;
+import com.sarin.prod.goodshost.adapter.RecyclerViewClickListener;
 import com.sarin.prod.goodshost.view.PopupDialogUtil;
 import com.sarin.prod.goodshost.view.PopupDialogClickListener;
 
@@ -79,7 +83,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProductDetailActivity extends AppCompatActivity {
+public class ProductDetailActivity extends AppCompatActivity implements RecyclerViewClickListener {
 
     private ActivityProductDetailBinding binding;
     private static String TAG = MainApplication.TAG;
@@ -103,6 +107,12 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private int current_price = 0;
 
+    private static RecyclerView relatedRecyclerView;
+    public static ProductAdapterHori productHoriAdapter;
+    private List<ProductItem> piLIst = new ArrayList<>();
+    private ProductItem pdItem = new ProductItem();
+    private int pdItem_possion = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,8 +121,6 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         Intent tp_intent = getIntent();
         vendor_item_id = tp_intent.getStringExtra("vendor_item_id");
-
-
 
         name = binding.name;
         price_value = binding.priceValue;
@@ -130,6 +138,14 @@ public class ProductDetailActivity extends AppCompatActivity {
         favorite = binding.favorite;
         rating_total_count = binding.ratingTotalCount;
         rating = binding.rating;
+
+
+        relatedRecyclerView = binding.recyclerView;
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        relatedRecyclerView.setLayoutManager(layoutManager);
+//        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1)); // 가로 2개 나열 할때.
+        productHoriAdapter = new ProductAdapterHori(piLIst, this);
+        relatedRecyclerView.setAdapter(productHoriAdapter);
 
         getProductDetail(vendor_item_id);
         getProductChart(vendor_item_id);
@@ -313,6 +329,33 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     }
 
+    public void onItemClickListener(View v, int pos) {
+
+    }
+
+    public void onItemClickListener_Hori(View v, int pos) {
+        // 아이템 클릭 이벤트 처리
+        pdItem = productHoriAdapter.get(pos);
+        pdItem_possion = pos;
+        if (v.getId() == R.id.layout_favorite) {
+            if(pdItem.isIs_Favorite()){
+                setDelUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id());
+                pdItem.setIs_Favorite(false);
+                productHoriAdapter.set(pos, pdItem);
+            } else {
+                setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), "Y", 0, "N");
+                pdItem.setIs_Favorite(true);
+                productHoriAdapter.set(pos, pdItem);
+            }
+
+        } else if (v.getId() == R.id.list_view_hori) {
+            Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
+            intent.putExtra("vendor_item_id", pdItem.getVendor_item_id());
+            v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
+        }
+    }
+
+
     public void setUserItemMap(String user_id, String vendor_item_id, String hope_low_price, int hope_price, String hope_stock){
 
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
@@ -332,6 +375,38 @@ public class ProductDetailActivity extends AppCompatActivity {
                         _pi.setHope_stock(hope_stock);
                     }
 
+                }
+                else{
+                }
+            }
+            @Override
+            public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
+                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
+            }
+        });
+
+
+    }
+
+    public void setDelUserItemMap(String user_id, String vendor_item_id){
+
+        retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
+
+        Call<ReturnMsgItem> call = service.setDelUserItemMap("setDelUserItemMap", user_id, vendor_item_id);
+        call.enqueue(new Callback<ReturnMsgItem>() {
+            @Override
+            public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
+                if(response.isSuccessful()){
+                    ReturnMsgItem returnMsgItem = response.body();
+//                    productAdapter.remove(pdItem_possion);
                 }
                 else{
                 }
@@ -641,6 +716,9 @@ public class ProductDetailActivity extends AppCompatActivity {
                         favorite.setImageResource(R.drawable.baseline_favorite_border_24);
                     }
 
+
+                    getProductsRelated(productItem.getName());
+
                 }
                 else{
                 }
@@ -664,6 +742,44 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
 
     }
+
+    public void getProductsRelated(String product_name){
+
+        loadingProgressManager.showLoading(this);
+        retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
+
+        Call<List<ProductItem>> call = service.getProductsRelated("getProductsRelated", MainApplication.ANDROID_ID, product_name);
+
+        call.enqueue(new Callback<List<ProductItem>>() {
+            @Override
+            public void onResponse(Call<List<ProductItem>> call, Response<List<ProductItem>> response) {
+                if(response.isSuccessful()){
+                    List<ProductItem> productItem = response.body();
+                    productHoriAdapter.addItems(productItem);
+                }
+                else{
+                }
+
+                loadingProgressManager.hideLoading();
+            }
+
+            @Override
+            public void onFailure(Call<List<ProductItem>> call, Throwable t) {
+                loadingProgressManager.hideLoading();
+                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
+            }
+        });
+
+    }
+
 
     @Override
     protected void onDestroy() {

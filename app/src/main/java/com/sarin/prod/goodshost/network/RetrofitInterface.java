@@ -111,7 +111,17 @@ public interface RetrofitInterface {
             @Query("search_text") String search_text
     );
 
+    @GET("{path}")
+    Call<List<ProductItem>> getProductsRelated(
+            @Path ("path") String path,
+            @Query("user_id") String user_id,
+            @Query("product_name") String product_name
+    );
 
+    @GET("{path}")
+    Call<List<String>> getPopularSearch(
+            @Path ("path") String path
+    );
 
 
 
