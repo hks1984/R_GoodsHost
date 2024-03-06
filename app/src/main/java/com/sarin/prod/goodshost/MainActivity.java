@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int NOTIFICATION_PERMISSION_CODE = 100;
     public static final int REQUEST_POST_NOTIFICATIONS = 200;
 
+    static int before_itemId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,15 +45,53 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        BottomNavigationView navView = binding.navView;
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
+        before_itemId = R.id.navigation_home;
+
+        navView.setOnNavigationItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            NavOptions.Builder navBuilder = new NavOptions.Builder();
+
+            if (itemId == R.id.navigation_home) {
+                if(before_itemId == R.id.navigation_home)   return true;    // 같은 메뉴 반복 클릭 방지
+                navBuilder.setEnterAnim(R.anim.from_left_enter)
+                        .setExitAnim(R.anim.to_right_exit);
+            } else if (itemId == R.id.navigation_search) {
+                if(before_itemId == R.id.navigation_search)   return true;  // 같은 메뉴 반복 클릭 방지
+                if(before_itemId == R.id.navigation_home){
+                    navBuilder.setEnterAnim(R.anim.from_right_enter)
+                            .setExitAnim(R.anim.to_left_exit);
+                } else {
+                    navBuilder.setEnterAnim(R.anim.from_left_enter)
+                            .setExitAnim(R.anim.to_right_exit);
+                }
+            } else if (itemId == R.id.navigation_favorite) {
+                if(before_itemId == R.id.navigation_favorite)   return true;    // 같은 메뉴 반복 클릭 방지
+                if(before_itemId == R.id.navigation_setting){
+                    navBuilder.setEnterAnim(R.anim.from_left_enter)
+                            .setExitAnim(R.anim.to_right_exit);
+                } else {
+                    navBuilder.setEnterAnim(R.anim.from_right_enter)
+                            .setExitAnim(R.anim.to_left_exit);
+                }
+            } else if (itemId == R.id.navigation_setting) {
+                if(before_itemId == R.id.navigation_setting)   return true; // 같은 메뉴 반복 클릭 방지
+                navBuilder.setEnterAnim(R.anim.from_right_enter)
+                        .setExitAnim(R.anim.to_left_exit);
+            }
+
+            before_itemId = itemId;
+
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+            navController.navigate(itemId, null, navBuilder.build());
+            return true; // true to display the item as the selected item
+        });
+
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_search, R.id.navigation_favorite, R.id.navigation_setting)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(binding.navView, navController);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             checkNotificationPermission();
@@ -59,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
 
     private void checkNotificationPermission() {
         // 특정 권한이 PackageManager.PERMISSION_DENIED 인지, PackageManager.PERMISSION_GRANTED 인지 반환 한다.
