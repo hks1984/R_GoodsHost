@@ -11,8 +11,8 @@ android {
         applicationId "com.sarin.prod.goodshost"
         minSdk 26
         targetSdk 34
-        versionCode 4
-        versionName "240229"
+        versionCode 24030719
+        versionName "1.0.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

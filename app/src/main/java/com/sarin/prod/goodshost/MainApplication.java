@@ -57,9 +57,9 @@ public class MainApplication extends Application implements Application.Activity
     private Activity currentActivity;
     public static Context context;
     public static Activity activity;
-//    public static final String BASE_URL = "https://api.dealdive.co.kr/dealdive/";
+    public static final String BASE_URL = "https://dealdive.co.kr/dealdive/";
 //    public static final String BASE_URL = "http://192.168.10.70:8080/dealdive/";
-    public static final String BASE_URL = "http://192.168.0.2:8080/dealdive/";
+//    public static final String BASE_URL = "http://192.168.0.2:8080/dealdive/";
 
 
 
@@ -103,66 +103,12 @@ public class MainApplication extends Application implements Application.Activity
             ANDROID_ID = userId;
         }
 
-        
-
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-            @Override
-            public void onComplete(@NonNull Task<String> task) {
-
-                if(task.isSuccessful() == false) {
-
-                    return;
-                }
-                String token = task.getResult();
-
-                if(!stringUtil.nullCheck(token)){
-                    UserItem userItem = new UserItem();
-                    userItem.setUser_id(ANDROID_ID);
-                    userItem.setFcm_token(token);
-                    setUserRegister(userItem);
-                }
-            }
-        });
-
         this.registerActivityLifecycleCallbacks(this);
         
 
     }
 
-    public void setUserRegister(UserItem userItem){
 
-        retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
-        RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
-
-        Call<ReturnMsgItem> call = service.setUserRegister("setUserRegister", userItem.getUser_id(), userItem.getFcm_token());
-        call.enqueue(new Callback<ReturnMsgItem>() {
-            @Override
-            public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
-                if(response.isSuccessful()){
-                    ReturnMsgItem returnMsgItem = response.body();
-                    
-
-                    PreferenceManager.setString(getApplicationContext(), "userId", MainApplication.ANDROID_ID);
-
-                }
-                else{
-                }
-            }
-            @Override
-            public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
-                    @Override
-                    public void onPositiveClick() {
-                    }
-                    @Override
-                    public void onNegativeClick() {
-                    }
-                }, "ONE", getResources().getString(R.string.server_not_connecting));
-            }
-        });
-
-
-    }
 
 
 
