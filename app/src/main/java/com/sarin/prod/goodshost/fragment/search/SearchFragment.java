@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.flexbox.FlexboxLayout;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.adapter.ProductAdapter;
@@ -90,7 +91,9 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
     private int pdItem_possion = 0;
     private ArrayAdapter<String> adapter;
 
-    private LinearLayout recent_layout, favorite_layout, searchNoItemMsg, editBoxLinearLayout, fragment_search_linearlayout, favorite_searcher_list;
+    private LinearLayout recent_layout, favorite_layout, searchNoItemMsg, editBoxLinearLayout, fragment_search_linearlayout;
+
+    private FlexboxLayout favorite_searcher_list;
 
     private ImageView searchIcon;
     private TextView search_favorite_searches_no_data;
@@ -518,7 +521,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                         favorite_searcher_list.addView(textView);
 
                         // TextView에 LayoutParams 설정 (예: 마진, 패딩 등)
-                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        FlexboxLayout.LayoutParams layoutParams = new FlexboxLayout.LayoutParams(
                                 LinearLayout.LayoutParams.WRAP_CONTENT, // 너비 설정
                                 LinearLayout.LayoutParams.WRAP_CONTENT // 높이 설정
                         );
