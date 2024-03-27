@@ -2,16 +2,16 @@ package com.sarin.prod.goodshost.item;
 
 public class VersionItem {
 
-    private String os_rype;
+    private String os_type;
     private String app_version;
     private int req_update;
 
-    public String getOs_rype() {
-        return os_rype;
+    public String getOs_type() {
+        return os_type;
     }
 
-    public void setOs_rype(String os_rype) {
-        this.os_rype = os_rype;
+    public void setOs_type(String os_type) {
+        this.os_type = os_type;
     }
 
     public String getApp_version() {
@@ -33,7 +33,7 @@ public class VersionItem {
     @Override
     public String toString() {
         return "VersionItem{" +
-                "os_rype='" + os_rype + '\'' +
+                "os_type='" + os_type + '\'' +
                 ", app_version='" + app_version + '\'' +
                 ", req_update=" + req_update +
                 '}';

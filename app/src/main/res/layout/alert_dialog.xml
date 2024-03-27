@@ -42,11 +42,11 @@
             >
 
             <TextView
-                android:id="@+id/btn_yes"
+                android:id="@+id/btn_no"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
-                android:text="@string/ok"
+                android:text="@string/no"
                 android:gravity="center"
                 android:textSize="16dp"
                 android:paddingVertical="16dp"
@@ -55,13 +55,13 @@
                 />
 
             <TextView
-                android:id="@+id/btn_no"
+                android:id="@+id/btn_yes"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
                 android:gravity="center"
                 android:paddingVertical="16dp"
-                android:text="@string/no"
+                android:text="@string/ok"
                 android:textColor="@color/white_500"
                 android:textSize="16dp"
                 android:textStyle="bold"

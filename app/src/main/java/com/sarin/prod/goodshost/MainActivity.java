@@ -1,5 +1,10 @@
 package com.sarin.prod.goodshost;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
+
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -53,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_POST_NOTIFICATIONS = 200;
 
     static int before_itemId;
+
+    static String versionName;
     static StringUtil stringUtil = StringUtil.getInstance();
 
     @Override
@@ -68,28 +75,6 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         before_itemId = R.id.navigation_home;
-
-        try {
-            // Context에서 PackageManager 인스턴스를 얻습니다.
-            PackageManager packageManager = this.getPackageManager();
-
-            // 현재 앱의 패키지 이름을 얻습니다.
-            String packageName = this.getPackageName();
-
-            // 패키지 이름과 0 플래그를 사용하여 PackageInfo 인스턴스를 얻습니다.
-            PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
-
-            // versionName을 가져옵니다.
-            String versionName = packageInfo.versionName;
-
-            // versionName을 사용합니다. 예를 들어 로그 출력
-//            Log.d("VersionName", versionName);
-            getVersion(MainApplication.ANDROID_ID, versionName);
-        } catch (PackageManager.NameNotFoundException e) {
-            // 패키지 이름을 찾을 수 없는 경우 예외 처리
-            e.printStackTrace();
-        }
-
 
 
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
@@ -155,6 +140,18 @@ public class MainActivity extends AppCompatActivity {
                 R.id.navigation_home, R.id.navigation_search, R.id.navigation_favorite, R.id.navigation_setting)
                 .build();
 
+        try {
+            PackageManager packageManager = this.getPackageManager();
+            String packageName = this.getPackageName();
+            PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
+            versionName = packageInfo.versionName;
+            getVersion(MainApplication.ANDROID_ID, versionName, "A");
+
+        } catch (PackageManager.NameNotFoundException e) {
+            // 패키지 이름을 찾을 수 없는 경우 예외 처리
+            e.printStackTrace();
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             checkNotificationPermission();
         } else {
@@ -184,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
+                PopupDialogUtil.showCustomDialog(MainActivity.this, new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {
                     }
@@ -199,30 +196,53 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void getVersion(String user_id, String app_version){
+    public void getVersion(String user_id, String app_version, String os_type){
 
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<VersionItem> call = service.getVersion("getVersion", user_id, app_version);
+        Call<VersionItem> call = service.getVersion("getVersion", user_id, app_version, os_type);
         call.enqueue(new Callback<VersionItem>() {
             @Override
             public void onResponse(Call<VersionItem> call, Response<VersionItem> response) {
                 if(response.isSuccessful()){
                     VersionItem ver = response.body();
+                    String newVersion = ver.getApp_version();
+                    int rtn = stringUtil.compareVersion(versionName, newVersion);
 
-                    Log.d(TAG, "version : " + ver.toString() );
+                    if(rtn > 0){
+                        PopupDialogUtil.showCustomDialog(MainActivity.this, new PopupDialogClickListener() {
+                            @Override
+                            public void onPositiveClick() {
+                                final String appPackageName = getApplicationContext().getPackageName();
+                                try {
+                                    // Google Play Store 앱에서 앱의 페이지를 열기 위한 인텐트를 생성합니다.
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName));
+                                    intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                                    getApplicationContext().startActivity(intent);
+                                } catch (ActivityNotFoundException e) {
+                                    // Google Play Store 앱이 없는 경우 웹 브라우저를 사용해 앱 페이지를 엽니다.
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName));
+                                    intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                                    getApplicationContext().startActivity(intent);
 
+                                }
+                            }
+                            @Override
+                            public void onNegativeClick() {
 
-//                    PreferenceManager.setString(getApplicationContext(), "userId", MainApplication.ANDROID_ID);
+                            }
+                        }, "TWO", getResources().getString(R.string.req_update_message));
+
+                    }
 
                 }
-                else{
+                else {
                 }
             }
             @Override
             public void onFailure(Call<VersionItem> call, Throwable t) {
-                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
+                PopupDialogUtil.showCustomDialog(MainActivity.this, new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {
                     }

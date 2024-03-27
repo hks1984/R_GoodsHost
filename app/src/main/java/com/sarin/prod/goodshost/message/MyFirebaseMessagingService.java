@@ -204,7 +204,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
                 if(response.isSuccessful()){
                     ReturnMsgItem returnMsgItem = response.body();
-                    
 
                     PreferenceManager.setString(getApplicationContext(), "userId", MainApplication.ANDROID_ID);
 
@@ -214,14 +213,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             }
             @Override
             public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
-                    @Override
-                    public void onPositiveClick() {
-                    }
-                    @Override
-                    public void onNegativeClick() {
-                    }
-                }, "ONE", getResources().getString(R.string.server_not_connecting));
+
             }
         });
 

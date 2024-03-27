@@ -51,14 +51,14 @@ public class PopupDialog extends Dialog {
 
 
         // popup dialog 확인 버튼
-        tvPositive = findViewById(R.id.btn_no);
+        tvPositive = findViewById(R.id.btn_yes);
         tvPositive.setOnClickListener(v -> {
             // 아니요 버튼 클릭
             this.popupDialogClickListener.onPositiveClick();
             dismiss();
         });
 
-        tvNegative = findViewById(R.id.btn_yes);
+        tvNegative = findViewById(R.id.btn_no);
         tvNegative.setOnClickListener(v -> {
             // 네 버튼 클릭
             this.popupDialogClickListener.onNegativeClick();
@@ -66,7 +66,7 @@ public class PopupDialog extends Dialog {
         });
 
         if("ONE".equals(type)){
-            tvPositive.setVisibility(View.GONE);
+            tvNegative.setVisibility(View.GONE);
         }
 
     }

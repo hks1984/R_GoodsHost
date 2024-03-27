@@ -141,4 +141,29 @@ public class StringUtil {
     }
 
 
+    public int compareVersion(String v1, String v2) {
+        // 버전을 '.' 기준으로 분할
+        String[] v1Parts = v1.split("\\.");
+        String[] v2Parts = v2.split("\\.");
+
+        int length = Math.max(v1Parts.length, v2Parts.length);
+
+        for (int i = 0; i < length; i++) {
+            // 각 부분을 정수로 변환하여 비교
+            int v1Part = i < v1Parts.length ? Integer.parseInt(v1Parts[i]) : 0;
+            int v2Part = i < v2Parts.length ? Integer.parseInt(v2Parts[i]) : 0;
+
+            if (v1Part < v2Part) {
+                return 1;
+            } else if (v1Part > v2Part) {
+                return -1;
+            }
+        }
+
+        // 모든 부분이 같다면 0 반환
+        return 0;
+    }
+
+
+
 }

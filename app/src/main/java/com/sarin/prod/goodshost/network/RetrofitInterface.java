@@ -29,7 +29,9 @@ public interface RetrofitInterface {
     Call<VersionItem> getVersion(
             @Path ("path") String path,
             @Query("user_id") String user_id,
-            @Query("app_version") String app_version
+            @Query("app_version") String app_version,
+            @Query("os_type") String os_type
+
     );
 
     @GET("{path}")

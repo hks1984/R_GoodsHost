@@ -255,7 +255,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
             }
             @Override
             public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                PopupDialogUtil.showCustomDialog(getActivity(), new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {
                     }
@@ -287,7 +287,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
             }
             @Override
             public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                PopupDialogUtil.showCustomDialog(getActivity(), new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {
                     }
@@ -327,7 +327,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
             @Override
             public void onFailure(Call<List<ProductItem>> call, Throwable t) {
                 loadingProgressManager.hideLoading();
-                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                PopupDialogUtil.showCustomDialog(getActivity(), new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {
                     }
@@ -371,7 +371,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
             @Override
             public void onFailure(Call<List<ProductItem>> call, Throwable t) {
                 loadingProgressManager.hideLoading();
-                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                PopupDialogUtil.showCustomDialog(getActivity(), new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {
                     }
@@ -420,7 +420,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
 
                 loadingProgressManager.hideLoading();
 
-                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                PopupDialogUtil.showCustomDialog(getActivity(), new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {
                     }

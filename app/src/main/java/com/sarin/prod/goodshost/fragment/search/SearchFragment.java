@@ -384,7 +384,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             }
             @Override
             public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                PopupDialogUtil.showCustomDialog(getActivity(), new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {
                     }
@@ -416,7 +416,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             }
             @Override
             public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                PopupDialogUtil.showCustomDialog(getActivity(), new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {
                     }
@@ -476,7 +476,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             @Override
             public void onFailure(Call<List<ProductItem>> call, Throwable t) {
                 loadingProgressManager.hideLoading();
-                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                PopupDialogUtil.showCustomDialog(getActivity(), new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {
                     }
@@ -560,7 +560,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             }
             @Override
             public void onFailure(Call<List<String>> call, Throwable t) {
-                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                PopupDialogUtil.showCustomDialog(getActivity(), new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {
                     }
@@ -607,7 +607,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             }
             @Override
             public void onFailure(Call<List<String>> call, Throwable t) {
-                PopupDialogUtil.showCustomDialog(getContext(), new PopupDialogClickListener() {
+                PopupDialogUtil.showCustomDialog(getActivity(), new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {
                     }

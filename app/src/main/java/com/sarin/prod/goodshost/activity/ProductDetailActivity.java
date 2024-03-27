@@ -382,7 +382,7 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
             }
             @Override
             public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
+                PopupDialogUtil.showCustomDialog(ProductDetailActivity.this, new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {
                     }
@@ -414,7 +414,7 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
             }
             @Override
             public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
+                PopupDialogUtil.showCustomDialog(ProductDetailActivity.this, new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {
                     }
@@ -652,7 +652,7 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
             @Override
             public void onFailure(Call<List<ChartItem>> call, Throwable t) {
                 loadingProgressManager.hideLoading();
-                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
+                PopupDialogUtil.showCustomDialog(ProductDetailActivity.this, new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {
                     }
@@ -730,7 +730,7 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
             @Override
             public void onFailure(Call<ProductItem> call, Throwable t) {
                 loadingProgressManager.hideLoading();
-                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
+                PopupDialogUtil.showCustomDialog(ProductDetailActivity.this, new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {
                     }
@@ -768,7 +768,7 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
             @Override
             public void onFailure(Call<List<ProductItem>> call, Throwable t) {
                 loadingProgressManager.hideLoading();
-                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
+                PopupDialogUtil.showCustomDialog(ProductDetailActivity.this, new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {
                     }

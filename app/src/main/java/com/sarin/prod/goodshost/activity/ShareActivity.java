@@ -118,7 +118,7 @@ public class ShareActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
+                PopupDialogUtil.showCustomDialog(ShareActivity.this, new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {
                     }
