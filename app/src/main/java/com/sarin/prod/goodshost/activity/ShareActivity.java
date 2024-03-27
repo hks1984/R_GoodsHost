@@ -98,6 +98,19 @@ public class ShareActivity extends AppCompatActivity {
 
                         }.start();
                     }
+                    else {
+                        add.setText(getApplicationContext().getResources().getString(R.string.share_add_product_fail));
+                        new CountDownTimer(3000, 1000) { // 3000 milliseconds in total, 1000 milliseconds interval
+                            public void onTick(long millisUntilFinished) {
+                                textViewCountdown.setText("" + millisUntilFinished / 1000);
+                            }
+                            public void onFinish() {
+//                                add.setVisibility(View.GONE); // Hide TextView
+                                finish();
+                            }
+
+                        }.start();
+                    }
 
                 }
                 else{

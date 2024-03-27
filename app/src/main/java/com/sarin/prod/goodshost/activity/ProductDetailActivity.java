@@ -205,7 +205,8 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
             public void onClick(View v) {
 
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(_pi.getCoupang_link()));
+                String url = sUtil.nullCheck(_pi.getCoupang_link()) ? _pi.getLink():_pi.getCoupang_link();
+                intent.setData(Uri.parse(url));
                 startActivity(intent);
 
             }

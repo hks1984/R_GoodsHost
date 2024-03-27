@@ -5,6 +5,7 @@ import com.sarin.prod.goodshost.item.ChartItem;
 import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.item.ReturnMsgItem;
 import com.sarin.prod.goodshost.item.UserItem;
+import com.sarin.prod.goodshost.item.VersionItem;
 
 import java.util.List;
 
@@ -23,6 +24,13 @@ public interface RetrofitInterface {
             @Query("page") int page
     );
 
+
+    @GET("{path}")
+    Call<VersionItem> getVersion(
+            @Path ("path") String path,
+            @Query("user_id") String user_id,
+            @Query("app_version") String app_version
+    );
 
     @GET("{path}")
     Call<List<ProductItem>> getSearchProducts(

@@ -76,6 +76,7 @@
     <!-- 링크 공유 화면 -->
     <string name="share_adding">상품을 추가하고 있어요. 잠시만 기다려주세요.</string>
     <string name="share_add_product">상품 등록이 완료되었어요.</string>
+    <string name="share_add_product_fail">지원하지 않는 쇼핑몰이에요.</string>
     <string name="title_activity_login">LoginActivity</string>
 
     <!-- 권한 화면 -->

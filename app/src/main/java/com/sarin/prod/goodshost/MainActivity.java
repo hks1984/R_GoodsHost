@@ -1,6 +1,7 @@
 package com.sarin.prod.goodshost;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -29,6 +30,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.sarin.prod.goodshost.databinding.ActivityMainBinding;
 import com.sarin.prod.goodshost.item.ReturnMsgItem;
 import com.sarin.prod.goodshost.item.UserItem;
+import com.sarin.prod.goodshost.item.VersionItem;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
 import com.sarin.prod.goodshost.util.PreferenceManager;
@@ -66,6 +68,28 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         before_itemId = R.id.navigation_home;
+
+        try {
+            // Context에서 PackageManager 인스턴스를 얻습니다.
+            PackageManager packageManager = this.getPackageManager();
+
+            // 현재 앱의 패키지 이름을 얻습니다.
+            String packageName = this.getPackageName();
+
+            // 패키지 이름과 0 플래그를 사용하여 PackageInfo 인스턴스를 얻습니다.
+            PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
+
+            // versionName을 가져옵니다.
+            String versionName = packageInfo.versionName;
+
+            // versionName을 사용합니다. 예를 들어 로그 출력
+//            Log.d("VersionName", versionName);
+            getVersion(MainApplication.ANDROID_ID, versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            // 패키지 이름을 찾을 수 없는 경우 예외 처리
+            e.printStackTrace();
+        }
+
 
 
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
@@ -160,6 +184,44 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
+                PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
+            }
+        });
+
+
+    }
+
+
+    public void getVersion(String user_id, String app_version){
+
+        retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
+
+        Call<VersionItem> call = service.getVersion("getVersion", user_id, app_version);
+        call.enqueue(new Callback<VersionItem>() {
+            @Override
+            public void onResponse(Call<VersionItem> call, Response<VersionItem> response) {
+                if(response.isSuccessful()){
+                    VersionItem ver = response.body();
+
+                    Log.d(TAG, "version : " + ver.toString() );
+
+
+//                    PreferenceManager.setString(getApplicationContext(), "userId", MainApplication.ANDROID_ID);
+
+                }
+                else{
+                }
+            }
+            @Override
+            public void onFailure(Call<VersionItem> call, Throwable t) {
                 PopupDialogUtil.showCustomDialog(getApplicationContext(), new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {
