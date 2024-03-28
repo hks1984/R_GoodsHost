@@ -17,13 +17,6 @@ import retrofit2.http.Query;
 
 public interface RetrofitInterface {
 
-    @GET("{path}")
-    Call<List<ProductItem>> getCategoryProductList(
-            @Path ("path") String path,
-            @Query("category_id") String category_id,
-            @Query("page") int page
-    );
-
 
     @GET("{path}")
     Call<VersionItem> getVersion(
