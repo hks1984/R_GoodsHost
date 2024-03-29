@@ -25,6 +25,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.LifecycleObserver;
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.github.mikephil.charting.data.Entry;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,6 +42,7 @@ import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
 import com.sarin.prod.goodshost.util.PreferenceManager;
 import com.sarin.prod.goodshost.util.StringUtil;
+import com.sarin.prod.goodshost.network.TokenUploadWorker;
 import com.sarin.prod.goodshost.view.PopupDialog;
 import com.sarin.prod.goodshost.view.PopupDialogClickListener;
 
@@ -46,6 +52,8 @@ import retrofit2.Response;
 
 import com.sarin.prod.goodshost.view.PopupDialogUtil;
 import com.sarin.prod.goodshost.view.PopupDialogClickListener;
+
+import java.util.concurrent.TimeUnit;
 
 
 public class MainApplication extends Application implements Application.ActivityLifecycleCallbacks, LifecycleObserver {
@@ -87,6 +95,7 @@ public class MainApplication extends Application implements Application.Activity
 
             try{
                 ANDROID_ID = Settings.Secure.getString(this.getContentResolver(),Settings.Secure.ANDROID_ID);
+                PreferenceManager.setStringList(getApplicationContext(), "userId", ANDROID_ID);
             }catch(Exception e){
 
             }
@@ -95,6 +104,7 @@ public class MainApplication extends Application implements Application.Activity
                 String deviceModel = android.os.Build.MODEL;
                 ANDROID_ID = deviceModel + Long.toString(currentTimeMillis);
                 ANDROID_ID = ANDROID_ID.trim();
+                PreferenceManager.setStringList(getApplicationContext(), "userId", ANDROID_ID);
             }
 
         }
@@ -103,8 +113,29 @@ public class MainApplication extends Application implements Application.Activity
             ANDROID_ID = userId;
         }
 
+        // FCM 토큰을 서버로 업데이트하지 못했을 때 주기적으로 업데이트하는 작업
+        setupWorkManager();
+
         this.registerActivityLifecycleCallbacks(this);
         
+
+    }
+
+    private void setupWorkManager() {
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+
+        PeriodicWorkRequest tokenUploadRequest = new PeriodicWorkRequest.Builder(TokenUploadWorker.class, 20, TimeUnit.MINUTES)
+                .setConstraints(constraints)
+                .build();
+
+//        WorkManager.getInstance(this).enqueue(tokenUploadRequest);
+        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+                "uploadTokenWork", // 작업의 고유 이름
+                ExistingPeriodicWorkPolicy.KEEP, // 기존 작업이 있다면 새 작업을 무시
+                tokenUploadRequest // PeriodicWorkRequest 객체
+        );
 
     }
 

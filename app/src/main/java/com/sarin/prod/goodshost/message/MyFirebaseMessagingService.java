@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -58,6 +59,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         super.onNewToken(token);
 
         String userId = PreferenceManager.getString(getApplicationContext(), "userId");
+
+        PreferenceManager.setString(getApplicationContext(), "fcmToken", token);
+        PreferenceManager.setInt(getApplicationContext(), "fcmFlag", 0);    // FCM 갱신 시 flag 값 초기화
+
+        Log.d(TAG, "onNewToken: " + token);
         if(!stringUtil.nullCheck(userId)){
             UserItem userItem = new UserItem();
             userItem.setUser_id(MainApplication.ANDROID_ID);
@@ -205,16 +211,23 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 if(response.isSuccessful()){
                     ReturnMsgItem returnMsgItem = response.body();
 
-                    PreferenceManager.setString(getApplicationContext(), "userId", MainApplication.ANDROID_ID);
+                    if(returnMsgItem.getCode() > 0){    // 성공
+                        PreferenceManager.setInt(getApplicationContext(), "fcmFlag", 0);
+                    } else {
+                        PreferenceManager.setInt(getApplicationContext(), "fcmFlag", 1);
+                    }
 
                 }
                 else{
+                    PreferenceManager.setInt(getApplicationContext(), "fcmFlag", 1);
                 }
             }
             @Override
             public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-
+                PreferenceManager.setInt(getApplicationContext(), "fcmFlag", 1);
             }
+
+
         });
 
 

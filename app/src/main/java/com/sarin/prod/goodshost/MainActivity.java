@@ -77,26 +77,6 @@ public class MainActivity extends AppCompatActivity {
         before_itemId = R.id.navigation_home;
 
 
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-            @Override
-            public void onComplete(@NonNull Task<String> task) {
-
-                if(task.isSuccessful() == false) {
-
-                    return;
-                }
-                String token = task.getResult();
-
-                if(!stringUtil.nullCheck(token)){
-                    UserItem userItem = new UserItem();
-                    userItem.setUser_id(MainApplication.ANDROID_ID);
-                    userItem.setFcm_token(token);
-                    setUserRegister(userItem);
-                }
-            }
-        });
-
-
         navView.setOnNavigationItemSelectedListener(item -> {
             int itemId = item.getItemId();
             NavOptions.Builder navBuilder = new NavOptions.Builder();
@@ -159,42 +139,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-    public void setUserRegister(UserItem userItem){
-
-        retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
-        RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
-
-        Call<ReturnMsgItem> call = service.setUserRegister("setUserRegister", userItem.getUser_id(), userItem.getFcm_token());
-        call.enqueue(new Callback<ReturnMsgItem>() {
-            @Override
-            public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
-                if(response.isSuccessful()){
-                    ReturnMsgItem returnMsgItem = response.body();
-
-
-                    PreferenceManager.setString(getApplicationContext(), "userId", MainApplication.ANDROID_ID);
-
-                }
-                else{
-                }
-            }
-            @Override
-            public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
-                PopupDialogUtil.showCustomDialog(MainActivity.this, new PopupDialogClickListener() {
-                    @Override
-                    public void onPositiveClick() {
-                    }
-                    @Override
-                    public void onNegativeClick() {
-                    }
-                }, "ONE", getResources().getString(R.string.server_not_connecting));
-            }
-        });
-
-
-    }
-
 
     public void getVersion(String user_id, String app_version, String os_type){
 
