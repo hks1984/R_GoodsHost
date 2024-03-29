@@ -23,7 +23,7 @@ public class PopupDialogUtil {
         currentDialog.setType(type);
         currentDialog.setText(text);
         currentDialog.setCanceledOnTouchOutside(false);
-        currentDialog.setCancelable(true);
+        currentDialog.setCancelable(false);
         currentDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         currentDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         currentDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);

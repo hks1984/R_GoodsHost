@@ -76,6 +76,18 @@ public class MainActivity extends AppCompatActivity {
         // menu should be considered as top level destinations.
         before_itemId = R.id.navigation_home;
 
+        try {
+            PackageManager packageManager = this.getPackageManager();
+            String packageName = this.getPackageName();
+            PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
+            versionName = packageInfo.versionName;
+            getVersion(MainApplication.ANDROID_ID, versionName, "A");
+
+        } catch (PackageManager.NameNotFoundException e) {
+            // 패키지 이름을 찾을 수 없는 경우 예외 처리
+            e.printStackTrace();
+        }
+
 
         navView.setOnNavigationItemSelectedListener(item -> {
             int itemId = item.getItemId();
@@ -120,17 +132,7 @@ public class MainActivity extends AppCompatActivity {
                 R.id.navigation_home, R.id.navigation_search, R.id.navigation_favorite, R.id.navigation_setting)
                 .build();
 
-        try {
-            PackageManager packageManager = this.getPackageManager();
-            String packageName = this.getPackageName();
-            PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
-            versionName = packageInfo.versionName;
-            getVersion(MainApplication.ANDROID_ID, versionName, "A");
 
-        } catch (PackageManager.NameNotFoundException e) {
-            // 패키지 이름을 찾을 수 없는 경우 예외 처리
-            e.printStackTrace();
-        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             checkNotificationPermission();
@@ -152,31 +154,61 @@ public class MainActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
                     VersionItem ver = response.body();
                     String newVersion = ver.getApp_version();
+                    int flag = ver.getReq_update();
                     int rtn = stringUtil.compareVersion(versionName, newVersion);
 
                     if(rtn > 0){
-                        PopupDialogUtil.showCustomDialog(MainActivity.this, new PopupDialogClickListener() {
-                            @Override
-                            public void onPositiveClick() {
-                                final String appPackageName = getApplicationContext().getPackageName();
-                                try {
-                                    // Google Play Store 앱에서 앱의 페이지를 열기 위한 인텐트를 생성합니다.
-                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName));
-                                    intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                                    getApplicationContext().startActivity(intent);
-                                } catch (ActivityNotFoundException e) {
-                                    // Google Play Store 앱이 없는 경우 웹 브라우저를 사용해 앱 페이지를 엽니다.
-                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName));
-                                    intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                                    getApplicationContext().startActivity(intent);
+                        if(flag > 0) {
+                            PopupDialogUtil.showCustomDialog(MainActivity.this, new PopupDialogClickListener() {
+                                @Override
+                                public void onPositiveClick() {
+                                    final String appPackageName = getApplicationContext().getPackageName();
+                                    try {
+                                        // Google Play Store 앱에서 앱의 페이지를 열기 위한 인텐트를 생성합니다.
+                                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName));
+                                        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                                        getApplicationContext().startActivity(intent);
+                                    } catch (ActivityNotFoundException e) {
+                                        // Google Play Store 앱이 없는 경우 웹 브라우저를 사용해 앱 페이지를 엽니다.
+                                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName));
+                                        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                                        getApplicationContext().startActivity(intent);
+
+                                    }
+                                    finish();
 
                                 }
-                            }
-                            @Override
-                            public void onNegativeClick() {
+                                @Override
+                                public void onNegativeClick() {
 
-                            }
-                        }, "TWO", getResources().getString(R.string.req_update_message));
+                                }
+                            }, "ONE", getResources().getString(R.string.req_update));
+                        }
+                        else {
+                            PopupDialogUtil.showCustomDialog(MainActivity.this, new PopupDialogClickListener() {
+                                @Override
+                                public void onPositiveClick() {
+                                    final String appPackageName = getApplicationContext().getPackageName();
+                                    try {
+                                        // Google Play Store 앱에서 앱의 페이지를 열기 위한 인텐트를 생성합니다.
+                                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName));
+                                        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                                        getApplicationContext().startActivity(intent);
+                                    } catch (ActivityNotFoundException e) {
+                                        // Google Play Store 앱이 없는 경우 웹 브라우저를 사용해 앱 페이지를 엽니다.
+                                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName));
+                                        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                                        getApplicationContext().startActivity(intent);
+
+                                    }
+                                }
+                                @Override
+                                public void onNegativeClick() {
+
+                                }
+                            }, "TWO", getResources().getString(R.string.req_update_message));
+                        }
+
 
                     }
 
