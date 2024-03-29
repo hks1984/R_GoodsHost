@@ -63,7 +63,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         PreferenceManager.setString(getApplicationContext(), "fcmToken", token);
         PreferenceManager.setInt(getApplicationContext(), "fcmFlag", 0);    // FCM 갱신 시 flag 값 초기화
 
-        Log.d(TAG, "onNewToken: " + token);
         if(!stringUtil.nullCheck(userId)){
             UserItem userItem = new UserItem();
             userItem.setUser_id(MainApplication.ANDROID_ID);
