@@ -95,7 +95,7 @@ public class MainApplication extends Application implements Application.Activity
 
             try{
                 ANDROID_ID = Settings.Secure.getString(this.getContentResolver(),Settings.Secure.ANDROID_ID);
-                PreferenceManager.setStringList(getApplicationContext(), "userId", ANDROID_ID);
+                PreferenceManager.setString(getApplicationContext(), "userId", ANDROID_ID);
             }catch(Exception e){
 
             }
@@ -104,7 +104,7 @@ public class MainApplication extends Application implements Application.Activity
                 String deviceModel = android.os.Build.MODEL;
                 ANDROID_ID = deviceModel + Long.toString(currentTimeMillis);
                 ANDROID_ID = ANDROID_ID.trim();
-                PreferenceManager.setStringList(getApplicationContext(), "userId", ANDROID_ID);
+                PreferenceManager.setString(getApplicationContext(), "userId", ANDROID_ID);
             }
 
         }
