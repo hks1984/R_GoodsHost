@@ -35,7 +35,8 @@ public class SplashActivity extends AppCompatActivity {
 
                 String isPermission = PreferenceManager.getString(getApplicationContext(), "isPermission");
                 if("1".equals(isPermission)){
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivity(intent);	//intent 에 명시된 액티비티로 이동
                 }else{
                     Intent intent = new Intent(getApplicationContext(), PermissionActivity.class);

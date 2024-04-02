@@ -8,10 +8,17 @@
     tools:context=".activity.LoginActivity">
 
     <com.google.android.gms.common.SignInButton
-        android:id="@+id/googleLoginBtn"
+        android:id="@+id/btn_google_sign_in"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints" />
+     />
+
+    <Button
+        android:id="@+id/btn_logout_google"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="구글 로그아웃"
+     />
 
 
 </LinearLayout>

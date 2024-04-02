@@ -106,4 +106,12 @@
 
 
 
+    <string name="google_success_login">구글 로그인 성공</string>
+    <string name="google_failed_login">구글 로그인 실패</string>
+    <string name="google_success_logout">로그아웃 되었습니다</string>
+    <string name="google_status_login">이미 로그인 되어있습니다</string>
+    <string name="google_default_web_client_id">764807957191-5jre0vn76o71kbalito7ovmqd9ks1i9h.apps.googleusercontent.com</string>
+
+
+
 </resources>

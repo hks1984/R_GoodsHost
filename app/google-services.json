@@ -12,7 +12,20 @@
           "package_name": "com.sarin.prod.goodshost"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "764807957191-5jre0vn76o71kbalito7ovmqd9ks1i9h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sarin.prod.goodshost",
+            "certificate_hash": "1ad9e53a72f36f12e0c1ecf6524257eb2229d234"
+          }
+        },
+        {
+          "client_id": "764807957191-21fdq7v4b86d32mgofhh7adintk82osc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyD76R7jRgj1Z1zOdRM74IaMWrV2-juJ6is"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "764807957191-21fdq7v4b86d32mgofhh7adintk82osc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
