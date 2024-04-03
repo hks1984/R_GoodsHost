@@ -8,12 +8,15 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
@@ -35,6 +38,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.kakao.sdk.common.KakaoSdk;
 import com.sarin.prod.goodshost.item.ReturnMsgItem;
 import com.sarin.prod.goodshost.item.UserItem;
 import com.sarin.prod.goodshost.network.RetrofitApi;
@@ -52,6 +56,9 @@ import retrofit2.Response;
 
 import com.sarin.prod.goodshost.view.PopupDialogUtil;
 import com.sarin.prod.goodshost.view.PopupDialogClickListener;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import java.util.concurrent.TimeUnit;
 
@@ -89,35 +96,35 @@ public class MainApplication extends Application implements Application.Activity
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         context = this;
 
-        String userId = PreferenceManager.getString(getApplicationContext(), "userId");
-        // userId가 null이면
-        if(stringUtil.nullCheck(userId)){
+        KakaoSdk.init(this,"cd6542e2cf71c211083caf3d8d5f8695");
 
-            try{
-                ANDROID_ID = Settings.Secure.getString(this.getContentResolver(),Settings.Secure.ANDROID_ID);
-                PreferenceManager.setString(getApplicationContext(), "userId", ANDROID_ID);
-            }catch(Exception e){
 
-            }
-            if(stringUtil.nullCheck(ANDROID_ID)){
-                long currentTimeMillis = System.currentTimeMillis();
-                String deviceModel = android.os.Build.MODEL;
-                ANDROID_ID = deviceModel + Long.toString(currentTimeMillis);
-                ANDROID_ID = ANDROID_ID.trim();
-                PreferenceManager.setString(getApplicationContext(), "userId", ANDROID_ID);
-            }
-
-        }
-        // userId가 기존 있으면.
-        else{
-            ANDROID_ID = userId;
-        }
 
         // FCM 토큰을 서버로 업데이트하지 못했을 때 주기적으로 업데이트하는 작업
         setupWorkManager();
 
         this.registerActivityLifecycleCallbacks(this);
-        
+
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (packageInfo == null)
+            Log.e(TAG , "KeyHash:null");
+
+        for (Signature signature : packageInfo.signatures) {
+            try {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d(TAG, Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            } catch (NoSuchAlgorithmException e) {
+                Log.e(TAG, "Unable to get MessageDigest. signature=" + signature, e);
+            }
+        }
+
+
 
     }
 

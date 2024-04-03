@@ -106,6 +106,9 @@
 
 
 
+    <string name="no_Acc_text"><u>비회원 로그인</u></string>
+
+    <string name="google_login_text">구글 로그인</string>
     <string name="google_success_login">구글 로그인 성공</string>
     <string name="google_failed_login">구글 로그인 실패</string>
     <string name="google_success_logout">로그아웃 되었습니다</string>

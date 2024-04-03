@@ -59,6 +59,21 @@
             android:exported="false"
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.R_GoodsHost" />
+
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
+                <data android:host="oauth"
+                    android:scheme="kakaocd6542e2cf71c211083caf3d8d5f8695" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".activity.ShareActivity"
             android:exported="true"
@@ -95,6 +110,10 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+
+
+
     </application>
 
 </manifest>

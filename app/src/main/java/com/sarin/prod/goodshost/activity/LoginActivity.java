@@ -15,9 +15,11 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.view.WindowCompat;
@@ -30,10 +32,19 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.kakao.sdk.auth.model.OAuthToken;
+import com.kakao.sdk.user.UserApiClient;
+import com.kakao.sdk.user.model.User;
+import com.sarin.prod.goodshost.MainActivity;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.databinding.ActivityLoginBinding;
 
 import com.sarin.prod.goodshost.R;
+import com.sarin.prod.goodshost.util.PreferenceManager;
+import com.sarin.prod.goodshost.util.StringUtil;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function2;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -41,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityLoginBinding binding;
 
-
+    static StringUtil sUtil = StringUtil.getInstance();
     /**
      *  Google 로그인
      */
@@ -64,6 +75,42 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        String userId = PreferenceManager.getString(getApplicationContext(), "userId");
+        // userId가 null이면
+        if(sUtil.nullCheck(userId)){
+
+            try{
+                userId = Settings.Secure.getString(this.getContentResolver(),Settings.Secure.ANDROID_ID);
+                PreferenceManager.setString(getApplicationContext(), "userId", userId);
+            }catch(Exception e){
+
+            }
+            if(sUtil.nullCheck(userId)){
+                long currentTimeMillis = System.currentTimeMillis();
+                String deviceModel = android.os.Build.MODEL;
+                userId = deviceModel + Long.toString(currentTimeMillis);
+                userId = userId.trim();
+                PreferenceManager.setString(getApplicationContext(), "userId", userId);
+            }
+
+        }
+        // userId가 기존 있으면.
+        else{
+            userId = userId;
+        }
+
+        TextView noAccLogin = binding.noAccLogin;
+        noAccLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PreferenceManager.setString(getApplicationContext(), "isPermission", "1");
+
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
         // 파이어베이스 인증 객체 선언
         mAuth = FirebaseAuth.getInstance();
 
@@ -76,7 +123,9 @@ public class LoginActivity extends AppCompatActivity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
 
-        btnGoogleLogin = findViewById(R.id.btn_google_sign_in);
+        btnGoogleLogin = findViewById(R.id.googleLogin);
+        TextView googleText = (TextView) btnGoogleLogin.getChildAt(0);
+        googleText.setText(getString(R.string.google_login_text));
         btnGoogleLogin.setOnClickListener(view -> {
             // 기존에 로그인 했던 계정을 확인한다.
             gsa = GoogleSignIn.getLastSignedInAccount(LoginActivity.this);
@@ -87,9 +136,48 @@ public class LoginActivity extends AppCompatActivity {
                 signIn();
         });
 
-        btnLogoutGoogle = findViewById(R.id.btn_logout_google);
-        btnLogoutGoogle.setOnClickListener(view -> {
-            signOut(); //로그아웃
+//        btnLogoutGoogle = findViewById(R.id.btn_logout_google);
+//        btnLogoutGoogle.setOnClickListener(view -> {
+//            signOut(); //로그아웃
+//        });
+
+
+        /**
+         * 카카오
+         */
+        // 카카오톡이 설치되어 있는지 확인하는 메서드 , 카카오에서 제공함. 콜백 객체를 이용합.
+        Function2<OAuthToken,Throwable,Unit> callback =new Function2<OAuthToken, Throwable, Unit>() {
+            @Override
+            // 콜백 메서드 ,
+            public Unit invoke(OAuthToken oAuthToken, Throwable throwable) {
+                Log.e(TAG,"CallBack Method");
+                //oAuthToken != null 이라면 로그인 성공
+                if(oAuthToken!=null){
+                    // 토큰이 전달된다면 로그인이 성공한 것이고 토큰이 전달되지 않으면 로그인 실패한다.
+                    updateKakaoLoginUi();
+
+                }else {
+                    //로그인 실패
+                    Log.e(TAG, "invoke: login fail" );
+                }
+
+                return null;
+            }
+        };
+
+        // 로그인 버튼 클릭 리스너
+        binding.kakaoLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // 해당 기기에 카카오톡이 설치되어 있는 확인
+                if(UserApiClient.getInstance().isKakaoTalkLoginAvailable(LoginActivity.this)){
+                    UserApiClient.getInstance().loginWithKakaoTalk(LoginActivity.this, callback);
+                }else{
+                    // 카카오톡이 설치되어 있지 않다면
+                    UserApiClient.getInstance().loginWithKakaoAccount(LoginActivity.this, callback);
+                }
+            }
         });
 
 
@@ -188,6 +276,46 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+
+    private void updateKakaoLoginUi() {
+
+        // 로그인 여부에 따른 UI 설정
+
+        UserApiClient.getInstance().me(new Function2<User, Throwable, Unit>() {
+            @Override
+            public Unit invoke(User user, Throwable throwable) {
+
+                if (user != null) {
+
+//                    // 유저의 아이디
+//                    Log.d(TAG, "invoke: id =" + user.getId());
+//                    // 유저의 이메일
+//                    Log.d(TAG, "invoke: email =" + user.getKakaoAccount().getEmail());
+//                    // 유저의 닉네임
+//                    Log.d(TAG, "invoke: nickname =" + user.getKakaoAccount().getProfile().getNickname());
+//                    // 유저의 성별
+//                    Log.d(TAG, "invoke: gender =" + user.getKakaoAccount().getGender());
+//                    // 유저의 연령대
+//                    Log.d(TAG, "invoke: age=" + user.getKakaoAccount().getAgeRange());
+//                    // 유저 닉네임 세팅해주기
+//                    Log.d(TAG, "invoke: profile = "+user.getKakaoAccount().getProfile().getThumbnailImageUrl());
+
+                    String USER_ID =user.getKakaoAccount().getEmail();
+                    if(sUtil.nullCheck(USER_ID)){
+                       return null;
+                    }
+                    else {
+                        PreferenceManager.setString(getApplicationContext(), "userId", USER_ID);
+                    }
+
+                } else {
+                    // 로그인 되어있지 않으면
+
+                }
+                return null;
+            }
+        });
+    }
 
 
 }
