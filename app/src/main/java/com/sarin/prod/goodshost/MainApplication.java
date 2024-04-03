@@ -68,13 +68,14 @@ public class MainApplication extends Application implements Application.Activity
     public static final String TAG = "SARIN_LOG";
 
     public static String ANDROID_ID = "";
+    public static String USER_ID = "";
     private final static int NOTICATION_ID = 222;
     private Activity currentActivity;
     public static Context context;
     public static Activity activity;
-    public static final String BASE_URL = "https://dealdive.co.kr/dealdive/";
+//    public static final String BASE_URL = "https://dealdive.co.kr/dealdive/";
 //    public static final String BASE_URL = "http://192.168.10.70:8080/dealdive/";
-//    public static final String BASE_URL = "http://192.168.0.2:8080/dealdive/";
+    public static final String BASE_URL = "http://192.168.0.2:8080/dealdive/";
 
 
 
@@ -96,33 +97,34 @@ public class MainApplication extends Application implements Application.Activity
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         context = this;
 
-        KakaoSdk.init(this,"cd6542e2cf71c211083caf3d8d5f8695");
+        USER_ID = PreferenceManager.getString(getApplicationContext(), "userId");
+        ANDROID_ID = PreferenceManager.getString(getApplicationContext(), "androidId");
 
-
+        KakaoSdk.init(this,getString(R.string.kakao_key));
 
         // FCM 토큰을 서버로 업데이트하지 못했을 때 주기적으로 업데이트하는 작업
         setupWorkManager();
 
         this.registerActivityLifecycleCallbacks(this);
 
-        PackageInfo packageInfo = null;
-        try {
-            packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        if (packageInfo == null)
-            Log.e(TAG , "KeyHash:null");
-
-        for (Signature signature : packageInfo.signatures) {
-            try {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d(TAG, Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            } catch (NoSuchAlgorithmException e) {
-                Log.e(TAG, "Unable to get MessageDigest. signature=" + signature, e);
-            }
-        }
+//        PackageInfo packageInfo = null;
+//        try {
+//            packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        if (packageInfo == null)
+//            Log.e(TAG , "KeyHash:null");
+//
+//        for (Signature signature : packageInfo.signatures) {
+//            try {
+//                MessageDigest md = MessageDigest.getInstance("SHA");
+//                md.update(signature.toByteArray());
+//                Log.d(TAG, Base64.encodeToString(md.digest(), Base64.DEFAULT));
+//            } catch (NoSuchAlgorithmException e) {
+//                Log.e(TAG, "Unable to get MessageDigest. signature=" + signature, e);
+//            }
+//        }
 
 
 
@@ -189,5 +191,7 @@ public class MainApplication extends Application implements Application.Activity
 
     @Override
     public void onActivityDestroyed(@NonNull Activity activity) {}
+
+
 
 }

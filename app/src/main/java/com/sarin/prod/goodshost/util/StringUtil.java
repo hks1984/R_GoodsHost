@@ -55,6 +55,18 @@ public class StringUtil {
         }
     }
 
+    public String convertIntToString(int number) {
+        try {
+            return String.valueOf(number);
+        } catch (NumberFormatException e) {
+            // 변환 중 오류 발생 시 적절한 처리 (여기서는 -1 반환)
+            return "";
+        }
+    }
+
+
+
+
 
     public String replaceHttp(String url) {
         String modifiedUrl = url.replace("https:", "coupang:").replace("http:", "coupang:");

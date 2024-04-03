@@ -5,16 +5,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.activity.PermissionActivity;
 import com.sarin.prod.goodshost.MainActivity;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.util.PreferenceManager;
+import com.sarin.prod.goodshost.util.StringUtil;
 import com.sarin.prod.goodshost.util.WritingTextView;
 
 
 public class SplashActivity extends AppCompatActivity {
+
+    private static String TAG = MainApplication.TAG;
+    static StringUtil stringUtil = StringUtil.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,15 +37,18 @@ public class SplashActivity extends AppCompatActivity {
             public void run()
             {
 
-
                 String isPermission = PreferenceManager.getString(getApplicationContext(), "isPermission");
-                if("1".equals(isPermission)){
-//                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                String isLogin = PreferenceManager.getString(getApplicationContext(), "isLogin");
+
+                if(stringUtil.nullCheck(isLogin)){
                     Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivity(intent);	//intent 에 명시된 액티비티로 이동
-                }else{
+                    startActivity(intent);
+                }else if(stringUtil.nullCheck(isPermission)){
                     Intent intent = new Intent(getApplicationContext(), PermissionActivity.class);
-                    startActivity(intent);	//intent 에 명시된 액티비티로 이동
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
                 }
 
                 finish();	//현재 액티비티 종료

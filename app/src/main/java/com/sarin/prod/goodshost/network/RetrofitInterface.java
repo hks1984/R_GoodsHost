@@ -12,6 +12,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -76,6 +77,12 @@ public interface RetrofitInterface {
             @Path ("path") String path,
             @Query("user_id") String user_id,
             @Query("fcm_token") String fcm_token
+    );
+
+    @POST("{path}")
+    Call<ReturnMsgItem> setUserRegisterJson(
+            @Path ("path") String path,
+            @Body UserItem userItem
     );
 
     @GET("{path}")

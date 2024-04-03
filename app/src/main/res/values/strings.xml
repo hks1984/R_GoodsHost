@@ -106,7 +106,9 @@
 
 
 
+    <string name="kakao_key">cd6542e2cf71c211083caf3d8d5f8695</string>
     <string name="no_Acc_text"><u>비회원 로그인</u></string>
+    <string name="no_Acc_login_fail">비회원 로그인에 실패했어요.\n앱 종료 후 다시 시도해 주세요.</string>
 
     <string name="google_login_text">구글 로그인</string>
     <string name="google_success_login">구글 로그인 성공</string>

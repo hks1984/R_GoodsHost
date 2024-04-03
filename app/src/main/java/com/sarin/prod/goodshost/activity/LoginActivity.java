@@ -1,7 +1,11 @@
 package com.sarin.prod.goodshost.activity;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -40,11 +44,22 @@ import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.databinding.ActivityLoginBinding;
 
 import com.sarin.prod.goodshost.R;
+import com.sarin.prod.goodshost.item.ReturnMsgItem;
+import com.sarin.prod.goodshost.item.UserItem;
+import com.sarin.prod.goodshost.network.RetrofitClientInstance;
+import com.sarin.prod.goodshost.network.RetrofitInterface;
 import com.sarin.prod.goodshost.util.PreferenceManager;
 import com.sarin.prod.goodshost.util.StringUtil;
+import com.sarin.prod.goodshost.view.PopupDialogClickListener;
+import com.sarin.prod.goodshost.view.PopupDialogUtil;
+
+import java.util.Random;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -67,7 +82,13 @@ public class LoginActivity extends AppCompatActivity {
     private SignInButton btnGoogleLogin;
     private Button btnLogoutGoogle;
 
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final Random random = new Random();
 
+
+    private String deviceModel;
+    private String androidId;
+    private String os_ver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,39 +96,43 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        String userId = PreferenceManager.getString(getApplicationContext(), "userId");
-        // userId가 null이면
-        if(sUtil.nullCheck(userId)){
+        deviceModel = Build.MODEL;
+        os_ver = sUtil.convertIntToString(Build.VERSION.SDK_INT);
 
-            try{
-                userId = Settings.Secure.getString(this.getContentResolver(),Settings.Secure.ANDROID_ID);
-                PreferenceManager.setString(getApplicationContext(), "userId", userId);
-            }catch(Exception e){
+        try{
+            androidId = Settings.Secure.getString(this.getContentResolver(),Settings.Secure.ANDROID_ID);
 
-            }
-            if(sUtil.nullCheck(userId)){
-                long currentTimeMillis = System.currentTimeMillis();
-                String deviceModel = android.os.Build.MODEL;
-                userId = deviceModel + Long.toString(currentTimeMillis);
-                userId = userId.trim();
-                PreferenceManager.setString(getApplicationContext(), "userId", userId);
-            }
+        }catch(Exception e){
+            long currentTimeMillis = System.currentTimeMillis();
 
-        }
-        // userId가 기존 있으면.
-        else{
-            userId = userId;
+            String temp = generateRandomString(3);
+
+            androidId = "R" + Long.toString(currentTimeMillis) + "_" + temp;
+            androidId = androidId.trim();
         }
 
         TextView noAccLogin = binding.noAccLogin;
         noAccLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PreferenceManager.setString(getApplicationContext(), "isPermission", "1");
 
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-                finish();
+                UserItem userItem = new UserItem();
+                userItem.setUser_id(androidId);
+                userItem.setAndroid_id(androidId);
+                userItem.setModel_name(deviceModel);
+                userItem.setOs_ver(os_ver);
+                userItem.setFcm_token(PreferenceManager.getString(getApplicationContext(), "fcmToken"));
+
+                setUserRegisterJson(userItem);
+
+//                if(sUtil.nullCheck(isPermission)){
+//                    Intent intent = new Intent(getApplicationContext(), PermissionActivity.class);
+//                    startActivity(intent);
+//                } else {
+//                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//                    startActivity(intent);
+//                }
+//                finish();
             }
         });
 
@@ -300,12 +325,19 @@ public class LoginActivity extends AppCompatActivity {
 //                    // 유저 닉네임 세팅해주기
 //                    Log.d(TAG, "invoke: profile = "+user.getKakaoAccount().getProfile().getThumbnailImageUrl());
 
-                    String USER_ID =user.getKakaoAccount().getEmail();
+                    String USER_ID = user.getKakaoAccount().getEmail();
                     if(sUtil.nullCheck(USER_ID)){
                        return null;
                     }
                     else {
-                        PreferenceManager.setString(getApplicationContext(), "userId", USER_ID);
+                        UserItem userItem = new UserItem();
+                        userItem.setUser_id(USER_ID);
+                        userItem.setAndroid_id(androidId);
+                        userItem.setModel_name(deviceModel);
+                        userItem.setOs_ver(os_ver);
+                        userItem.setFcm_token(PreferenceManager.getString(getApplicationContext(), "fcmToken"));
+
+                        setUserRegisterJson(userItem);
                     }
 
                 } else {
@@ -315,6 +347,96 @@ public class LoginActivity extends AppCompatActivity {
                 return null;
             }
         });
+    }
+
+
+
+
+
+    public void setUserRegisterJson(UserItem userItem){
+
+        retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
+
+        Call<ReturnMsgItem> call = service.setUserRegisterJson("setUserRegisterJson", userItem);
+        call.enqueue(new Callback<ReturnMsgItem>() {
+            @Override
+            public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
+                if(response.isSuccessful()){
+                    ReturnMsgItem returnMsgItem = response.body();
+
+                    if(returnMsgItem.getCode() > 0){    // 성공
+                        PreferenceManager.setString(getApplicationContext(), "userId", userItem.getUser_id());
+                        PreferenceManager.setString(getApplicationContext(), "androidId", userItem.getAndroid_id());
+
+                        PreferenceManager.setString(getApplicationContext(), "isLogin", "1");
+                        PreferenceManager.setInt(getApplicationContext(), "fcmFlag", 0);
+
+                        String isPermission = PreferenceManager.getString(getApplicationContext(), "isPermission");
+                        if(sUtil.nullCheck(isPermission)){
+                            Intent intent = new Intent(getApplicationContext(), PermissionActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(intent);
+                        }
+                        finish();
+
+                    } else {
+                        PreferenceManager.setInt(getApplicationContext(), "fcmFlag", 1);
+                    }
+
+                }
+                else{
+                    PreferenceManager.setInt(getApplicationContext(), "fcmFlag", 1);
+                }
+
+                PopupDialogUtil.showCustomDialog(LoginActivity.this, new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                        finish();
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.no_Acc_login_fail));
+
+
+            }
+            @Override
+            public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
+                PreferenceManager.setInt(getApplicationContext(), "fcmFlag", 1);
+
+                PopupDialogUtil.showCustomDialog(LoginActivity.this, new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                        finish();
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.no_Acc_login_fail));
+
+
+            }
+
+        });
+
+    }
+
+
+
+    public String generateRandomString(int length) {
+        StringBuilder stringBuilder = new StringBuilder(length);
+
+        for (int i = 0; i < length; i++) {
+            // 랜덤 인덱스를 생성하고 해당 인덱스의 문자를 StringBuilder에 추가합니다.
+            int randomIndex = random.nextInt(CHARACTERS.length());
+            stringBuilder.append(CHARACTERS.charAt(randomIndex));
+        }
+
+        // 최종적으로 생성된 문자열을 반환합니다.
+        return stringBuilder.toString();
     }
 
 
