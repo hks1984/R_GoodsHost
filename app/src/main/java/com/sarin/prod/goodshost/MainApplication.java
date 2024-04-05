@@ -77,6 +77,8 @@ public class MainApplication extends Application implements Application.Activity
 //    public static final String BASE_URL = "http://192.168.10.70:8080/dealdive/";
     public static final String BASE_URL = "http://192.168.0.2:8080/dealdive/";
 
+    public static UserItem userItem = new UserItem();
+    static StringUtil sUtil = StringUtil.getInstance();
 
 
     int count = 0;
@@ -86,6 +88,11 @@ public class MainApplication extends Application implements Application.Activity
 
     public MainApplication() {
         context = this;
+
+//        userItem.setUser_id(PreferenceManager.getString(getApplicationContext(), "userId"));
+//        userItem.setAndroid_id(PreferenceManager.getString(getApplicationContext(), "androidId"));
+//        userItem.setOs_ver(sUtil.convertIntToString(Build.VERSION.SDK_INT));
+//        userItem.setModel_name(Build.MODEL);
 
     }
 
@@ -97,8 +104,10 @@ public class MainApplication extends Application implements Application.Activity
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         context = this;
 
+
         USER_ID = PreferenceManager.getString(getApplicationContext(), "userId");
         ANDROID_ID = PreferenceManager.getString(getApplicationContext(), "androidId");
+
 
         KakaoSdk.init(this,getString(R.string.kakao_key));
 

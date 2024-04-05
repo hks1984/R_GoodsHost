@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.d(TAG, "MainActivity START");
+//        Log.d(TAG, "MainActivity START");
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             String packageName = this.getPackageName();
             PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
             versionName = packageInfo.versionName;
-            getVersion(MainApplication.ANDROID_ID, versionName, "A");
+            getVersion(MainApplication.USER_ID, versionName, "A");
 
         } catch (PackageManager.NameNotFoundException e) {
             // 패키지 이름을 찾을 수 없는 경우 예외 처리

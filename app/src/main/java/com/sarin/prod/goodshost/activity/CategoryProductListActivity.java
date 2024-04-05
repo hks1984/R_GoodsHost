@@ -180,11 +180,11 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
         pdItem_possion = pos;
         if (v.getId() == R.id.layout_favorite) {
             if(pdItem.isIs_Favorite()){
-                setDelUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id());
+                setDelUserItemMap(MainApplication.USER_ID, pdItem.getVendor_item_id());
                 pdItem.setIs_Favorite(false);
                 productAdapter.set(pos, pdItem);
             } else {
-                setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), "Y", 0, "N");
+                setUserItemMap(MainApplication.USER_ID, pdItem.getVendor_item_id(), "Y", 0, "N");
                 pdItem.setIs_Favorite(true);
                 productAdapter.set(pos, pdItem);
             }
@@ -314,7 +314,7 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<List<ProductItem>> call = service.getTopProducts("getTopProducts", cnt, page++, MainApplication.ANDROID_ID, code);
+        Call<List<ProductItem>> call = service.getTopProducts("getTopProducts", cnt, page++, MainApplication.USER_ID, code);
 
         call.enqueue(new Callback<List<ProductItem>>() {
             @Override
@@ -354,7 +354,7 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<List<ProductItem>> call = service.getBestSalesProducts("getBestSalesProducts", cnt, page++, MainApplication.ANDROID_ID, code);
+        Call<List<ProductItem>> call = service.getBestSalesProducts("getBestSalesProducts", cnt, page++, MainApplication.USER_ID, code);
 
         call.enqueue(new Callback<List<ProductItem>>() {
             @Override

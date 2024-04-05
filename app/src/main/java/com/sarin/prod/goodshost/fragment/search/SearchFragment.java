@@ -344,11 +344,11 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         if (v.getId() == R.id.layout_favorite) {
 
             if(pdItem.isIs_Favorite()){
-                setDelUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id());
+                setDelUserItemMap(MainApplication.USER_ID, pdItem.getVendor_item_id());
                 pdItem.setIs_Favorite(false);
                 productAdapter.set(pos, pdItem);
             } else {
-                setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), "Y", 0, "N");
+                setUserItemMap(MainApplication.USER_ID, pdItem.getVendor_item_id(), "Y", 0, "N");
                 pdItem.setIs_Favorite(true);
                 productAdapter.set(pos, pdItem);
             }
@@ -443,7 +443,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<List<ProductItem>> call = service.getSearchProducts("getSearchProducts", searchName, MainApplication.ANDROID_ID, SearchProducts_page++);
+        Call<List<ProductItem>> call = service.getSearchProducts("getSearchProducts", searchName, MainApplication.USER_ID, SearchProducts_page++);
 
         call.enqueue(new Callback<List<ProductItem>>() {
             @Override

@@ -368,6 +368,8 @@ public class LoginActivity extends AppCompatActivity {
                     if(returnMsgItem.getCode() > 0){    // 성공
                         PreferenceManager.setString(getApplicationContext(), "userId", userItem.getUser_id());
                         PreferenceManager.setString(getApplicationContext(), "androidId", userItem.getAndroid_id());
+                        MainApplication.USER_ID = userItem.getUser_id();
+                        MainApplication.ANDROID_ID = userItem.getAndroid_id();
 
                         PreferenceManager.setString(getApplicationContext(), "isLogin", "1");
                         PreferenceManager.setInt(getApplicationContext(), "fcmFlag", 0);

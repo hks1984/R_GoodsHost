@@ -109,7 +109,7 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
         favoriteProductAdapter = new FavoriteProductAdapter(piLIst, this);
         recyclerView.setAdapter(favoriteProductAdapter);
 
-        getFavoriteProducts(MainApplication.ANDROID_ID);
+        getFavoriteProducts(MainApplication.USER_ID);
 
         LayoutInflater inflater_bottom_sheet = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater_bottom_sheet.inflate(R.layout.bottom_sheet_registration, null, false);
@@ -136,7 +136,7 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
 
                 pdItem.setHope_price(sUtil.convertStringToInt(editTextValue));
                 pdItem.setHope_stock(hope_stock);
-                setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), "Y", sUtil.convertStringToInt(editTextValue), hope_stock);
+                setUserItemMap(MainApplication.USER_ID, pdItem.getVendor_item_id(), "Y", sUtil.convertStringToInt(editTextValue), hope_stock);
                 CustomSnackbar.showSnackbar(getContext(), binding.getRoot(), getContext().getResources().getString(R.string.favorite_save));
 
                 bottomSheetDialog.dismiss();
@@ -229,7 +229,7 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
         pdItem_possion = pos;
 
         if (v.getId() == R.id.favorite_del) {
-            setDelUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id());
+            setDelUserItemMap(MainApplication.USER_ID, pdItem.getVendor_item_id());
             HomeFragment hf = HomeFragment.getInstance();
             hf.productAdapter.setFavorite(pdItem.getVendor_item_id(), false);
             hf.productHoriAdapter.setFavorite(pdItem.getVendor_item_id(), false);

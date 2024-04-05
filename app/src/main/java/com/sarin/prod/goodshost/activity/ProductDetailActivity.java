@@ -254,7 +254,7 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
                 boolean isCheckBoxChecked = check.isChecked();
                 String hope_stock = isCheckBoxChecked ? "Y" : "N";
                 String editTextValue = hope_price.getText().toString();
-                setUserItemMap(MainApplication.ANDROID_ID, vendor_item_id, "Y", sUtil.convertStringToInt(editTextValue), hope_stock);
+                setUserItemMap(MainApplication.USER_ID, vendor_item_id, "Y", sUtil.convertStringToInt(editTextValue), hope_stock);
 
                 HomeFragment hf = HomeFragment.getInstance();
                 hf.productAdapter.setFavorite(vendor_item_id, true);
@@ -340,11 +340,11 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
         pdItem_possion = pos;
         if (v.getId() == R.id.layout_favorite) {
             if(pdItem.isIs_Favorite()){
-                setDelUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id());
+                setDelUserItemMap(MainApplication.USER_ID, pdItem.getVendor_item_id());
                 pdItem.setIs_Favorite(false);
                 productHoriAdapter.set(pos, pdItem);
             } else {
-                setUserItemMap(MainApplication.ANDROID_ID, pdItem.getVendor_item_id(), "Y", 0, "N");
+                setUserItemMap(MainApplication.USER_ID, pdItem.getVendor_item_id(), "Y", 0, "N");
                 pdItem.setIs_Favorite(true);
                 productHoriAdapter.set(pos, pdItem);
             }
@@ -674,7 +674,7 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<ProductItem> call = service.getProductDetail("getProductDetail", MainApplication.ANDROID_ID, vendor_item_id);
+        Call<ProductItem> call = service.getProductDetail("getProductDetail", MainApplication.USER_ID, vendor_item_id);
 
         call.enqueue(new Callback<ProductItem>() {
             @Override
@@ -750,7 +750,7 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<List<ProductItem>> call = service.getProductsRelated("getProductsRelated", MainApplication.ANDROID_ID, product_name);
+        Call<List<ProductItem>> call = service.getProductsRelated("getProductsRelated", MainApplication.USER_ID, product_name);
 
         call.enqueue(new Callback<List<ProductItem>>() {
             @Override

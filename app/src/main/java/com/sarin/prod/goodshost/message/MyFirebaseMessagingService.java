@@ -65,7 +65,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "# MyFirebaseMessagingService - fcmToken: " + token);
         if(!stringUtil.nullCheck(userId)){
             UserItem userItem = new UserItem();
-            userItem.setUser_id(MainApplication.ANDROID_ID);
+            userItem.setUser_id(MainApplication.USER_ID);
             userItem.setFcm_token(token);
             setUserRegister(userItem);
         }

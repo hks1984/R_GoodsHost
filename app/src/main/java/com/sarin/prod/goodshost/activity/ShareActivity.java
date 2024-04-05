@@ -56,7 +56,7 @@ public class ShareActivity extends AppCompatActivity {
                 add.setText(getApplicationContext().getResources().getString(R.string.share_adding));
                 
 
-                setUserSelectProduct(MainApplication.ANDROID_ID, sharedText);
+                setUserSelectProduct(MainApplication.USER_ID, sharedText);
 
             }
 //            else if (type.startsWith("image/")) {
