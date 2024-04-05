@@ -692,6 +692,9 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
                             .apply(RequestOptions.bitmapTransform(new RoundedCorners(20))) // 여기서 10은 코너의 반지름을 dp 단위로 지정
                             .into(image);
 
+                    if(productItem.getRating() == null || "".equals(productItem.getRating())){
+                        productItem.setRating("0");
+                    }
                     rating.setRating(Float.parseFloat(productItem.getRating()));
                     String ratingTotalCount = sUtil.replaceStringPriceToInt(productItem.getRating_total_count());
                     if (ratingTotalCount != null && !ratingTotalCount.isEmpty()) {
