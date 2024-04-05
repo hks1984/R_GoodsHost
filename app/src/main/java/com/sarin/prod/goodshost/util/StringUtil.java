@@ -6,6 +6,8 @@ import com.sarin.prod.goodshost.MainApplication;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -62,6 +64,19 @@ public class StringUtil {
             // 변환 중 오류 발생 시 적절한 처리 (여기서는 -1 반환)
             return "";
         }
+    }
+
+    public static String convertDate(String inputDate) {
+        // 입력된 날짜를 LocalDate 객체로 파싱
+        LocalDate date = LocalDate.parse(inputDate);
+
+        // 원하는 출력 형식 정의 (MM/dd)
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd");
+
+        // 파싱된 날짜를 원하는 형식으로 변환
+        String formattedDate = date.format(formatter);
+
+        return formattedDate;
     }
 
 

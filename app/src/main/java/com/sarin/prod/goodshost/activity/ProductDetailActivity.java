@@ -442,18 +442,15 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
             maxValue = Math.max(maxValue, value);
 
             String date = ci.getC_date();
+            String conDate = sUtil.convertDate(date);
             if (!xLabelMap.containsKey(date)) {
-                xLabelMap.put(date, index++);
-
-                
+//                date = index == 0 || index == chartItems.size() - 1 ? date : "";    // 차트 x축 처음과 끝에만 날짜 출력
+                xLabelMap.put(conDate, index++);
             }
-            entries.add(new Entry(xLabelMap.get(date), value));
-
+            entries.add(new Entry(xLabelMap.get(conDate), value));
 
         }
-        
-        
-        
+
         LineDataSet dataSet = new LineDataSet(entries, null);
         dataSet.setColor(ContextCompat.getColor(getApplicationContext(), R.color.personal));
 //        dataSet.setValueTextColor(Color.BLUE);
@@ -526,8 +523,8 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
         if(range == 0){
             range = 10;
         }
-        lineChart.getAxisLeft().setAxisMinimum(minValue - range * 1.0f);
-        lineChart.getAxisLeft().setAxisMaximum(maxValue + range * 1.0f);
+        lineChart.getAxisLeft().setAxisMinimum(minValue - range * 0.2f);
+        lineChart.getAxisLeft().setAxisMaximum(maxValue + range * 0.2f);
 
         // 최소값에 대한 LimitLine 추가
         LimitLine llMin = new LimitLine(minValue, "최저가: " + sUtil.replaceStringPriceToInt((int)minValue) + "원");
