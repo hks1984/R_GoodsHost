@@ -73,6 +73,8 @@ import com.sarin.prod.goodshost.util.CustomSnackbar;
 
 
 import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -609,10 +611,15 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
                 if(response.isSuccessful()){
                     List<ChartItem> chartItem = response.body();
 
+                    chartItem = fillDates(chartItem);
+                    Log.d(TAG, "chartItem: " + chartItem.toString());
                     
                     if(chartItem != null && chartItem.size() > 0){
                         LineChartGraph(chartItem);
                         lineChart.setScaleEnabled(false);
+
+
+
 
                         int total_price = 0;
                         for (ChartItem ci : chartItem) {
@@ -661,6 +668,31 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
         });
 
 
+    }
+
+    public static List<ChartItem> fillDates(List<ChartItem> input) {
+        List<ChartItem> result = new ArrayList<>();
+        ChartItem previous = null;
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
+
+        for (ChartItem current : input) {
+            if (previous != null) {
+                LocalDate nextDate = LocalDate.parse(previous.getC_date(), formatter).plusDays(1);
+                LocalDate currentDate = LocalDate.parse(current.getC_date(), formatter);
+
+                while (nextDate.isBefore(currentDate)) {
+                    ChartItem ci = new ChartItem();
+                    ci.setC_date(nextDate.toString());
+                    ci.setMin_value(previous.getMin_value());
+                    result.add(ci);
+                    nextDate = nextDate.plusDays(1);
+                }
+            }
+            result.add(current);
+            previous = current;
+        }
+
+        return result;
     }
 
 

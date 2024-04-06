@@ -50,7 +50,7 @@ public class SettingFragment extends Fragment {
 
     private TextView app_version, setting_login;
 
-    private LinearLayout setting_privacy;
+    private LinearLayout setting_privacy, setting_termsOfUse;
     SwitchCompat alarm_switch;
 
     public static SettingFragment newInstance() {
@@ -70,6 +70,7 @@ public class SettingFragment extends Fragment {
         app_version = binding.appVersion;
         setting_login = binding.settingLogin;
         setting_privacy = binding.settingPrivacy;
+        setting_termsOfUse = binding.settingTermsOfUse;
 
 
         try {
@@ -128,6 +129,15 @@ public class SettingFragment extends Fragment {
             }
         });
 
+        setting_termsOfUse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), WebViewActivity.class);
+                String url = MainApplication.BASE_URL;
+                intent.putExtra("url", url + "termsOfUse");
+                v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
+            }
+        });
 
 //        setting_login.setOnClickListener(new View.OnClickListener() {
 //            @Override
