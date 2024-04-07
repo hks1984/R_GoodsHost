@@ -34,6 +34,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.sarin.prod.goodshost.databinding.ActivityMainBinding;
 import com.sarin.prod.goodshost.item.ReturnMsgItem;
+import com.sarin.prod.goodshost.item.ReturnObjMsgItem;
 import com.sarin.prod.goodshost.item.UserItem;
 import com.sarin.prod.goodshost.item.VersionItem;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
@@ -82,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
             PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
             versionName = packageInfo.versionName;
             getVersion(MainApplication.USER_ID, versionName, "A");
+            getVersionJson(MainApplication.USER_ID, versionName, "A");
+
+
 
         } catch (PackageManager.NameNotFoundException e) {
             // 패키지 이름을 찾을 수 없는 경우 예외 처리
@@ -218,6 +222,44 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<VersionItem> call, Throwable t) {
+                PopupDialogUtil.showCustomDialog(MainActivity.this, new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
+            }
+        });
+
+
+    }
+
+
+    public void getVersionJson(String user_id, String app_version, String os_type){
+
+        retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
+
+        VersionItem versionItem = new VersionItem();
+        versionItem.setApp_version(app_version);
+        versionItem.setOs_type(os_type);
+        Call<ReturnObjMsgItem> call = service.getVersionJson("getVersionJson", user_id, versionItem);
+        call.enqueue(new Callback<ReturnObjMsgItem>() {
+            @Override
+            public void onResponse(Call<ReturnObjMsgItem> call, Response<ReturnObjMsgItem> response) {
+                if(response.isSuccessful()){
+                    ReturnObjMsgItem obj = response.body();
+
+                    Log.d(TAG, "msg: " + obj.getReturnMsgItem());
+                    Log.d(TAG, "ver: " + obj.getVersionItem());
+
+                }
+
+            }
+            @Override
+            public void onFailure(Call<ReturnObjMsgItem> call, Throwable t) {
                 PopupDialogUtil.showCustomDialog(MainActivity.this, new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {

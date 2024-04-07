@@ -4,6 +4,7 @@ import com.sarin.prod.goodshost.item.CategoryItem;
 import com.sarin.prod.goodshost.item.ChartItem;
 import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.item.ReturnMsgItem;
+import com.sarin.prod.goodshost.item.ReturnObjMsgItem;
 import com.sarin.prod.goodshost.item.UserItem;
 import com.sarin.prod.goodshost.item.VersionItem;
 
@@ -27,6 +28,16 @@ public interface RetrofitInterface {
             @Query("os_type") String os_type
 
     );
+
+    @POST("{path}")
+    Call<ReturnObjMsgItem> getVersionJson(
+            @Path ("path") String path,
+            @Query("user_id") String user_id,
+            @Body VersionItem versionItem
+
+    );
+
+
 
     @GET("{path}")
     Call<List<ProductItem>> getSearchProducts(
