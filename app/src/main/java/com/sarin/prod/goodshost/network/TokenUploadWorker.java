@@ -42,6 +42,7 @@ public class TokenUploadWorker extends Worker {
 
     private boolean uploadTokenToServer() {
         String userId = PreferenceManager.getString(getApplicationContext(), "userId");
+        String androidId = PreferenceManager.getString(getApplicationContext(), "androidId");
         String fcmToken = PreferenceManager.getString(getApplicationContext(), "fcmToken");
 
         if(su.nullCheck(userId) || su.nullCheck(fcmToken)) {
@@ -50,19 +51,20 @@ public class TokenUploadWorker extends Worker {
 
         UserItem userItem = new UserItem();
         userItem.setUser_id(userId);
+        userItem.setAndroid_id(androidId);
         userItem.setFcm_token(fcmToken);
-        setUserRegister(userItem);
+        setFcmTokenUpdate(userItem);
 
         return true; // 임시 코드
     }
 
-    public void setUserRegister(UserItem userItem){
 
-        Log.d(TAG, userItem.toString());
+    public void setFcmTokenUpdate(UserItem userItem){
+
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<ReturnMsgItem> call = service.setUserRegister("setUserRegister", userItem.getUser_id(), userItem.getFcm_token());
+        Call<ReturnMsgItem> call = service.setFcmTokenUpdate("setFcmTokenUpdate", userItem);
         call.enqueue(new Callback<ReturnMsgItem>() {
             @Override
             public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
@@ -88,5 +90,8 @@ public class TokenUploadWorker extends Worker {
         });
 
     }
+
+
+
 
 }

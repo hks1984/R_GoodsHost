@@ -69,13 +69,14 @@ public class MainApplication extends Application implements Application.Activity
 
     public static String ANDROID_ID = "";
     public static String USER_ID = "";
+    public static String VERSION = "";
     private final static int NOTICATION_ID = 222;
     private Activity currentActivity;
     public static Context context;
     public static Activity activity;
 //    public static final String BASE_URL = "https://dealdive.co.kr/dealdive/";
-//    public static final String BASE_URL = "http://192.168.10.70:8080/dealdive/";
-    public static final String BASE_URL = "http://192.168.0.2:8080/dealdive/";
+    public static final String BASE_URL = "http://192.168.10.70:8080/dealdive/";
+//    public static final String BASE_URL = "http://192.168.0.2:8080/dealdive/";
 
     public static UserItem userItem = new UserItem();
     static StringUtil sUtil = StringUtil.getInstance();
@@ -107,6 +108,17 @@ public class MainApplication extends Application implements Application.Activity
 
         USER_ID = PreferenceManager.getString(getApplicationContext(), "userId");
         ANDROID_ID = PreferenceManager.getString(getApplicationContext(), "androidId");
+
+        try {
+            PackageManager packageManager = this.getPackageManager();
+            String packageName = this.getPackageName();
+            PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
+            VERSION = packageInfo.versionName;
+
+        } catch (PackageManager.NameNotFoundException e) {
+            // 패키지 이름을 찾을 수 없는 경우 예외 처리
+            e.printStackTrace();
+        }
 
 
         KakaoSdk.init(this,getString(R.string.kakao_key));
@@ -149,11 +161,30 @@ public class MainApplication extends Application implements Application.Activity
                 .build();
 
 //        WorkManager.getInstance(this).enqueue(tokenUploadRequest);
-        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
                 "uploadTokenWork", // 작업의 고유 이름
                 ExistingPeriodicWorkPolicy.KEEP, // 기존 작업이 있다면 새 작업을 무시
                 tokenUploadRequest // PeriodicWorkRequest 객체
         );
+
+    }
+
+    public static void setFcmToken(){
+
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+
+                if(task.isSuccessful() == false) {
+                    return;
+                }
+                String token = task.getResult();
+
+                Log.d(TAG, "token: " + token);
+
+                PreferenceManager.setString(context, "fcmToken", token);
+            }
+        });
 
     }
 

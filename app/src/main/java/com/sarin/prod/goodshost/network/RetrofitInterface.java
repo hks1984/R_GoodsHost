@@ -20,11 +20,38 @@ import retrofit2.http.Query;
 public interface RetrofitInterface {
 
 
+    @POST("{path}")
+    Call<ReturnMsgItem> setLogin(
+            @Path ("path") String path,
+            @Body UserItem userItem
+    );
+
+
+    @POST("{path}")
+    Call<ReturnMsgItem> setAccountDelete(
+            @Path ("path") String path,
+            @Body UserItem userItem
+    );
+
+    @POST("{path}")
+    Call<ReturnMsgItem> setFcmTokenUpdate(
+            @Path ("path") String path,
+            @Body UserItem userItem
+    );
+
+
     @GET("{path}")
     Call<VersionItem> getVersion(
             @Path ("path") String path,
             @Query("user_id") String user_id,
             @Query("app_version") String app_version,
+            @Query("os_type") String os_type
+
+    );
+
+    @POST("{path}")
+    Call<VersionItem> getVersion(
+            @Path ("path") String path,
             @Query("os_type") String os_type
 
     );
@@ -83,18 +110,6 @@ public interface RetrofitInterface {
             @Query("vendor_item_id") String vendor_item_id
     );
 
-    @GET("{path}")
-    Call<ReturnMsgItem> setUserRegister(
-            @Path ("path") String path,
-            @Query("user_id") String user_id,
-            @Query("fcm_token") String fcm_token
-    );
-
-    @POST("{path}")
-    Call<ReturnMsgItem> setUserRegisterJson(
-            @Path ("path") String path,
-            @Body UserItem userItem
-    );
 
     @GET("{path}")
     Call<ReturnMsgItem> setUserItemMap(

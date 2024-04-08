@@ -313,7 +313,7 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
             @Override
             public void onClick(View v) {
                 // EditText가 클릭되었을 때 실행될 코드
-                Log.d(TAG, "hope_price.getText().length() 1: " + hope_price.getText().length());
+//                Log.d(TAG, "hope_price.getText().length() 1: " + hope_price.getText().length());
                 if (hope_price.getText().length() > 0) {
                     hope_price.setSelection(hope_price.getText().length()); // 커서를 텍스트의 가장 우측으로 이동
                 }
@@ -612,7 +612,7 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
                     List<ChartItem> chartItem = response.body();
 
                     chartItem = fillDates(chartItem);
-                    Log.d(TAG, "chartItem: " + chartItem.toString());
+//                    Log.d(TAG, "chartItem: " + chartItem.toString());
                     
                     if(chartItem != null && chartItem.size() > 0){
                         LineChartGraph(chartItem);

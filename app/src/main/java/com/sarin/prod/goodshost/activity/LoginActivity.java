@@ -99,6 +99,8 @@ public class LoginActivity extends AppCompatActivity {
         deviceModel = Build.MODEL;
         os_ver = sUtil.convertIntToString(Build.VERSION.SDK_INT);
 
+        MainApplication.setFcmToken();
+
         try{
             androidId = Settings.Secure.getString(this.getContentResolver(),Settings.Secure.ANDROID_ID);
 
@@ -123,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                 userItem.setOs_ver(os_ver);
                 userItem.setFcm_token(PreferenceManager.getString(getApplicationContext(), "fcmToken"));
 
-                setUserRegisterJson(userItem);
+                setLogin(userItem);
 
 //                if(sUtil.nullCheck(isPermission)){
 //                    Intent intent = new Intent(getApplicationContext(), PermissionActivity.class);
@@ -175,7 +177,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             // 콜백 메서드 ,
             public Unit invoke(OAuthToken oAuthToken, Throwable throwable) {
-                Log.e(TAG,"CallBack Method");
+//                Log.e(TAG,"CallBack Method");
                 //oAuthToken != null 이라면 로그인 성공
                 if(oAuthToken!=null){
                     // 토큰이 전달된다면 로그인이 성공한 것이고 토큰이 전달되지 않으면 로그인 실패한다.
@@ -183,7 +185,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 }else {
                     //로그인 실패
-                    Log.e(TAG, "invoke: login fail" );
+//                    Log.e(TAG, "invoke: login fail" );
                 }
 
                 return null;
@@ -241,18 +243,18 @@ public class LoginActivity extends AppCompatActivity {
                 String personId = acct.getId();
                 Uri personPhoto = acct.getPhotoUrl();
 
-                Log.d(TAG, "handleSignInResult:personName "+personName);
-                Log.d(TAG, "handleSignInResult:personGivenName "+personGivenName);
-                Log.d(TAG, "handleSignInResult:personEmail "+personEmail);
-                Log.d(TAG, "handleSignInResult:personId "+personId);
-                Log.d(TAG, "handleSignInResult:personFamilyName "+personFamilyName);
-                Log.d(TAG, "handleSignInResult:personPhoto "+personPhoto);
+//                Log.d(TAG, "handleSignInResult:personName "+personName);
+//                Log.d(TAG, "handleSignInResult:personGivenName "+personGivenName);
+//                Log.d(TAG, "handleSignInResult:personEmail "+personEmail);
+//                Log.d(TAG, "handleSignInResult:personId "+personId);
+//                Log.d(TAG, "handleSignInResult:personFamilyName "+personFamilyName);
+//                Log.d(TAG, "handleSignInResult:personPhoto "+personPhoto);
             }
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.e(TAG, "" + e);
-            Log.e(TAG, "signInResult:failed code=" + e.getStatusCode());
+//            Log.e(TAG, "" + e);
+//            Log.e(TAG, "signInResult:failed code=" + e.getStatusCode());
         }
     }
 
@@ -264,13 +266,13 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "signInWithCredential:success");
+//                        Log.d(TAG, "signInWithCredential:success");
                         Toast.makeText(LoginActivity.this, R.string.google_success_login, Toast.LENGTH_SHORT).show();
                         FirebaseUser user = mAuth.getCurrentUser();
 //                            updateUI(user);
                     } else {
                         // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithCredential:failure", task.getException());
+//                        Log.w(TAG, "signInWithCredential:failure", task.getException());
                         Toast.makeText(LoginActivity.this, R.string.google_failed_login, Toast.LENGTH_SHORT).show();
 //                            updateUI(null);
                     }
@@ -335,9 +337,10 @@ public class LoginActivity extends AppCompatActivity {
                         userItem.setAndroid_id(androidId);
                         userItem.setModel_name(deviceModel);
                         userItem.setOs_ver(os_ver);
+                        MainApplication.setFcmToken();
                         userItem.setFcm_token(PreferenceManager.getString(getApplicationContext(), "fcmToken"));
 
-                        setUserRegisterJson(userItem);
+                        setLogin(userItem);
                     }
 
                 } else {
@@ -350,15 +353,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
-
-
-    public void setUserRegisterJson(UserItem userItem){
+    public void setLogin(UserItem userItem){
 
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<ReturnMsgItem> call = service.setUserRegisterJson("setUserRegisterJson", userItem);
+        Call<ReturnMsgItem> call = service.setLogin("setLogin", userItem);
         call.enqueue(new Callback<ReturnMsgItem>() {
             @Override
             public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
@@ -386,23 +386,31 @@ public class LoginActivity extends AppCompatActivity {
 
                     } else {
                         PreferenceManager.setInt(getApplicationContext(), "fcmFlag", 1);
+                        PopupDialogUtil.showCustomDialog(LoginActivity.this, new PopupDialogClickListener() {
+                            @Override
+                            public void onPositiveClick() {
+                                finish();
+                            }
+                            @Override
+                            public void onNegativeClick() {
+                            }
+                        }, "ONE", getResources().getString(R.string.no_Acc_login_fail));
                     }
 
                 }
                 else{
                     PreferenceManager.setInt(getApplicationContext(), "fcmFlag", 1);
+                    PopupDialogUtil.showCustomDialog(LoginActivity.this, new PopupDialogClickListener() {
+                        @Override
+                        public void onPositiveClick() {
+                            finish();
+                        }
+                        @Override
+                        public void onNegativeClick() {
+                        }
+                    }, "ONE", getResources().getString(R.string.no_Acc_login_fail));
+
                 }
-
-                PopupDialogUtil.showCustomDialog(LoginActivity.this, new PopupDialogClickListener() {
-                    @Override
-                    public void onPositiveClick() {
-                        finish();
-                    }
-                    @Override
-                    public void onNegativeClick() {
-                    }
-                }, "ONE", getResources().getString(R.string.no_Acc_login_fail));
-
 
             }
             @Override

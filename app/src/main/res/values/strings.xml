@@ -39,6 +39,9 @@
     <string name="setting_privacy_text">개인정보 처리방침</string>
     <string name="setting_termsOfUse_text">이용약관</string>
     <string name="setting_app_version">앱 버전</string>
+    <string name="setting_acc_delete">계정탈퇴</string>
+    <string name="setting_acc_delete_success">계정 탈퇴되었어요.\n앱을 종료합니다.</string>
+    <string name="setting_acc_delete_msg">탈퇴 시 계정의 모든 정보는 삭제되며 재가입 시에도 복구되지 않아요.\n<u>탈퇴하시겠어요?</u></string>
     <string name="setting_alarm_title">알림 권한 설정 안내</string>
     <string name="setting_alarm_info">알림 권한 요청을 거부하신 관계로 직접 알림 설정을 활성화 해주셔야되요. 아래 \&apos;설정 바로가기\&apos; 버튼을 통해 알림 권한 활성화 후 사용해주세요.</string>
     <string name="setting_alarm_set_go">설정 바로가기</string>

@@ -503,7 +503,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 if(response.isSuccessful()){
                     List<String> searchName = response.body();
 
-                    Log.d(TAG, "searchName: " + searchName.toString());
+//                    Log.d(TAG, "searchName: " + searchName.toString());
 
                     for (int i = 0; i < searchName.size(); i++) {
                         // 새 TextView 생성

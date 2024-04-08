@@ -59,15 +59,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         super.onNewToken(token);
 
         String userId = PreferenceManager.getString(getApplicationContext(), "userId");
+        String androidId = PreferenceManager.getString(getApplicationContext(), "androidId");
 
         PreferenceManager.setString(getApplicationContext(), "fcmToken", token);
         PreferenceManager.setInt(getApplicationContext(), "fcmFlag", 0);    // FCM 갱신 시 flag 값 초기화
-        Log.d(TAG, "# MyFirebaseMessagingService - fcmToken: " + token);
+//        Log.d(TAG, "# MyFirebaseMessagingService - fcmToken: " + token);
         if(!stringUtil.nullCheck(userId)){
             UserItem userItem = new UserItem();
-            userItem.setUser_id(MainApplication.USER_ID);
+            userItem.setUser_id(userId);
+            userItem.setAndroid_id(androidId);
             userItem.setFcm_token(token);
-            setUserRegister(userItem);
+            setFcmTokenUpdate(userItem);
         }
 
     }
@@ -198,12 +200,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
 
-    public void setUserRegister(UserItem userItem){
+    public void setFcmTokenUpdate(UserItem userItem){
 
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<ReturnMsgItem> call = service.setUserRegister("setUserRegister", userItem.getUser_id(), userItem.getFcm_token());
+        Call<ReturnMsgItem> call = service.setFcmTokenUpdate("setFcmTokenUpdate", userItem);
         call.enqueue(new Callback<ReturnMsgItem>() {
             @Override
             public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
