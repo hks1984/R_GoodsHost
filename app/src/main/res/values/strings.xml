@@ -32,6 +32,8 @@
 
 
     <!-- 설정화면 -->
+    <string name="setting_user_nick">%s님</string>
+    <string name="setting_user_soical_id">%sID: %s</string>
     <string name="setting_title_default">일반</string>
     <string name="setting_use_info">딜다이브 사용법</string>
     <string name="setting_use_alarm">알림 설정</string>

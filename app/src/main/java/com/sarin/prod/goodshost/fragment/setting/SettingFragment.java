@@ -24,6 +24,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.provider.Settings;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +54,7 @@ import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
 import com.sarin.prod.goodshost.util.CustomSnackbar;
 import com.sarin.prod.goodshost.util.PreferenceManager;
+import com.sarin.prod.goodshost.util.StringUtil;
 import com.sarin.prod.goodshost.view.PopupDialogClickListener;
 import com.sarin.prod.goodshost.view.PopupDialogUtil;
 
@@ -60,12 +65,13 @@ import retrofit2.Response;
 public class SettingFragment extends Fragment {
 
     private static String TAG = MainApplication.TAG;
+    static StringUtil sUtil = StringUtil.getInstance();
     private SettingViewModel mViewModel;
     private FragmentSettingBinding binding;
 
-    private TextView app_version, setting_login;
+    private TextView app_version, setting_login, setting_info_nick, setting_info_social;
 
-    private LinearLayout setting_privacy, setting_termsOfUse, setting_acc_delete;
+    private LinearLayout setting_privacy, setting_termsOfUse, setting_acc_delete, setting_easy_login;
     SwitchCompat alarm_switch;
 
     public static SettingFragment newInstance() {
@@ -83,10 +89,43 @@ public class SettingFragment extends Fragment {
         View root = binding.getRoot();
 
         app_version = binding.appVersion;
-        setting_login = binding.settingLogin;
         setting_privacy = binding.settingPrivacy;
         setting_termsOfUse = binding.settingTermsOfUse;
         setting_acc_delete = binding.settingAccDelete;
+        setting_easy_login = binding.settingEasyLogin;
+        setting_info_nick = binding.settingInfoNick;
+        setting_info_social = binding.settingInfoSocial;
+
+        if(!sUtil.nullCheck(PreferenceManager.getString(getContext(), "isSoicalLogin"))){
+            setting_easy_login.setVisibility(View.GONE);
+        }
+
+        String userNick = PreferenceManager.getString(getContext(), "userNick");
+        String nickFullText = String.format(getString(R.string.setting_user_nick), userNick);
+        SpannableString spannableString = new SpannableString(nickFullText);
+
+        // 대체된 문자열의 시작과 끝 위치를 찾습니다.
+        int start = nickFullText.indexOf(userNick);
+        int end = start + userNick.length();
+        // 대체된 문자열 색상 변경
+        spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.personal_2)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        // 대체된 문자열의 크기를 변경합니다. 1.5f는 150%를 의미합니다.
+        spannableString.setSpan(new RelativeSizeSpan(0.6f), end, nickFullText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        // 텍스트뷰에 스타일이 적용된 텍스트를 설정합니다.
+        setting_info_nick.setText(spannableString);
+
+
+
+        String userId = PreferenceManager.getString(getContext(), "userId");
+        String idFullText = "";
+
+        if(!sUtil.nullCheck(PreferenceManager.getString(getContext(), "isSoicalLogin"))){
+            idFullText = String.format(getString(R.string.setting_user_soical_id), "", userId);
+        }else {
+            idFullText = String.format(getString(R.string.setting_user_soical_id), "비로그인", userId);
+        }
+        setting_info_social.setText(idFullText);
+
 
         try {
             // 현재 앱의 패키지 이름을 가져옵니다.
@@ -207,6 +246,7 @@ Log.d(TAG, "ddd");
                         PreferenceManager.setString(getContext(), "isLogin", "");
                         PreferenceManager.setString(getContext(), "fcmToken", "");
                         PreferenceManager.setInt(getContext(), "fcmFlag", 0);
+                        PreferenceManager.setString(getContext(), "isSoicalLogin", "");
 
                         PopupDialogUtil.showCustomDialog(getActivity(), new PopupDialogClickListener() {
                             @Override

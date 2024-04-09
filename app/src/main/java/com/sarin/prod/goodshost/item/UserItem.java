@@ -2,6 +2,7 @@ package com.sarin.prod.goodshost.item;
 
 public class UserItem {
     private String user_id;
+    private String soical;
     private String user_nick;
     private String android_id;
     private String model_name;
@@ -14,6 +15,14 @@ public class UserItem {
 
     public void setUser_id(String user_id) {
         this.user_id = user_id;
+    }
+
+    public String getSoical() {
+        return soical;
+    }
+
+    public void setSoical(String soical) {
+        this.soical = soical;
     }
 
     public String getFcm_token() {
@@ -60,6 +69,7 @@ public class UserItem {
     public String toString() {
         return "UserItem{" +
                 "user_id='" + user_id + '\'' +
+                ", soical='" + soical + '\'' +
                 ", user_nick='" + user_nick + '\'' +
                 ", android_id='" + android_id + '\'' +
                 ", model_name='" + model_name + '\'' +

@@ -4,6 +4,7 @@ public class ReturnObjMsgItem {
 
     private ReturnMsgItem returnMsgItem;
     private VersionItem versionItem;
+    private UserItem userItem;
 
     public ReturnMsgItem getReturnMsgItem() {
         return returnMsgItem;
@@ -21,11 +22,20 @@ public class ReturnObjMsgItem {
         this.versionItem = versionItem;
     }
 
+    public UserItem getUserItem() {
+        return userItem;
+    }
+
+    public void setUserItem(UserItem userItem) {
+        this.userItem = userItem;
+    }
+
     @Override
     public String toString() {
         return "ReturnObjMsgItem{" +
                 "returnMsgItem=" + returnMsgItem +
                 ", versionItem=" + versionItem +
+                ", userItem=" + userItem +
                 '}';
     }
 }

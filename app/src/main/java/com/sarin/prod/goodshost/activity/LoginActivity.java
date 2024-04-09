@@ -45,6 +45,8 @@ import com.sarin.prod.goodshost.databinding.ActivityLoginBinding;
 
 import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.item.ReturnMsgItem;
+import com.sarin.prod.goodshost.item.ReturnObjMsgItem;
+
 import com.sarin.prod.goodshost.item.UserItem;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
@@ -337,6 +339,7 @@ public class LoginActivity extends AppCompatActivity {
                         userItem.setAndroid_id(androidId);
                         userItem.setModel_name(deviceModel);
                         userItem.setOs_ver(os_ver);
+                        userItem.setSoical("KAKAO");
                         MainApplication.setFcmToken();
                         userItem.setFcm_token(PreferenceManager.getString(getApplicationContext(), "fcmToken"));
 
@@ -358,21 +361,30 @@ public class LoginActivity extends AppCompatActivity {
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<ReturnMsgItem> call = service.setLogin("setLogin", userItem);
-        call.enqueue(new Callback<ReturnMsgItem>() {
+        Call<ReturnObjMsgItem> call = service.setLogin("setLogin", userItem);
+        call.enqueue(new Callback<ReturnObjMsgItem>() {
             @Override
-            public void onResponse(Call<ReturnMsgItem> call, Response<ReturnMsgItem> response) {
+            public void onResponse(Call<ReturnObjMsgItem> call, Response<ReturnObjMsgItem> response) {
                 if(response.isSuccessful()){
-                    ReturnMsgItem returnMsgItem = response.body();
+
+                    ReturnObjMsgItem returnObjMsgItem = response.body();
+                    Log.d(TAG, "returnObjMsgItem: " + returnObjMsgItem.toString());
+                    ReturnMsgItem returnMsgItem = returnObjMsgItem.getReturnMsgItem();
+                    UserItem userItem = returnObjMsgItem.getUserItem();
 
                     if(returnMsgItem.getCode() > 0){    // 성공
                         PreferenceManager.setString(getApplicationContext(), "userId", userItem.getUser_id());
                         PreferenceManager.setString(getApplicationContext(), "androidId", userItem.getAndroid_id());
+                        PreferenceManager.setString(getApplicationContext(), "userNick", userItem.getUser_nick());
                         MainApplication.USER_ID = userItem.getUser_id();
                         MainApplication.ANDROID_ID = userItem.getAndroid_id();
 
                         PreferenceManager.setString(getApplicationContext(), "isLogin", "1");
                         PreferenceManager.setInt(getApplicationContext(), "fcmFlag", 0);
+
+                        if(!sUtil.nullCheck(userItem.getSoical())) {
+                            PreferenceManager.setString(getApplicationContext(), "isSoicalLogin", "1");
+                        }
 
                         String isPermission = PreferenceManager.getString(getApplicationContext(), "isPermission");
                         if(sUtil.nullCheck(isPermission)){
@@ -414,7 +426,7 @@ public class LoginActivity extends AppCompatActivity {
 
             }
             @Override
-            public void onFailure(Call<ReturnMsgItem> call, Throwable t) {
+            public void onFailure(Call<ReturnObjMsgItem> call, Throwable t) {
                 PreferenceManager.setInt(getApplicationContext(), "fcmFlag", 1);
 
                 PopupDialogUtil.showCustomDialog(LoginActivity.this, new PopupDialogClickListener() {

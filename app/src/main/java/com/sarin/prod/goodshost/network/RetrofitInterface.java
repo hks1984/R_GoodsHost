@@ -21,7 +21,7 @@ public interface RetrofitInterface {
 
 
     @POST("{path}")
-    Call<ReturnMsgItem> setLogin(
+    Call<ReturnObjMsgItem> setLogin(
             @Path ("path") String path,
             @Body UserItem userItem
     );
