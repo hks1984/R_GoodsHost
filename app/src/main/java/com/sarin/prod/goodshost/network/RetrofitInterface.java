@@ -40,7 +40,7 @@ public interface RetrofitInterface {
     );
 
 
-    @GET("{path}")
+    @POST("{path}")
     Call<VersionItem> getVersion(
             @Path ("path") String path,
             @Query("user_id") String user_id,
@@ -66,7 +66,7 @@ public interface RetrofitInterface {
 
 
 
-    @GET("{path}")
+    @POST("{path}")
     Call<List<ProductItem>> getSearchProducts(
             @Path ("path") String path,
             @Query("searchName") String searchName,
@@ -74,19 +74,19 @@ public interface RetrofitInterface {
             @Query("page") int page
     );
 
-    @GET("{path}")
+    @POST("{path}")
     Call<ProductItem> getProductDetail(
             @Path ("path") String path,
             @Query("user_id") String user_id,
             @Query("vendor_item_id") String vendor_item_id
     );
 
-    @GET("{path}")
+    @POST("{path}")
     Call<List<CategoryItem>> getCategoryList(
             @Path ("path") String path
     );
 
-    @GET("{path}")
+    @POST("{path}")
     Call<List<ProductItem>> getBestSalesProducts(
             @Path ("path") String path,
             @Query("cnt") int cnt,
@@ -95,7 +95,7 @@ public interface RetrofitInterface {
             @Query("code") String code
     );
 
-    @GET("{path}")
+    @POST("{path}")
     Call<List<ProductItem>> getTopProducts(
             @Path ("path") String path,
             @Query("cnt") int cnt,
@@ -104,14 +104,14 @@ public interface RetrofitInterface {
             @Query("code") String code
     );
 
-    @GET("{path}")
+    @POST("{path}")
     Call<List<ChartItem>> getProductChart(
             @Path ("path") String path,
             @Query("vendor_item_id") String vendor_item_id
     );
 
 
-    @GET("{path}")
+    @POST("{path}")
     Call<ReturnMsgItem> setUserItemMap(
             @Path ("path") String path,
             @Query("user_id") String user_id,
@@ -121,40 +121,40 @@ public interface RetrofitInterface {
             @Query("hope_stock") String hope_stock
     );
 
-    @GET("{path}")
+    @POST("{path}")
     Call<ReturnMsgItem> setDelUserItemMap(
             @Path ("path") String path,
             @Query("user_id") String user_id,
             @Query("vendor_item_id") String vendor_item_id
     );
 
-    @GET("{path}")
+    @POST("{path}")
     Call<ReturnMsgItem> setUserSelectProduct(
             @Path ("path") String path,
             @Query("user_id") String user_id,
             @Query("deep_link") String deep_link
     );
 
-    @GET("{path}")
+    @POST("{path}")
     Call<List<ProductItem>> getFavoriteProducts(
             @Path ("path") String path,
             @Query("user_id") String user_id
     );
 
-    @GET("{path}")
+    @POST("{path}")
     Call<List<String>> getAutoCompleteText(
             @Path ("path") String path,
             @Query("search_text") String search_text
     );
 
-    @GET("{path}")
+    @POST("{path}")
     Call<List<ProductItem>> getProductsRelated(
             @Path ("path") String path,
             @Query("user_id") String user_id,
             @Query("product_name") String product_name
     );
 
-    @GET("{path}")
+    @POST("{path}")
     Call<List<String>> getPopularSearch(
             @Path ("path") String path
     );
