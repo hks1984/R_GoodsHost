@@ -176,7 +176,7 @@ public class SettingFragment extends Fragment {
         setting_acc_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-Log.d(TAG, "ddd");
+//Log.d(TAG, "ddd");
                 PopupDialogUtil.showCustomDialog(getActivity(), new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {

@@ -74,6 +74,18 @@
         app:layout_constraintLeft_toLeftOf="parent"
         />
 
+<!--    <ImageView-->
+<!--        android:id="@+id/imageView"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginLeft="5dp"-->
+<!--        android:src="@drawable/baseline_mode_edit_24_black"-->
+<!--        app:layout_constraintLeft_toRightOf="@id/setting_info_nick"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/setting_info_nick"-->
+<!--        app:layout_constraintTop_toTopOf="@id/setting_info_nick"-->
+<!--        />-->
+
+
     <TextView
         android:id="@+id/setting_info_social"
         android:layout_width="wrap_content"

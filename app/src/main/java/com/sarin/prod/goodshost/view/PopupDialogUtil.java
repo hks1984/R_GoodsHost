@@ -20,7 +20,7 @@ public class PopupDialogUtil {
 
         if (currentDialog != null && currentDialog.isShowing()) {
             // 이미 활성화된 팝업이 있으면 추가적인 팝업을 생성하지 않음
-            Log.d(TAG, "showCustomDialog");
+//            Log.d(TAG, "showCustomDialog");
             return;
         }
 
@@ -37,7 +37,7 @@ public class PopupDialogUtil {
         currentDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                Log.d(TAG, "setOnDismissListener");
+//                Log.d(TAG, "setOnDismissListener");
                 currentDialog.cancel();
                 currentDialog.dismiss();
                 currentDialog = null; // 팝업 참조 제거
@@ -45,7 +45,7 @@ public class PopupDialogUtil {
             }
         });
 
-        Log.d(TAG, "currentDialog.show()");
+//        Log.d(TAG, "currentDialog.show()");
         currentDialog.show();
     }
 

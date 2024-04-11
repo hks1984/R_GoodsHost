@@ -389,7 +389,7 @@ public class LoginActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
 
                     ReturnObjMsgItem returnObjMsgItem = response.body();
-                    Log.d(TAG, "returnObjMsgItem: " + returnObjMsgItem.toString());
+//                    Log.d(TAG, "returnObjMsgItem: " + returnObjMsgItem.toString());
                     ReturnMsgItem returnMsgItem = returnObjMsgItem.getReturnMsgItem();
                     UserItem userItem = returnObjMsgItem.getUserItem();
 
