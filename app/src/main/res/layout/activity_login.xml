@@ -8,6 +8,23 @@
     >
 
     <LinearLayout
+        android:id="@+id/exit"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="7dp"
+            android:src="@drawable/exit" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/main_logo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

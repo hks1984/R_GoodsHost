@@ -96,52 +96,21 @@ public class SettingFragment extends Fragment {
         setting_info_nick = binding.settingInfoNick;
         setting_info_social = binding.settingInfoSocial;
 
-        if(!sUtil.nullCheck(PreferenceManager.getString(getContext(), "isSoicalLogin"))){
-            setting_easy_login.setVisibility(View.GONE);
-        }
-
-        String userNick = PreferenceManager.getString(getContext(), "userNick");
-        String nickFullText = String.format(getString(R.string.setting_user_nick), userNick);
-        SpannableString spannableString = new SpannableString(nickFullText);
-
-        // 대체된 문자열의 시작과 끝 위치를 찾습니다.
-        int start = nickFullText.indexOf(userNick);
-        int end = start + userNick.length();
-        // 대체된 문자열 색상 변경
-        spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.personal_2)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        // 대체된 문자열의 크기를 변경합니다. 1.5f는 150%를 의미합니다.
-        spannableString.setSpan(new RelativeSizeSpan(0.6f), end, nickFullText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        // 텍스트뷰에 스타일이 적용된 텍스트를 설정합니다.
-        setting_info_nick.setText(spannableString);
 
 
 
-        String userId = PreferenceManager.getString(getContext(), "userId");
-        String idFullText = "";
 
-        if(!sUtil.nullCheck(PreferenceManager.getString(getContext(), "isSoicalLogin"))){
-            idFullText = String.format(getString(R.string.setting_user_soical_id), "", userId);
-        }else {
-            idFullText = String.format(getString(R.string.setting_user_soical_id), "비로그인", userId);
-        }
-        setting_info_social.setText(idFullText);
+        setting_easy_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), LoginActivity.class);
+                intent.putExtra("flag", "setting");
+                v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
+            }
+        });
 
 
-        try {
-            // 현재 앱의 패키지 이름을 가져옵니다.
-            String packageName = getContext().getPackageName();
-            // 패키지 매니저를 통해 패키지 정보를 가져옵니다.
-            PackageInfo packageInfo = getContext().getPackageManager().getPackageInfo(packageName, 0);
-            // 버전 이름과 버전 코드를 가져옵니다.
-            String versionName = packageInfo.versionName;
-            int versionCode = packageInfo.versionCode;
-
-            app_version.setText(versionName);
-
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            // 패키지 이름을 찾을 수 없는 경우의 예외 처리
-        }
+        setAccountInfoUpdate();
 
         alarm_switch = binding.alarmSwitch;
         checkAlarmStatus();
@@ -332,9 +301,61 @@ Log.d(TAG, "ddd");
                 .show();
     }
 
+    public void setAccountInfoUpdate(){
+
+        if(!sUtil.nullCheck(PreferenceManager.getString(getContext(), "isSoicalLogin"))){
+            setting_easy_login.setVisibility(View.GONE);
+        }
+
+        String userNick = PreferenceManager.getString(getContext(), "userNick");
+        String nickFullText = String.format(getString(R.string.setting_user_nick), userNick);
+        SpannableString spannableString = new SpannableString(nickFullText);
+
+        // 대체된 문자열의 시작과 끝 위치를 찾습니다.
+        int start = nickFullText.indexOf(userNick);
+        int end = start + userNick.length();
+        // 대체된 문자열 색상 변경
+        spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.personal_2)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        // 대체된 문자열의 크기를 변경합니다. 1.5f는 150%를 의미합니다.
+        spannableString.setSpan(new RelativeSizeSpan(0.6f), end, nickFullText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        // 텍스트뷰에 스타일이 적용된 텍스트를 설정합니다.
+        setting_info_nick.setText(spannableString);
+
+
+
+        String userId = PreferenceManager.getString(getContext(), "userId");
+        String idFullText = "";
+
+        if(!sUtil.nullCheck(PreferenceManager.getString(getContext(), "isSoicalLogin"))){
+            idFullText = String.format(getString(R.string.setting_user_soical_id), "", userId);
+        }else {
+            idFullText = String.format(getString(R.string.setting_user_soical_id), "비로그인", userId);
+        }
+        setting_info_social.setText(idFullText);
+
+
+        try {
+            // 현재 앱의 패키지 이름을 가져옵니다.
+            String packageName = getContext().getPackageName();
+            // 패키지 매니저를 통해 패키지 정보를 가져옵니다.
+            PackageInfo packageInfo = getContext().getPackageManager().getPackageInfo(packageName, 0);
+            // 버전 이름과 버전 코드를 가져옵니다.
+            String versionName = packageInfo.versionName;
+            int versionCode = packageInfo.versionCode;
+
+            app_version.setText(versionName);
+
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            // 패키지 이름을 찾을 수 없는 경우의 예외 처리
+        }
+
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         checkAlarmStatus();
+        setAccountInfoUpdate();
     }
 }

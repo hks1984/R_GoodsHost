@@ -23,6 +23,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -91,12 +92,20 @@ public class LoginActivity extends AppCompatActivity {
     private String deviceModel;
     private String androidId;
     private String os_ver;
+
+    private String flag = "";
+    private LinearLayout exit;
+    private TextView noAccLogin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        exit = binding.exit;
+        noAccLogin = binding.noAccLogin;
+        flag = getIntent().getStringExtra("flag");
 
         deviceModel = Build.MODEL;
         os_ver = sUtil.convertIntToString(Build.VERSION.SDK_INT);
@@ -115,7 +124,9 @@ public class LoginActivity extends AppCompatActivity {
             androidId = androidId.trim();
         }
 
-        TextView noAccLogin = binding.noAccLogin;
+        if(!sUtil.nullCheck(flag)){
+            noAccLogin.setVisibility(View.GONE);
+        }
         noAccLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -206,6 +217,16 @@ public class LoginActivity extends AppCompatActivity {
                     // 카카오톡이 설치되어 있지 않다면
                     UserApiClient.getInstance().loginWithKakaoAccount(LoginActivity.this, callback);
                 }
+            }
+        });
+
+        if(sUtil.nullCheck(flag)){
+            exit.setVisibility(View.GONE);
+        }
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 
@@ -387,7 +408,10 @@ public class LoginActivity extends AppCompatActivity {
                         }
 
                         String isPermission = PreferenceManager.getString(getApplicationContext(), "isPermission");
-                        if(sUtil.nullCheck(isPermission)){
+
+                        if(!sUtil.nullCheck(flag)){
+                            // 세팅 메뉴에서 로그인한 경우 activity만 종료 (이후 setting 화면에서 화면 업데이트)
+                        } else if(sUtil.nullCheck(isPermission)){
                             Intent intent = new Intent(getApplicationContext(), PermissionActivity.class);
                             startActivity(intent);
                         } else {
