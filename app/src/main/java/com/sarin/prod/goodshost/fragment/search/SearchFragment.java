@@ -274,6 +274,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                     productAdapter.clear();
                     SearchProducts_page = 0;
                     getSearchProducts(searchName);
+                    initScrollListener();
                     PreferenceManager.setStringList(getContext(), "searchList", searchName);
                     recentAdapter.addItem(searchName);
                     recentAdapter.notifyDataSetChanged();
@@ -539,6 +540,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                                 productAdapter.clear();
                                 SearchProducts_page = 0;
                                 getSearchProducts(word);
+                                initScrollListener();
                                 PreferenceManager.setStringList(getContext(), "searchList", word);
                                 recentAdapter.addItem(word);
                                 recentAdapter.notifyDataSetChanged();
@@ -655,6 +657,9 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
     boolean isLoading = false;
 
     private void initScrollListener() {
+
+        Log.d(TAG, "initScrollListener ON ");
+
         if (!isScrollListenerAdded) {
             scrollListener = new RecyclerView.OnScrollListener() {
                 @Override
@@ -667,6 +672,8 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                     super.onScrolled(recyclerView, dx, dy);
 
                     LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+
+                    Log.d(TAG, "size: " + linearLayoutManager.findLastCompletelyVisibleItemPosition());
 
                     if(productAdapter.size() > 4){
                         if (!isLoading) {

@@ -38,18 +38,45 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/site_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imagew">
+
+        <ImageView
+            android:id="@+id/site_icon"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/baseline_language_24_gray" />
+
+        <TextView
+            android:id="@+id/site"
+            style="@style/TextBlack.mediumStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="쇼핑몰"
+            android:textStyle="bold"
+            />
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/name"
         style="@style/TextBlack.mediumStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="2"
         android:text="22222222"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/imagew" />
+        app:layout_constraintTop_toBottomOf="@id/site_info" />
 
     <TextView
         android:id="@+id/persent"

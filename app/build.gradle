@@ -13,11 +13,11 @@ android {
         targetSdk 34
 
         def date = new Date()
-        def formattedDate = date.format('yyMMddHH')
+        def formattedDate = date.format('yyMMdd') + "06"
         def code = formattedDate.toInteger()
 
         versionCode code
-        versionName "1.0.8"
+        versionName "1.0.9"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

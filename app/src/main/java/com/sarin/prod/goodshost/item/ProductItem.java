@@ -30,6 +30,8 @@ public class ProductItem {
     private boolean is_Favorite;
     public int views;
     public String site;
+    public String site_icon;
+
 
 
     public String getHope_low_price() {
@@ -241,6 +243,14 @@ public class ProductItem {
         this.rank = rank;
     }
 
+    public String getSite_icon() {
+        return site_icon;
+    }
+
+    public void setSite_icon(String site_icon) {
+        this.site_icon = site_icon;
+    }
+
     @Override
     public String toString() {
         return "ProductItem{" +
@@ -270,6 +280,7 @@ public class ProductItem {
                 ", is_Favorite='" + is_Favorite + '\'' +
                 ", views='" + views + '\'' +
                 ", site='" + site + '\'' +
+                ", site_icon='" + site_icon + '\'' +
                 '}';
     }
 }

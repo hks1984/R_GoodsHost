@@ -93,8 +93,8 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
     private LoadingProgressManager loadingProgressManager = LoadingProgressManager.getInstance();
     static StringUtil sUtil = StringUtil.getInstance();
 
-    private ImageView image, exit, favorite, share;
-    private TextView name, price_value, registration, link, save, rocket, difference_price, average_price, views, discount_1, discount_2, discount_3, rating_total_count;
+    private ImageView image, exit, favorite, share, site_icon;
+    private TextView name, price_value, registration, link, save, rocket, difference_price, average_price, views, discount_1, discount_2, discount_3, rating_total_count, site;
     private RatingBar rating;
     private EditText hope_price;
     private CheckBox check;
@@ -140,6 +140,8 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
         favorite = binding.favorite;
         rating_total_count = binding.ratingTotalCount;
         rating = binding.rating;
+        site = binding.site;
+        site_icon = binding.siteIcon;
 
 
         relatedRecyclerView = binding.recyclerView;
@@ -749,6 +751,11 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
                         favorite.setImageResource(R.drawable.baseline_favorite_border_24);
                     }
 
+                    site.setText(productItem.getSite());
+
+                    Glide.with(getApplicationContext())
+                            .load(productItem.getSite_icon())
+                            .into(site_icon);
 
                     getProductsRelated(productItem.getName());
 

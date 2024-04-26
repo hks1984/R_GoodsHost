@@ -137,8 +137,8 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView name, price_value, persent, favorite_hope_price, favorite_hope_stock, favorite_hope_low_price;
-        private ImageView image;
+        private TextView name, price_value, persent, favorite_hope_price, favorite_hope_stock, favorite_hope_low_price, site;
+        private ImageView image, site_icon;
 //        private RatingBar rating;
 
         private LinearLayout favorite_del, favorite_alarm_edit;
@@ -158,6 +158,8 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             favorite_del = (LinearLayout) itemView.findViewById(R.id.favorite_del);
             favorite_alarm_edit = (LinearLayout) itemView.findViewById(R.id.favorite_alarm_edit);
             list_view_favorite = (ConstraintLayout) itemView.findViewById(R.id.list_view_favorite);
+            site = (TextView) itemView.findViewById(R.id.site);
+            site_icon = (ImageView) itemView.findViewById(R.id.site_icon);
 
 
         }
@@ -206,6 +208,12 @@ public class FavoriteProductAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             } else {
                 favorite_hope_stock.setVisibility(View.GONE); // 레이아웃 숨김
             }
+
+            site.setText(pitem.getSite());
+
+            Glide.with(context)
+                    .load(pitem.getSite_icon())
+                    .into(site_icon);
 
 
         }
