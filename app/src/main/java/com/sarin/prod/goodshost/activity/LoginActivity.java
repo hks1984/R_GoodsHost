@@ -17,12 +17,15 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +43,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.kakao.sdk.auth.model.OAuthToken;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.User;
+import com.navercorp.nid.NaverIdLoginSDK;
+import com.navercorp.nid.oauth.NidOAuthLogin;
+import com.navercorp.nid.oauth.OAuthLoginCallback;
 import com.sarin.prod.goodshost.MainActivity;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.databinding.ActivityLoginBinding;
@@ -56,6 +62,12 @@ import com.sarin.prod.goodshost.util.StringUtil;
 import com.sarin.prod.goodshost.view.PopupDialogClickListener;
 import com.sarin.prod.goodshost.view.PopupDialogUtil;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Random;
 
 import kotlin.Unit;
@@ -96,6 +108,8 @@ public class LoginActivity extends AppCompatActivity {
     private String flag = "";
     private LinearLayout exit;
     private TextView noAccLogin;
+
+    private ImageView buttonOAuthLoginImg;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +119,8 @@ public class LoginActivity extends AppCompatActivity {
 
         exit = binding.exit;
         noAccLogin = binding.noAccLogin;
+        buttonOAuthLoginImg = binding.buttonOAuthLoginImg;
+
         flag = getIntent().getStringExtra("flag");
 
         deviceModel = Build.MODEL;
@@ -163,18 +179,18 @@ public class LoginActivity extends AppCompatActivity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
 
-        btnGoogleLogin = findViewById(R.id.googleLogin);
-        TextView googleText = (TextView) btnGoogleLogin.getChildAt(0);
-        googleText.setText(getString(R.string.google_login_text));
-        btnGoogleLogin.setOnClickListener(view -> {
-            // 기존에 로그인 했던 계정을 확인한다.
-            gsa = GoogleSignIn.getLastSignedInAccount(LoginActivity.this);
-
-            if (gsa != null) // 로그인 되있는 경우
-                Toast.makeText(LoginActivity.this, R.string.google_status_login, Toast.LENGTH_SHORT).show();
-            else
-                signIn();
-        });
+//        btnGoogleLogin = findViewById(R.id.googleLogin);
+//        TextView googleText = (TextView) btnGoogleLogin.getChildAt(0);
+//        googleText.setText(getString(R.string.google_login_text));
+//        btnGoogleLogin.setOnClickListener(view -> {
+//            // 기존에 로그인 했던 계정을 확인한다.
+//            gsa = GoogleSignIn.getLastSignedInAccount(LoginActivity.this);
+//
+//            if (gsa != null) // 로그인 되있는 경우
+//                Toast.makeText(LoginActivity.this, R.string.google_status_login, Toast.LENGTH_SHORT).show();
+//            else
+//                signIn();
+//        });
 
 //        btnLogoutGoogle = findViewById(R.id.btn_logout_google);
 //        btnLogoutGoogle.setOnClickListener(view -> {
@@ -229,6 +245,94 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+
+
+        ActivityResultLauncher<Intent> launcher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
+
+
+                        Log.d(TAG, "" + NaverIdLoginSDK.INSTANCE.getAccessToken());
+                        Log.d(TAG, "" + NaverIdLoginSDK.INSTANCE.getRefreshToken());
+                        Log.d(TAG, "" + NaverIdLoginSDK.INSTANCE.getExpiresAt());
+                        Log.d(TAG, "" + NaverIdLoginSDK.INSTANCE.getTokenType());
+                        Log.d(TAG, "" + NaverIdLoginSDK.INSTANCE.getState().toString());
+
+                        String accessToken = NaverIdLoginSDK.INSTANCE.getAccessToken();
+
+                        // 사용자 프로필 API 호출
+                        new Thread(() -> {
+                            try {
+                                String header = "Bearer " + accessToken;
+                                URL url = new URL("https://openapi.naver.com/v1/nid/me");
+                                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                                con.setRequestMethod("GET");
+                                con.setRequestProperty("Authorization", header);
+
+                                int responseCode = con.getResponseCode();
+                                BufferedReader br;
+                                if (responseCode == 200) { // 정상 호출
+                                    br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                                } else { // 에러 발생
+                                    br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+                                }
+
+                                String inputLine;
+                                StringBuffer response = new StringBuffer();
+                                while ((inputLine = br.readLine()) != null) {
+                                    response.append(inputLine);
+                                }
+                                br.close();
+
+                                // JSON 파싱
+                                JSONObject jsonObject = new JSONObject(response.toString());
+                                JSONObject responseObject = jsonObject.getJSONObject("response");
+
+                                String USER_ID = responseObject.getString("email");
+
+                                if(sUtil.nullCheck(USER_ID)){
+                                    // 로그인 메일이 안들어왔다. 결과적으로는 실패.
+                                }
+                                else {
+                                    UserItem userItem = new UserItem();
+                                    userItem.setUser_id(USER_ID);
+                                    userItem.setAndroid_id(androidId);
+                                    userItem.setModel_name(deviceModel);
+                                    userItem.setOs_ver(os_ver);
+                                    userItem.setSoical("NAVER");
+                                    MainApplication.setFcmToken();
+                                    userItem.setFcm_token(PreferenceManager.getString(getApplicationContext(), "fcmToken"));
+
+                                    setLogin(userItem);
+                                }
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }).start();
+
+
+
+                    } else if (result.getResultCode() == RESULT_CANCELED) {
+                        // 실패 or 에러
+                        Log.d(TAG, "로그인 실패");
+                    }
+                });
+
+        buttonOAuthLoginImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                NaverIdLoginSDK.INSTANCE.authenticate(getApplicationContext(), launcher);
+            }
+        });
+
+
+
+
 
 
     }

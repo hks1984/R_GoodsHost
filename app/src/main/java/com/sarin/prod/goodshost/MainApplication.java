@@ -39,6 +39,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.kakao.sdk.common.KakaoSdk;
+import com.navercorp.nid.NaverIdLoginSDK;
+import com.navercorp.nid.oauth.NidOAuthErrorCode;
 import com.sarin.prod.goodshost.item.ReturnMsgItem;
 import com.sarin.prod.goodshost.item.UserItem;
 import com.sarin.prod.goodshost.network.RetrofitApi;
@@ -62,6 +64,8 @@ import java.security.NoSuchAlgorithmException;
 
 import java.util.concurrent.TimeUnit;
 
+import com.navercorp.nid.NaverIdLoginSDK;
+
 
 public class MainApplication extends Application implements Application.ActivityLifecycleCallbacks, LifecycleObserver {
 
@@ -74,12 +78,13 @@ public class MainApplication extends Application implements Application.Activity
     private Activity currentActivity;
     public static Context context;
     public static Activity activity;
-    public static final String BASE_URL = "https://dealdive.co.kr/dealdive/";
+//    public static final String BASE_URL = "https://dealdive.co.kr/dealdive/";
 //    public static final String BASE_URL = "http://192.168.10.70:8080/dealdive/";
-//    public static final String BASE_URL = "http://192.168.0.2:8080/dealdive/";
+    public static final String BASE_URL = "http://192.168.0.2:8080/dealdive/";
 
     public static UserItem userItem = new UserItem();
     static StringUtil sUtil = StringUtil.getInstance();
+
 
 
     int count = 0;
@@ -122,6 +127,9 @@ public class MainApplication extends Application implements Application.Activity
 
 
         KakaoSdk.init(this,getString(R.string.kakao_key));
+        NaverIdLoginSDK naver = NaverIdLoginSDK.INSTANCE;
+        naver.initialize(context, "2XF2eShAoVzPAWc3f2a6", "tYp2RdMjoG", "딜다이브");
+
 
         // FCM 토큰을 서버로 업데이트하지 못했을 때 주기적으로 업데이트하는 작업
         setupWorkManager();
@@ -167,9 +175,11 @@ public class MainApplication extends Application implements Application.Activity
                 tokenUploadRequest // PeriodicWorkRequest 객체
         );
 
+
     }
 
     public static void setFcmToken(){
+
 
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
