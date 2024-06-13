@@ -118,7 +118,7 @@
             style="@style/TextBlack.smallStyle"
             android:textColor="@color/black_500"
             android:textStyle="bold"
-            android:text="간편\n로그인"
+            android:text="@string/social_login_2"
             android:gravity="center"
             />
 

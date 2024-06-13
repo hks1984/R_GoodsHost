@@ -58,6 +58,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -97,6 +99,9 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
     private ImageView searchIcon;
     private TextView search_favorite_searches_no_data;
+
+    private Timer timer;
+    private final long DELAY = 800; // milliseconds
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -171,17 +176,38 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                searchName = s.toString();
-                
-
-                if (s.length() >= 2) { // 예를 들어, 2글자 이상 입력된 경우에만 요청
-                    searchName = s.toString();
-                    getAutoCompleteText(s.toString());
+                if (timer != null) {
+                    timer.cancel();
                 }
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+
+                searchName = s.toString();
+
+                if (s.length() >= 2) { // 예를 들어, 2글자 이상 입력된 경우에만 요청
+//                    searchName = s.toString();
+//                    getAutoCompleteText(s.toString());
+                    timer = new Timer();
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    searchName = s.toString();
+                                    getAutoCompleteText(s.toString());
+                                }
+                            });
+
+                        }
+                    }, DELAY);
+                }
+
+
+            }
+
         });
 
         //엔터키 이벤트 처리

@@ -56,13 +56,15 @@
 
     <TextView
         android:id="@+id/noAccLogin"
-        android:layout_width="350dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/no_Acc_text"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
         android:layout_marginTop="50dp"
-        android:textStyle="bold"
-        android:background="@drawable/round_button_gray"
-        style="@style/TextBlack.bigLargeStyle"
+        android:background="@drawable/round_button_gray_100"
+        android:elevation="5dp"
+        style="@style/TextBlack.smallStyle"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/main_logo"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,37 +74,25 @@
 
     <LinearLayout
         android:id="@+id/noLoginLayout"
-        android:layout_width="350dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:padding="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/noAccLogin"
         >
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1"
-            android:background="#000000" />
-
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="간편 로그인"
-            style="@style/TextBlack.largeStyle"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:textColor="#000000" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1"
-            android:background="#000000" />
+            android:gravity="center"
+            android:text="@string/social_login"
+            style="@style/TextBlack.smallStyle"
+            />
 
     </LinearLayout>
 
