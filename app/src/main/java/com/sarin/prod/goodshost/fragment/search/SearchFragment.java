@@ -684,7 +684,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
     private void initScrollListener() {
 
-        Log.d(TAG, "initScrollListener ON ");
+//        Log.d(TAG, "initScrollListener ON ");
 
         if (!isScrollListenerAdded) {
             scrollListener = new RecyclerView.OnScrollListener() {
@@ -699,7 +699,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
                     LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
 
-                    Log.d(TAG, "size: " + linearLayoutManager.findLastCompletelyVisibleItemPosition());
+//                    Log.d(TAG, "size: " + linearLayoutManager.findLastCompletelyVisibleItemPosition());
 
                     if(productAdapter.size() > 4){
                         if (!isLoading) {

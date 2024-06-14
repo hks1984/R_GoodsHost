@@ -255,11 +255,11 @@ public class LoginActivity extends AppCompatActivity {
                         // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
 
 
-                        Log.d(TAG, "" + NaverIdLoginSDK.INSTANCE.getAccessToken());
-                        Log.d(TAG, "" + NaverIdLoginSDK.INSTANCE.getRefreshToken());
-                        Log.d(TAG, "" + NaverIdLoginSDK.INSTANCE.getExpiresAt());
-                        Log.d(TAG, "" + NaverIdLoginSDK.INSTANCE.getTokenType());
-                        Log.d(TAG, "" + NaverIdLoginSDK.INSTANCE.getState().toString());
+//                        Log.d(TAG, "" + NaverIdLoginSDK.INSTANCE.getAccessToken());
+//                        Log.d(TAG, "" + NaverIdLoginSDK.INSTANCE.getRefreshToken());
+//                        Log.d(TAG, "" + NaverIdLoginSDK.INSTANCE.getExpiresAt());
+//                        Log.d(TAG, "" + NaverIdLoginSDK.INSTANCE.getTokenType());
+//                        Log.d(TAG, "" + NaverIdLoginSDK.INSTANCE.getState().toString());
 
                         String accessToken = NaverIdLoginSDK.INSTANCE.getAccessToken();
 
@@ -318,7 +318,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     } else if (result.getResultCode() == RESULT_CANCELED) {
                         // 실패 or 에러
-                        Log.d(TAG, "로그인 실패");
+//                        Log.d(TAG, "로그인 실패");
                     }
                 });
 

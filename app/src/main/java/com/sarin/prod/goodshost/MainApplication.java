@@ -78,9 +78,9 @@ public class MainApplication extends Application implements Application.Activity
     private Activity currentActivity;
     public static Context context;
     public static Activity activity;
-//    public static final String BASE_URL = "https://dealdive.co.kr/dealdive/";
+    public static final String BASE_URL = "https://dealdive.co.kr/dealdive/";
 //    public static final String BASE_URL = "http://192.168.10.70:8080/dealdive/";
-    public static final String BASE_URL = "http://192.168.0.2:8080/dealdive/";
+//    public static final String BASE_URL = "http://192.168.0.2:8080/dealdive/";
 
     public static UserItem userItem = new UserItem();
     static StringUtil sUtil = StringUtil.getInstance();
