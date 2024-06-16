@@ -63,7 +63,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
     public static ProductAdapter productAdapter;
     public static ProductAdapterHori productHoriAdapter;
     public static CategoryAdapter categoryAdapter;
-    private static ImageView favorite, alarm;
+    private static ImageView favorite, alarm, bestSale;
     private static TextView gmall_best_totalView, gmall_top_totalView;
 
     private List<ProductItem> piLIst = new ArrayList<>();
@@ -100,16 +100,17 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
         View root = binding.getRoot();
 
         alarm = binding.alarm;
+        bestSale = binding.bestSale;
 
         /**
          * 최저가 순위
          */
-        recyclerView = binding.recyclerView;
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-//        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1)); // 가로 2개 나열 할때.
-        productHoriAdapter = new ProductAdapterHori(piLIst, this);
-        recyclerView.setAdapter(productHoriAdapter);
+//        recyclerView = binding.recyclerView;
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+//        recyclerView.setLayoutManager(layoutManager);
+////        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1)); // 가로 2개 나열 할때.
+//        productHoriAdapter = new ProductAdapterHori(piLIst, this);
+//        recyclerView.setAdapter(productHoriAdapter);
 
         /**
          * 인기 상품
@@ -130,8 +131,8 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
         categoryAdapter = new CategoryAdapter(ctLIst);
         categoryRecyclerView.setAdapter(categoryAdapter);
 
-        gmall_best_totalView = binding.gmallBestTotalView;
-        gmall_best_totalView.setOnClickListener(new View.OnClickListener() {
+
+        bestSale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), CategoryProductListActivity.class);
@@ -141,6 +142,18 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
 
             }
         });
+
+//        gmall_best_totalView = binding.gmallBestTotalView;
+//        gmall_best_totalView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(v.getContext(), CategoryProductListActivity.class);
+//                intent.putExtra("flag", "best");
+//                v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
+//                getActivity().overridePendingTransition(R.anim.from_right_enter, R.anim.none);
+//
+//            }
+//        });
 
         gmall_top_totalView = binding.gmallTopTotalView;
         gmall_top_totalView.setOnClickListener(new View.OnClickListener() {
@@ -168,9 +181,9 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
             getCategoryList();
         }
 
-        if(productHoriAdapter.size() <= 0){
-            getBestSalesProducts(10, 0);
-        }
+//        if(productHoriAdapter.size() <= 0){
+//            getBestSalesProducts(10, 0);
+//        }
 
         if(productAdapter.size() <= 0){
             getTopProducts(10, 0, currentCategoryCode);
@@ -215,24 +228,24 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
     @Override
     public void onItemClickListener_Hori(View v, int pos) {
         // 아이템 클릭 이벤트 처리
-        pdItem = productHoriAdapter.get(pos);
-        pdItem_possion = pos;
-        if (v.getId() == R.id.layout_favorite) {
-            if(pdItem.isIs_Favorite()){
-                setDelUserItemMap(MainApplication.USER_ID, pdItem.getVendor_item_id());
-                pdItem.setIs_Favorite(false);
-                productHoriAdapter.set(pos, pdItem);
-            } else {
-                setUserItemMap(MainApplication.USER_ID, pdItem.getVendor_item_id(), "Y", 0, "N");
-                pdItem.setIs_Favorite(true);
-                productHoriAdapter.set(pos, pdItem);
-            }
-
-        } else if (v.getId() == R.id.list_view_hori) {
-            Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
-            intent.putExtra("vendor_item_id", pdItem.getVendor_item_id());
-            v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
-        }
+//        pdItem = productHoriAdapter.get(pos);
+//        pdItem_possion = pos;
+//        if (v.getId() == R.id.layout_favorite) {
+//            if(pdItem.isIs_Favorite()){
+//                setDelUserItemMap(MainApplication.USER_ID, pdItem.getVendor_item_id());
+//                pdItem.setIs_Favorite(false);
+//                productHoriAdapter.set(pos, pdItem);
+//            } else {
+//                setUserItemMap(MainApplication.USER_ID, pdItem.getVendor_item_id(), "Y", 0, "N");
+//                pdItem.setIs_Favorite(true);
+//                productHoriAdapter.set(pos, pdItem);
+//            }
+//
+//        } else if (v.getId() == R.id.list_view_hori) {
+//            Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
+//            intent.putExtra("vendor_item_id", pdItem.getVendor_item_id());
+//            v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
+//        }
     }
 
     public void setUserItemMap(String user_id, String vendor_item_id, String hope_low_price, int hope_price, String hope_stock){
