@@ -11,11 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.RequestManager;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.activity.CategoryProductListActivity;
 import com.sarin.prod.goodshost.fragment.home.HomeFragment;
 import com.sarin.prod.goodshost.item.CategoryItem;
+import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.util.StringUtil;
 
@@ -31,17 +33,20 @@ public class CategoryProductListAdapter extends RecyclerView.Adapter<CategoryPro
 
     static CategoryProductListActivity cpla = CategoryProductListActivity.getInstance();
 
-
-    public CategoryProductListAdapter(List<CategoryItem> items){
-        this.items = items;
-    }
-
     public int selectedItem = -1;
 
     private OnItemClickListener onItemClickListener = null;
     public interface OnItemClickListener {
         void onItemClick(View v, int pos);
     }
+
+    private CateRecyclerViewClickListener cateRecyclerViewClickListener;
+    public CategoryProductListAdapter(List<CategoryItem> items, CateRecyclerViewClickListener listener)
+    {
+        this.items = items;
+        this.cateRecyclerViewClickListener = listener;
+    }
+
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.onItemClickListener = listener;
     }
@@ -59,11 +64,16 @@ public class CategoryProductListAdapter extends RecyclerView.Adapter<CategoryPro
         notifyDataSetChanged();  // 데이터 변경을 알리기
     }
 
+    public String getMode() {
+        return this.isMode;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CategoryItem item = items.get(position);
         holder.setItem(item);
 
+        Log.d(MainApplication.TAG, "position: " + position);
         if (position == 0 && selectedItem == -1) {
             // 0번째 항목에 대한 특별한 속성 설정
             holder.categoryName.setBackgroundResource(R.drawable.round_button_on);
@@ -79,25 +89,28 @@ public class CategoryProductListAdapter extends RecyclerView.Adapter<CategoryPro
             holder.categoryName.setTextColor(ContextCompat.getColor(context, R.color.black_500));
         }
 
-        holder.categoryItemClickListener = new CategoryItemClickListener() {
-            @Override
-            public void onItemClickListener(View v, int position) {
+        holder.categoryName.setOnClickListener(v -> cateRecyclerViewClickListener.cateOnItemClickListener(v, position));
 
-                selectedItem = position;
-                notifyDataSetChanged();
 
-                cpla.productAdapter.clear();
-                cpla.productAdapter.notifyDataSetChanged();
-                cpla.categoryCode = items.get(position).api_code;
-                cpla.page = 0;
-                if("best".equals(isMode)){
-                    cpla.getBestSalesProducts(cpla.viewCount, items.get(position).api_code);
-                }else{
-                    cpla.getTopProducts(cpla.viewCount, items.get(position).api_code);
-                }
-
-            }
-        };
+//        holder.categoryItemClickListener = new CategoryItemClickListener() {
+//            @Override
+//            public void onItemClickListener(View v, int position) {
+//
+//                selectedItem = position;
+//                notifyDataSetChanged();
+//
+//                cpla.productAdapter.clear();
+//                cpla.productAdapter.notifyDataSetChanged();
+//                cpla.categoryCode = items.get(position).api_code;
+//                cpla.page = 0;
+//                if("best".equals(isMode)){
+//                    cpla.getBestSalesProducts(cpla.viewCount, items.get(position).api_code);
+//                }else{
+//                    cpla.getTopProducts(cpla.viewCount, items.get(position).api_code);
+//                }
+//
+//            }
+//        };
 
     }
 
@@ -112,6 +125,10 @@ public class CategoryProductListAdapter extends RecyclerView.Adapter<CategoryPro
     public void setItems(List<CategoryItem> items){
         items = items;
         notifyDataSetChanged();
+    }
+
+    public CategoryItem get(int possion) {
+        return items.get(possion);
     }
 
     public int size() {
@@ -153,7 +170,7 @@ public class CategoryProductListAdapter extends RecyclerView.Adapter<CategoryPro
 
 
 
-
+            
         }
 
     }

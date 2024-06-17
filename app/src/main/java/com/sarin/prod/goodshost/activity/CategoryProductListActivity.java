@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
+import com.sarin.prod.goodshost.adapter.CateRecyclerViewClickListener;
 import com.sarin.prod.goodshost.adapter.CategoryProductListAdapter;
 import com.sarin.prod.goodshost.adapter.RecyclerViewClickListener;
 
@@ -43,7 +46,7 @@ import com.sarin.prod.goodshost.view.PopupDialogUtil;
 import com.sarin.prod.goodshost.view.PopupDialogClickListener;
 
 
-public class CategoryProductListActivity extends AppCompatActivity implements RecyclerViewClickListener {
+public class CategoryProductListActivity extends AppCompatActivity implements RecyclerViewClickListener, CateRecyclerViewClickListener {
 
     private ActivityCategoryProductListBinding binding;
     private static String TAG = MainApplication.TAG;
@@ -54,7 +57,7 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
     private List<ProductItem> piLIst = new ArrayList<>();
 
     private ImageView exit;
-    private TextView logo;
+    private TextView logo, categoryName;
 
     private LinearLayout LinearLayout1;
     private boolean isScrollListenerAdded = false;
@@ -72,6 +75,8 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
 
     private ProductItem pdItem = new ProductItem();
     private int pdItem_possion = 0;
+
+    private int selectedItem = -1;
 
 
     public static CategoryProductListActivity getInstance() {
@@ -99,6 +104,7 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
         flag = intent.getStringExtra("flag");
 
         exit = binding.exit;
+
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,6 +147,12 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
             }
         });
 
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View otherLayout = inflater.inflate(R.layout.category_list_view, null);
+
+        // 인플레이트한 레이아웃에서 뷰 찾기
+        categoryName = otherLayout.findViewById(R.id.categoryName);
+
 
 
         categoryRecyclerView = binding.categoryRecyclerView;
@@ -151,7 +163,7 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
         ci.setApi_code(categoryCode);
         ci.setName("전체");
         ctLIst.add(ci);
-        categoryProductListAdapter = new CategoryProductListAdapter(ctLIst);
+        categoryProductListAdapter = new CategoryProductListAdapter(ctLIst, this);
         categoryRecyclerView.setAdapter(categoryProductListAdapter);
         categoryProductListAdapter.notifyItemChanged(1);
 
@@ -196,6 +208,38 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
             v.getContext().startActivity(intent);	//intent 에 명시된 액티비티로 이동
         }
     }
+
+    @Override
+    public void cateOnItemClickListener(View v, int pos) {
+        // 아이템 클릭 이벤트 처리
+
+        if (pos == 0 && selectedItem == -1) {
+            // 0번째 항목에 대한 특별한 속성 설정
+            categoryName.setBackgroundResource(R.drawable.round_button_on);
+            categoryName.setTextColor(ContextCompat.getColor(this, R.color.white_500));
+        }
+        // 선택한 카테고리 속성 변경
+        else if(selectedItem == pos) {
+            categoryName.setBackgroundResource(R.drawable.round_button_on);
+            categoryName.setTextColor(ContextCompat.getColor(this, R.color.white_500));
+
+        } else {
+            categoryName.setBackgroundResource(R.drawable.round_button_off);
+            categoryName.setTextColor(ContextCompat.getColor(this, R.color.black_500));
+        }
+
+        productAdapter.clear();
+        categoryCode = categoryProductListAdapter.get(pos).api_code;
+        page = 0;
+        if("best".equals(categoryProductListAdapter.getMode())){
+            getBestSalesProducts(viewCount, categoryProductListAdapter.get(pos).api_code);
+        }else{
+            getTopProducts(viewCount, categoryProductListAdapter.get(pos).api_code);
+        }
+
+    }
+
+
 
     @Override
     public void onItemClickListener_Hori(View v, int pos) {}
@@ -311,7 +355,7 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
 
     public void getTopProducts(int cnt, String code){
 
-        loadingProgressManager.showLoading(MainApplication.activity);
+        loadingProgressManager.showLoading(this);
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
@@ -351,7 +395,7 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
     }
     public void getBestSalesProducts(int cnt, String code){
 
-        loadingProgressManager.showLoading(MainApplication.activity);
+        loadingProgressManager.showLoading(this);
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
@@ -362,7 +406,6 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
             public void onResponse(Call<List<ProductItem>> call, Response<List<ProductItem>> response) {
                 if(response.isSuccessful()){
                     List<ProductItem> productItem = response.body();
-//                    piLIst.addAll(productItem);
                     productAdapter.addItems(productItem);
                 }
                 else{

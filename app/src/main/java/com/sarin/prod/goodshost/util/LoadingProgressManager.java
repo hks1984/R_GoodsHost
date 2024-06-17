@@ -48,6 +48,8 @@ public class LoadingProgressManager {
                     loadingDialog.dismiss();
                     loadingDialog = null;
                     requestCount = 0;
+                } else if (requestCount < 0) {  // 로딩 안되는 현상 방지
+                    requestCount = 0;
                 }
             }
         }
