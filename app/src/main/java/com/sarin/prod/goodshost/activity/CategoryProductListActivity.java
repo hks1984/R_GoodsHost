@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.adapter.CategoryProductListAdapter;
@@ -91,7 +92,7 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
 //        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
 //        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2)); // 가로 2개 나열 할때.
-        productAdapter = new ProductAdapter(piLIst, this);
+        productAdapter = new ProductAdapter(Glide.with(this) ,piLIst, this);
         recyclerView.setAdapter(productAdapter);
 
         Intent intent = getIntent();

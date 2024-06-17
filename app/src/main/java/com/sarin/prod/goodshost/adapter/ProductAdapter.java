@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.sarin.prod.goodshost.MainApplication;
@@ -28,12 +29,14 @@ import java.util.List;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder>{
 
     private List<ProductItem> items;
+    private final RequestManager glide;
     public static String TAG = MainApplication.TAG;
     private static Context context;
     static StringUtil sUtil = StringUtil.getInstance();
     private RecyclerViewClickListener recyclerViewClickListener;
-    public ProductAdapter(List<ProductItem> items, RecyclerViewClickListener listener)
+    public ProductAdapter(RequestManager glide, List<ProductItem> items, RecyclerViewClickListener listener)
     {
+        this.glide = glide;
         this.items = items;
         this.recyclerViewClickListener = listener;
     }
@@ -135,8 +138,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             if(!url.contains("https:")){
                 url = "https:" + url;
             }
-            Glide.with(itemView.getContext())
-                    .load(url)
+            glide.load(url)
                     .apply(RequestOptions.bitmapTransform(new RoundedCorners(30))) // 여기서 10은 코너의 반지름을 dp 단위로 지정
                     .into(image);
             if(pitem.getRating() == null || "".equals(pitem.getRating())){
@@ -172,8 +174,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
             site.setText(pitem.getSite());
 
-            Glide.with(context)
-                    .load(pitem.getSite_icon())
+            glide.load(pitem.getSite_icon())
                     .into(site_icon);
 
 

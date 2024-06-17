@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.activity.CategoryProductListActivity;
@@ -35,6 +36,7 @@ import java.util.List;
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder>{
 
     private List<CategoryItem> items;
+    private final RequestManager glide;
     public static String TAG = MainApplication.TAG;
     private static Context context;
 
@@ -42,8 +44,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     static HomeFragment hf = HomeFragment.getInstance();
     RetrofitClientInstance rci = RetrofitClientInstance.getInstance();
 
-    public CategoryAdapter(List<CategoryItem> items){
+    public CategoryAdapter(RequestManager glide, List<CategoryItem> items){
         this.items = items;
+        this.glide = glide;
     }
 
     public int selectedItem = -1;

@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.activity.AlarmActivity;
@@ -119,7 +120,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
 //        LinearLayoutManager toplayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 //        recyclerViewTop.setLayoutManager(toplayoutManager);
         recyclerViewTop.setLayoutManager(new GridLayoutManager(getContext(), 2)); // 가로 2개 나열 할때.
-        productAdapter = new ProductAdapter(TopProductList, this);
+        productAdapter = new ProductAdapter(Glide.with(getActivity()),TopProductList, this);
         recyclerViewTop.setAdapter(productAdapter);
 
         /**
@@ -128,7 +129,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
         categoryRecyclerView = binding.categoryRecyclerView;
         LinearLayoutManager catelayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         categoryRecyclerView.setLayoutManager(catelayoutManager);
-        categoryAdapter = new CategoryAdapter(ctLIst);
+        categoryAdapter = new CategoryAdapter(Glide.with(getActivity()), ctLIst);
         categoryRecyclerView.setAdapter(categoryAdapter);
 
 

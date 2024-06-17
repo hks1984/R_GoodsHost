@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.flexbox.FlexboxLayout;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
@@ -125,7 +126,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 //        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 //        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2)); // 가로 2개 나열 할때.
-        productAdapter = new ProductAdapter(piLIst, this);
+        productAdapter = new ProductAdapter(Glide.with(getActivity()),piLIst, this);
         recyclerView.setAdapter(productAdapter);
 
         List<String> androids = new ArrayList<>();
