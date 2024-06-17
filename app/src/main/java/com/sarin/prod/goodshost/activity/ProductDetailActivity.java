@@ -165,7 +165,7 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
 
         save = bottomSheetDialog.findViewById(R.id.save);
         hope_price = bottomSheetDialog.findViewById(R.id.hope_price);
-        check = bottomSheetDialog.findViewById(R.id.check);
+//        check = bottomSheetDialog.findViewById(R.id.check);
         discount_1 = bottomSheetDialog.findViewById(R.id.discount_1);
         discount_2 = bottomSheetDialog.findViewById(R.id.discount_2);
         discount_3 = bottomSheetDialog.findViewById(R.id.discount_3);
@@ -180,11 +180,11 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
 
                 hope_price.setText("" + _pi.getHope_price());
 
-                if("Y".equals(_pi.getHope_stock())){
-                    check.setChecked(true);
-                } else {
-                    check.setChecked(false);
-                }
+//                if("Y".equals(_pi.getHope_stock())){
+//                    check.setChecked(true);
+//                } else {
+//                    check.setChecked(false);
+//                }
 
             }
         });
@@ -255,10 +255,10 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean isCheckBoxChecked = check.isChecked();
-                String hope_stock = isCheckBoxChecked ? "Y" : "N";
+//                boolean isCheckBoxChecked = check.isChecked();
+//                String hope_stock = isCheckBoxChecked ? "Y" : "N";
                 String editTextValue = hope_price.getText().toString();
-                setUserItemMap(MainApplication.USER_ID, vendor_item_id, "Y", sUtil.convertStringToInt(editTextValue), hope_stock);
+                setUserItemMap(MainApplication.USER_ID, vendor_item_id, "Y", sUtil.convertStringToInt(editTextValue), "Y");
 
                 HomeFragment hf = HomeFragment.getInstance();
                 hf.productAdapter.setFavorite(vendor_item_id, true);
@@ -348,7 +348,7 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
                 pdItem.setIs_Favorite(false);
                 productHoriAdapter.set(pos, pdItem);
             } else {
-                setUserItemMap(MainApplication.USER_ID, pdItem.getVendor_item_id(), "Y", 0, "N");
+                setUserItemMap(MainApplication.USER_ID, pdItem.getVendor_item_id(), "Y", 0, "Y");
                 pdItem.setIs_Favorite(true);
                 productHoriAdapter.set(pos, pdItem);
             }

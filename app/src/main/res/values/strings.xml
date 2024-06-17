@@ -62,7 +62,7 @@
     <string name="no_chart">데이터가 쌓이면 시세 그래프를 만들어 드릴게요.</string>
 
     <string name="detail_favorite_setting">관심 상품 설정</string>
-    <string name="detail_favorite_note">원하는 가격 및 재입고 항목을 설정하시면\n알림을 받으실 수 있어요.\n관심상품 등록 후 나중에 알림 설정을 하실 수도 있어요.!</string>
+    <string name="detail_favorite_note">원하는 가격을 설정하시면\n알림을 받으실 수 있어요.\n관심상품 등록 후 나중에 알림 설정을 하실 수도 있어요!</string>
     <string name="detail_alarm_price">가격 알림 설정</string>
     <string name="detail_q_alarm_price">퀵 가격 설정</string>
     <string name="detail_alarm_solt">재입고 알림 설정</string>

@@ -376,7 +376,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 pdItem.setIs_Favorite(false);
                 productAdapter.set(pos, pdItem);
             } else {
-                setUserItemMap(MainApplication.USER_ID, pdItem.getVendor_item_id(), "Y", 0, "N");
+                setUserItemMap(MainApplication.USER_ID, pdItem.getVendor_item_id(), "Y", 0, "Y");
                 pdItem.setIs_Favorite(true);
                 productAdapter.set(pos, pdItem);
             }

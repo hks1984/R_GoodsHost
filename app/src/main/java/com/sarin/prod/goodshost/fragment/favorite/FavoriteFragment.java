@@ -118,7 +118,7 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
 
         hope_price = bottomSheetDialog.findViewById(R.id.hope_price);
         save = bottomSheetDialog.findViewById(R.id.save);
-        check = bottomSheetDialog.findViewById(R.id.check);
+//        check = bottomSheetDialog.findViewById(R.id.check);
         discount_1 = bottomSheetDialog.findViewById(R.id.discount_1);
         discount_2 = bottomSheetDialog.findViewById(R.id.discount_2);
         discount_3 = bottomSheetDialog.findViewById(R.id.discount_3);
@@ -127,16 +127,16 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean isCheckBoxChecked = check.isChecked();
-                String hope_stock = isCheckBoxChecked ? "Y" : "N";
+//                boolean isCheckBoxChecked = check.isChecked();
+//                String hope_stock = isCheckBoxChecked ? "Y" : "N";
 
                 String editTextValue = hope_price.getText().toString();
 
                 
 
                 pdItem.setHope_price(sUtil.convertStringToInt(editTextValue));
-                pdItem.setHope_stock(hope_stock);
-                setUserItemMap(MainApplication.USER_ID, pdItem.getVendor_item_id(), "Y", sUtil.convertStringToInt(editTextValue), hope_stock);
+                pdItem.setHope_stock("Y");
+                setUserItemMap(MainApplication.USER_ID, pdItem.getVendor_item_id(), "Y", sUtil.convertStringToInt(editTextValue), "Y");
                 CustomSnackbar.showSnackbar(getContext(), binding.getRoot(), getContext().getResources().getString(R.string.favorite_save));
 
                 bottomSheetDialog.dismiss();
@@ -238,11 +238,11 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
             bottomSheetDialog.show();
             hope_price.setText("" + favoriteProductAdapter.get(pos).getHope_price());
             hope_price.setSelection(hope_price.getText().length());
-            if("Y".equals(favoriteProductAdapter.get(pos).getHope_stock())){
-                check.setChecked(true);
-            } else {
-                check.setChecked(false);
-            }
+//            if("Y".equals(favoriteProductAdapter.get(pos).getHope_stock())){
+//                check.setChecked(true);
+//            } else {
+//                check.setChecked(false);
+//            }
         } else if (v.getId() == R.id.list_view_favorite) {
             Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
             intent.putExtra("vendor_item_id", pdItem.getVendor_item_id());
