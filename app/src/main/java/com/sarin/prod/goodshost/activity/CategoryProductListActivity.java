@@ -211,23 +211,8 @@ public class CategoryProductListActivity extends AppCompatActivity implements Re
 
     @Override
     public void cateOnItemClickListener(View v, int pos) {
-        // 아이템 클릭 이벤트 처리
 
-        if (pos == 0 && selectedItem == -1) {
-            // 0번째 항목에 대한 특별한 속성 설정
-            categoryName.setBackgroundResource(R.drawable.round_button_on);
-            categoryName.setTextColor(ContextCompat.getColor(this, R.color.white_500));
-        }
-        // 선택한 카테고리 속성 변경
-        else if(selectedItem == pos) {
-            categoryName.setBackgroundResource(R.drawable.round_button_on);
-            categoryName.setTextColor(ContextCompat.getColor(this, R.color.white_500));
-
-        } else {
-            categoryName.setBackgroundResource(R.drawable.round_button_off);
-            categoryName.setTextColor(ContextCompat.getColor(this, R.color.black_500));
-        }
-
+        categoryProductListAdapter.setSelectedItem(pos);
         productAdapter.clear();
         categoryCode = categoryProductListAdapter.get(pos).api_code;
         page = 0;

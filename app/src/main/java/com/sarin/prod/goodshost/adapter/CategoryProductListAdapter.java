@@ -73,7 +73,6 @@ public class CategoryProductListAdapter extends RecyclerView.Adapter<CategoryPro
         CategoryItem item = items.get(position);
         holder.setItem(item);
 
-        Log.d(MainApplication.TAG, "position: " + position);
         if (position == 0 && selectedItem == -1) {
             // 0번째 항목에 대한 특별한 속성 설정
             holder.categoryName.setBackgroundResource(R.drawable.round_button_on);
@@ -90,27 +89,6 @@ public class CategoryProductListAdapter extends RecyclerView.Adapter<CategoryPro
         }
 
         holder.categoryName.setOnClickListener(v -> cateRecyclerViewClickListener.cateOnItemClickListener(v, position));
-
-
-//        holder.categoryItemClickListener = new CategoryItemClickListener() {
-//            @Override
-//            public void onItemClickListener(View v, int position) {
-//
-//                selectedItem = position;
-//                notifyDataSetChanged();
-//
-//                cpla.productAdapter.clear();
-//                cpla.productAdapter.notifyDataSetChanged();
-//                cpla.categoryCode = items.get(position).api_code;
-//                cpla.page = 0;
-//                if("best".equals(isMode)){
-//                    cpla.getBestSalesProducts(cpla.viewCount, items.get(position).api_code);
-//                }else{
-//                    cpla.getTopProducts(cpla.viewCount, items.get(position).api_code);
-//                }
-//
-//            }
-//        };
 
     }
 
@@ -139,6 +117,11 @@ public class CategoryProductListAdapter extends RecyclerView.Adapter<CategoryPro
     public void clear(){
         items.clear();
 //        notifyDataSetChanged();
+    }
+
+    public void setSelectedItem(int v){
+        selectedItem = v;
+        notifyDataSetChanged();
     }
 
     @Override
