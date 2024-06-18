@@ -154,6 +154,9 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
         getProductDetail(vendor_item_id);
         getProductChart(vendor_item_id);
 
+        /**
+         * BottomSheet 세팅
+         */
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.bottom_sheet_registration, null, false);
         // 상단 라운딩 적용. (themes.xml에 style 추가 필요)

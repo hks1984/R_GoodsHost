@@ -2,6 +2,7 @@ package com.sarin.prod.goodshost.fragment.search;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.flexbox.FlexboxLayout;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.sarin.prod.goodshost.MainApplication;
 import com.sarin.prod.goodshost.R;
 import com.sarin.prod.goodshost.adapter.ProductAdapter;
@@ -55,6 +57,7 @@ import com.sarin.prod.goodshost.adapter.RecyclerViewClickListener;
 import com.sarin.prod.goodshost.util.PreferenceManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -76,11 +79,13 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
     private static RecyclerView recyclerView;
     private static RecyclerView recentRecyclerView;
+    private static RecyclerView orderByViewRecycler;
     private RecyclerView.OnScrollListener scrollListener;
     private boolean isScrollListenerAdded = false;
     public static ProductAdapter productAdapter;
     public static FavoriteSearcherAdapter favoriteSearcherAdapter;
     public static RecentAdapter recentAdapter;
+    public static RecentAdapter orderByViewAdapter;
 
     private List<ProductItem> piLIst = new ArrayList<>();
     private AutoCompleteTextView autoCompleteTextView;
@@ -88,21 +93,34 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
     private int SearchProducts_page = 0;
     private List<String> favoriteSearcherList = new ArrayList<>();
     private List<String> recentList = new ArrayList<>();
+    private List<String> orderByViewList = new ArrayList<>();
 
     private LoadingProgressManager loadingProgressManager = LoadingProgressManager.getInstance();
     private ProductItem pdItem = new ProductItem();
     private int pdItem_possion = 0;
     private ArrayAdapter<String> adapter;
 
-    private LinearLayout recent_layout, favorite_layout, searchNoItemMsg, editBoxLinearLayout, fragment_search_linearlayout;
+    private LinearLayout recent_layout, favorite_layout, searchNoItemMsg, editBoxLinearLayout, fragment_search_linearlayout, orderByView;
 
     private FlexboxLayout favorite_searcher_list;
 
     private ImageView searchIcon;
-    private TextView search_favorite_searches_no_data;
+    private TextView search_favorite_searches_no_data, orderByName;
 
     private Timer timer;
     private final long DELAY = 800; // milliseconds
+
+
+    /**
+     * 바텀 시트 변수들
+     */
+    private LinearLayout recommendationView, popularityView, lowPriceView, highPriceView;
+    private ImageView recommendationImage, popularityImage, lowPriceImage, highPriceImage;
+
+
+
+
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -120,6 +138,9 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         fragment_search_linearlayout = binding.fragmentSearchLinearlayout;
         search_favorite_searches_no_data = binding.searchFavoriteSearchesNoData;
         favorite_searcher_list = binding.favoriteSearcherList;
+
+        orderByView = binding.orderByView;
+        orderByName = binding.orderByName;
 
 
         recyclerView = binding.recyclerView;
@@ -358,9 +379,83 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             }
         });
 
+        View view = inflater.inflate(R.layout.bottom_sheet_orderby, container, false);
+
+        // 상단 라운딩 적용. (themes.xml에 style 추가 필요)
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext(), R.style.RoundCornerBottomSheetDialogTheme);
+        bottomSheetDialog.setContentView(view);
+
+        recommendationView = view.findViewById(R.id.Recommendation_view);
+        popularityView = view.findViewById(R.id.popularity_view);
+        lowPriceView = view.findViewById(R.id.lowPrice_view);
+        highPriceView = view.findViewById(R.id.highPrice_view);
+
+        recommendationImage = view.findViewById(R.id.Recommendation_image);
+        popularityImage = view.findViewById(R.id.popularity_image);
+        lowPriceImage = view.findViewById(R.id.lowPrice_image);
+        highPriceImage = view.findViewById(R.id.highPrice_image);
+        // 선택 초기화
+        showOnlySelectedImage(recommendationImage);
+
+        orderByView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetDialog.show();
+
+            }
+        });
+
+        recommendationView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showOnlySelectedImage(recommendationImage);
+                orderByName.setText(getContext().getResources().getString(R.string.recommendationText));
+                bottomSheetDialog.dismiss();
+
+            }
+        });
+
+        popularityView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showOnlySelectedImage(popularityImage);
+                orderByName.setText(getContext().getResources().getString(R.string.popularityText));
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        lowPriceView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showOnlySelectedImage(lowPriceImage);
+                orderByName.setText(getContext().getResources().getString(R.string.lowPriceText));
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        highPriceView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showOnlySelectedImage(highPriceImage);
+                orderByName.setText(getContext().getResources().getString(R.string.highPriceText));
+                bottomSheetDialog.dismiss();
+            }
+        });
+
 
 
         return root;
+    }
+
+    private void showOnlySelectedImage(ImageView selectedImageView) {
+        // Hide all images
+        recommendationImage.setVisibility(View.GONE);
+        popularityImage.setVisibility(View.GONE);
+        lowPriceImage.setVisibility(View.GONE);
+        highPriceImage.setVisibility(View.GONE);
+
+        // Show only the selected image
+        selectedImageView.setVisibility(View.VISIBLE);
     }
 
     @Override
