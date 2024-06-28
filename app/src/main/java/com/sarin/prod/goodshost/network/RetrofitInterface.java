@@ -71,7 +71,9 @@ public interface RetrofitInterface {
             @Path ("path") String path,
             @Query("searchName") String searchName,
             @Query("user_id") String user_id,
-            @Query("page") int page
+            @Query("page") int page,
+            @Query("orderType") String orderType
+
     );
 
     @POST("{path}")

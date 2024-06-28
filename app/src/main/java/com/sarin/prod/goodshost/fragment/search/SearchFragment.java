@@ -100,12 +100,12 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
     private int pdItem_possion = 0;
     private ArrayAdapter<String> adapter;
 
-    private LinearLayout recent_layout, favorite_layout, searchNoItemMsg, editBoxLinearLayout, fragment_search_linearlayout, orderByView;
+    private LinearLayout recent_layout, favorite_layout, searchNoItemMsg, editBoxLinearLayout, fragment_search_linearlayout, orderByView, recyclerViewLinearLayout;
 
     private FlexboxLayout favorite_searcher_list;
 
-    private ImageView searchIcon;
-    private TextView search_favorite_searches_no_data, orderByName;
+    private ImageView searchIcon, searchBackSpace;
+    private TextView search_favorite_searches_no_data, orderByName, searchTitleName;
 
     private Timer timer;
     private final long DELAY = 800; // milliseconds
@@ -117,7 +117,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
     private LinearLayout recommendationView, popularityView, lowPriceView, highPriceView;
     private ImageView recommendationImage, popularityImage, lowPriceImage, highPriceImage;
 
-
+    private String orderType = "recommendation";
 
 
 
@@ -138,6 +138,9 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         fragment_search_linearlayout = binding.fragmentSearchLinearlayout;
         search_favorite_searches_no_data = binding.searchFavoriteSearchesNoData;
         favorite_searcher_list = binding.favoriteSearcherList;
+        recyclerViewLinearLayout = binding.recyclerViewLinearLayout;
+        searchBackSpace = binding.searchBackSpace;
+        searchTitleName = binding.searchTitleName;
 
         orderByView = binding.orderByView;
         orderByName = binding.orderByName;
@@ -158,38 +161,12 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
         autoCompleteTextView.setAdapter(adapter);
 
+        editBoxLinearLayout.setVisibility(View.VISIBLE);
+        recyclerViewLinearLayout.setVisibility(View.GONE);
 
-        getPopularSearch();
 
+        getPopularSearch(); //인기 검색어
 
-        autoCompleteTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // AutoCompleteTextView가 클릭되었을 때의 처리
-                favorite_layout.setVisibility(View.VISIBLE);
-                recent_layout.setVisibility(View.VISIBLE);
-                recyclerView.setVisibility(View.GONE);
-                searchNoItemMsg.setVisibility(View.GONE);
-//                fragment_search_linearlayout.setBackgroundColor( ContextCompat.getColor(getContext(), R.color.white_500));
-
-            }
-        });
-
-        autoCompleteTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    // AutoCompleteTextView가 포커스를 얻었을 때의 처리
-                    favorite_layout.setVisibility(View.VISIBLE);
-                    recent_layout.setVisibility(View.VISIBLE);
-                    recyclerView.setVisibility(View.GONE);
-                    searchNoItemMsg.setVisibility(View.GONE);
-//                    fragment_search_linearlayout.setBackgroundColor( ContextCompat.getColor(getContext(), R.color.white_500));
-                } else {
-                    // AutoCompleteTextView가 포커스를 잃었을 때의 처리
-                }
-            }
-        });
 
         autoCompleteTextView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -245,7 +222,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                     searchName = String.valueOf(autoCompleteTextView.getText());
                     productAdapter.clear();
                     SearchProducts_page = 0;
-                    getSearchProducts(searchName);
+                    getSearchProducts(searchName, orderType);
                     PreferenceManager.setStringList(getContext(), "searchList", searchName);
                     recentAdapter.addItem(searchName);
                     recentAdapter.notifyDataSetChanged();
@@ -265,11 +242,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                         // drawableEnd 클릭 시 수행할 동작
                         // 예: 검색 기능 실행, 입력 내용 지우기 등
                         autoCompleteTextView.setText("");
-                        favorite_layout.setVisibility(View.VISIBLE);
-                        recent_layout.setVisibility(View.VISIBLE);
-                        recyclerView.setVisibility(View.GONE);
-                        searchNoItemMsg.setVisibility(View.GONE);
-//                        fragment_search_linearlayout.setBackgroundColor( ContextCompat.getColor(getContext(), R.color.white_500));
+
                         return true;
                     }
                 }
@@ -286,12 +259,29 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 searchName = String.valueOf(autoCompleteTextView.getText());
                 productAdapter.clear();
                 SearchProducts_page = 0;
-                getSearchProducts(searchName);
+                getSearchProducts(searchName, orderType);
                 PreferenceManager.setStringList(getContext(), "searchList", searchName);
                 recentAdapter.addItem(searchName);
                 recentAdapter.notifyDataSetChanged();
                 initScrollListener();
 
+            }
+        });
+
+
+        searchBackSpace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editBoxLinearLayout.setVisibility(View.VISIBLE);
+                recyclerViewLinearLayout.setVisibility(View.GONE);
+
+                // 다시 검색창으로 돌아왔을때 '추천순'으로 세팅.
+                orderType = "recommendation";
+                showOnlySelectedImage(recommendationImage);
+                orderByName.setText(getContext().getResources().getString(R.string.recommendationText));
+
+                // 다시 검색창으로 돌아왔을때 '최근 검색어' 리스트 업데이트
+                recentAdapter.notifyDataSetChanged();
             }
         });
 
@@ -321,7 +311,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
                     productAdapter.clear();
                     SearchProducts_page = 0;
-                    getSearchProducts(searchName);
+                    getSearchProducts(searchName, orderType);
                     initScrollListener();
                     PreferenceManager.setStringList(getContext(), "searchList", searchName);
                     recentAdapter.addItem(searchName);
@@ -353,14 +343,14 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                     
 //                    autoCompleteTextView.setVisibility(View.VISIBLE);
 //                    editBoxLinearLayout.setVisibility(View.VISIBLE);
-                    VisibleSlideDown(editBoxLinearLayout);
+//                    VisibleSlideDown(editBoxLinearLayout);
 
                 }else if(newState == RecyclerView.SCROLL_STATE_SETTLING && !isScrolledDown){
                     
                     if (!piLIst.isEmpty()) {
 //                        autoCompleteTextView.setVisibility(View.GONE);
 //                        editBoxLinearLayout.setVisibility(View.GONE);
-                        GoneSlideUp(editBoxLinearLayout);
+//                        GoneSlideUp(editBoxLinearLayout);
                     }
 
 
@@ -410,6 +400,9 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             public void onClick(View v) {
                 showOnlySelectedImage(recommendationImage);
                 orderByName.setText(getContext().getResources().getString(R.string.recommendationText));
+                orderType = "recommendation";
+                productAdapter.clear();
+                getSearchProducts(searchName, orderType);
                 bottomSheetDialog.dismiss();
 
             }
@@ -420,6 +413,9 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             public void onClick(View v) {
                 showOnlySelectedImage(popularityImage);
                 orderByName.setText(getContext().getResources().getString(R.string.popularityText));
+                orderType = "popularity";
+                productAdapter.clear();
+                getSearchProducts(searchName, orderType);
                 bottomSheetDialog.dismiss();
             }
         });
@@ -429,6 +425,9 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             public void onClick(View v) {
                 showOnlySelectedImage(lowPriceImage);
                 orderByName.setText(getContext().getResources().getString(R.string.lowPriceText));
+                orderType = "lowPrice";
+                productAdapter.clear();
+                getSearchProducts(searchName, orderType);
                 bottomSheetDialog.dismiss();
             }
         });
@@ -438,6 +437,9 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
             public void onClick(View v) {
                 showOnlySelectedImage(highPriceImage);
                 orderByName.setText(getContext().getResources().getString(R.string.highPriceText));
+                orderType = "highPrice";
+                productAdapter.clear();
+                getSearchProducts(searchName, orderType);
                 bottomSheetDialog.dismiss();
             }
         });
@@ -557,16 +559,14 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
     public void onItemClickListener_Hori(View v, int pos) {}
 
 
-    public void getSearchProducts(String searchName){
-
+    public void getSearchProducts(String searchName, String orderType){
 
         loadingProgressManager.showLoading(getContext());
-
 
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
-        Call<List<ProductItem>> call = service.getSearchProducts("getSearchProducts", searchName, MainApplication.USER_ID, SearchProducts_page++);
+        Call<List<ProductItem>> call = service.getSearchProducts("getSearchProducts", searchName, MainApplication.USER_ID, SearchProducts_page++, orderType);
 
         call.enqueue(new Callback<List<ProductItem>>() {
             @Override
@@ -585,12 +585,9 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 }
                 else{
                 }
-                favorite_layout.setVisibility(View.GONE);
-                recent_layout.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
-
-                search_favorite_searches_no_data.setVisibility(View.GONE);
-                recentRecyclerView.setVisibility(View.VISIBLE);
+                editBoxLinearLayout.setVisibility(View.GONE);
+                recyclerViewLinearLayout.setVisibility(View.VISIBLE);
+                searchTitleName.setText(searchName);
 
                 loadingProgressManager.hideLoading();
 
@@ -661,7 +658,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
 
                                 productAdapter.clear();
                                 SearchProducts_page = 0;
-                                getSearchProducts(word);
+                                getSearchProducts(word, orderType);
                                 initScrollListener();
                                 PreferenceManager.setStringList(getContext(), "searchList", word);
                                 recentAdapter.addItem(word);
@@ -824,7 +821,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                getSearchProducts(searchName);
+                getSearchProducts(searchName, orderType);
                 isLoading = false;
             }
         }, 1000);
