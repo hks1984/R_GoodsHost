@@ -153,7 +153,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID);
 
-        builder.setSmallIcon(R.drawable.icon3)
+        builder.setSmallIcon(R.drawable.ic_stat_name)
+
                 //.setLargeIcon(mLargeIcon)
                 // .setContent(remoteViews)
                 .setContentIntent(pendingIntent)
