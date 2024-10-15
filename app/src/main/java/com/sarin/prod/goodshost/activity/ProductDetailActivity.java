@@ -202,7 +202,7 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
                 startActivity(Sharing);
             }
         });
-        출처: https://goatlab.tistory.com/entry/Android-Studio-공유하기-기능-Android-Sharesheet [GOATLAB:티스토리]
+
 
 
         link.setOnClickListener(new View.OnClickListener() {
@@ -602,7 +602,7 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
 
     public void getProductChart(String vendor_item_id){
 
-        loadingProgressManager.showLoading(this);
+//        loadingProgressManager.showLoading(this);
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
@@ -653,7 +653,7 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
                 else{
                 }
 
-                loadingProgressManager.hideLoading();
+//                loadingProgressManager.hideLoading();
             }
 
             @Override
@@ -702,7 +702,7 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
     public void getProductDetail(String vendor_item_id){
 
 
-        loadingProgressManager.showLoading(this);
+//        loadingProgressManager.showLoading(this);
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
@@ -757,13 +757,14 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
                 }
                 else{
                 }
-                loadingProgressManager.hideLoading();
+//                loadingProgressManager.hideLoading();
+
 
             }
 
             @Override
             public void onFailure(Call<ProductItem> call, Throwable t) {
-                loadingProgressManager.hideLoading();
+//                loadingProgressManager.hideLoading();
                 PopupDialogUtil.showCustomDialog(ProductDetailActivity.this, new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {
@@ -780,7 +781,7 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
 
     public void getProductsRelated(String product_name){
 
-        loadingProgressManager.showLoading(this);
+//        loadingProgressManager.showLoading(this);
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
 
@@ -796,12 +797,12 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
                 else{
                 }
 
-                loadingProgressManager.hideLoading();
+//                loadingProgressManager.hideLoading();
             }
 
             @Override
             public void onFailure(Call<List<ProductItem>> call, Throwable t) {
-                loadingProgressManager.hideLoading();
+//                loadingProgressManager.hideLoading();
                 PopupDialogUtil.showCustomDialog(ProductDetailActivity.this, new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {

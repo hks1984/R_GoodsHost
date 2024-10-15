@@ -323,7 +323,7 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
     public void getFavoriteProducts(String user_id){
 
 
-        loadingProgressManager.showLoading(getContext());
+//        loadingProgressManager.showLoading(getContext());
 
         retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
@@ -353,12 +353,12 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
                 }
                 else{
                 }
-                loadingProgressManager.hideLoading();
+//                loadingProgressManager.hideLoading();
             }
 
             @Override
             public void onFailure(Call<List<ProductItem>> call, Throwable t) {
-                loadingProgressManager.hideLoading();
+//                loadingProgressManager.hideLoading();
                 PopupDialogUtil.showCustomDialog(getActivity(), new PopupDialogClickListener() {
                     @Override
                     public void onPositiveClick() {

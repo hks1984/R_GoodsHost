@@ -402,6 +402,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 orderByName.setText(getContext().getResources().getString(R.string.recommendationText));
                 orderType = "recommendation";
                 productAdapter.clear();
+                SearchProducts_page = 0;
                 getSearchProducts(searchName, orderType);
                 bottomSheetDialog.dismiss();
 
@@ -415,6 +416,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 orderByName.setText(getContext().getResources().getString(R.string.popularityText));
                 orderType = "popularity";
                 productAdapter.clear();
+                SearchProducts_page = 0;
                 getSearchProducts(searchName, orderType);
                 bottomSheetDialog.dismiss();
             }
@@ -427,6 +429,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 orderByName.setText(getContext().getResources().getString(R.string.lowPriceText));
                 orderType = "lowPrice";
                 productAdapter.clear();
+                SearchProducts_page = 0;
                 getSearchProducts(searchName, orderType);
                 bottomSheetDialog.dismiss();
             }
@@ -439,6 +442,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 orderByName.setText(getContext().getResources().getString(R.string.highPriceText));
                 orderType = "highPrice";
                 productAdapter.clear();
+                SearchProducts_page = 0;
                 getSearchProducts(searchName, orderType);
                 bottomSheetDialog.dismiss();
             }
@@ -574,7 +578,11 @@ public class SearchFragment extends Fragment implements RecyclerViewClickListene
                 if(response.isSuccessful()){
                     List<ProductItem> productItem = response.body();
 
-                    if(productItem.size() <= 0){
+                    Log.d(TAG, "getSearchProducts: " + productItem.toString());
+
+                    // 스크롤 내릴 시 마지막 스크롤때 상품이 없을 경우 'productItem.size() <= 0' 일 경우가 나오는데 이때 리사이클러뷰가 GONE 될수 있음.
+                    // 방지하기 위해 SearchProducts_page 값을 추가로 비교하여 두번째 호출 시에는 리사이클러뷰가 GONE 되지 않도록 개선.
+                    if(productItem.size() <= 0 && SearchProducts_page == 1) {
                         searchNoItemMsg.setVisibility(View.VISIBLE);
                         recyclerView.setVisibility(View.GONE);
                     }else{
