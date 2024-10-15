@@ -140,8 +140,6 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
         favorite = binding.favorite;
         rating_total_count = binding.ratingTotalCount;
         rating = binding.rating;
-        site = binding.site;
-        site_icon = binding.siteIcon;
 
 
         relatedRecyclerView = binding.recyclerView;
@@ -753,12 +751,6 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
                     }else{
                         favorite.setImageResource(R.drawable.baseline_favorite_border_24);
                     }
-
-                    site.setText(productItem.getSite());
-
-                    Glide.with(getApplicationContext())
-                            .load(productItem.getSite_icon())
-                            .into(site_icon);
 
                     getProductsRelated(productItem.getName());
 
