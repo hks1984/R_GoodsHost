@@ -127,8 +127,6 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
             favorite = (ImageView) itemView.findViewById(R.id.favorite);
             layout_favorite = (LinearLayout) itemView.findViewById(R.id.layout_favorite);
             list_view_hori = (ConstraintLayout) itemView.findViewById(R.id.list_view_hori);
-            site = (TextView) itemView.findViewById(R.id.site);
-            site_icon = (ImageView) itemView.findViewById(R.id.site_icon);
 
         }
 
@@ -174,13 +172,6 @@ public class ProductAdapterHori extends RecyclerView.Adapter<ProductAdapterHori.
             }else{
                 favorite.setImageResource(R.drawable.baseline_favorite_border_24);
             }
-
-            site.setText(pitem.getSite());
-
-            Glide.with(context)
-                    .load(pitem.getSite_icon())
-                    .into(site_icon);
-
 
         }
 
