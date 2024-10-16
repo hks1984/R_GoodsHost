@@ -41,6 +41,7 @@ import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
 import com.sarin.prod.goodshost.util.LoadingProgressManager;
 import com.sarin.prod.goodshost.util.StringUtil;
+import com.sarin.prod.goodshost.view.EventPopupDialog;
 import com.sarin.prod.goodshost.view.PopupDialogUtil;
 import com.sarin.prod.goodshost.view.PopupDialogClickListener;
 
@@ -189,6 +190,12 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
         if(productAdapter.size() <= 0){
             getTopProducts(10, 0, currentCategoryCode);
         }
+
+
+        EventPopupDialog popupDialog = new EventPopupDialog();
+        String imageUrl = "https://dealdive.co.kr/dealdive/image/getImage?imageName=b940f5e81570000801a78a5f99866e4f.png";  // 네트워크 상의 이미지 URL
+        popupDialog.showImageDialog(getContext(), imageUrl);
+
 
 
         return root;
