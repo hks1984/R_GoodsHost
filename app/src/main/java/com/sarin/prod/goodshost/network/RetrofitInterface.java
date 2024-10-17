@@ -2,6 +2,7 @@ package com.sarin.prod.goodshost.network;
 
 import com.sarin.prod.goodshost.item.CategoryItem;
 import com.sarin.prod.goodshost.item.ChartItem;
+import com.sarin.prod.goodshost.item.EventItem;
 import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.item.ReturnMsgItem;
 import com.sarin.prod.goodshost.item.ReturnObjMsgItem;
@@ -161,7 +162,11 @@ public interface RetrofitInterface {
             @Path ("path") String path
     );
 
-
+    @POST("{path}")
+    Call<List<EventItem>> getEvent(
+            @Path ("path") String path,
+            @Query("type") String type
+    );
 
 
 

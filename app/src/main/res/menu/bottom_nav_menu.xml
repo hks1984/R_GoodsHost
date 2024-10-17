@@ -17,6 +17,11 @@
         android:title="@string/title_favorite" />
 
     <item
+        android:id="@+id/navigation_event"
+        android:icon="@drawable/baseline_redeem_24"
+        android:title="@string/title_event" />
+
+    <item
         android:id="@+id/navigation_setting"
         android:icon="@drawable/baseline_settings_24"
         android:title="@string/title_setting" />
