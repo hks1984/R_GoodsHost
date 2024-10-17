@@ -263,7 +263,7 @@ public class ProductDetailActivity extends AppCompatActivity implements Recycler
 
                 HomeFragment hf = HomeFragment.getInstance();
                 hf.productAdapter.setFavorite(vendor_item_id, true);
-                hf.productHoriAdapter.setFavorite(vendor_item_id, true);
+//                hf.productHoriAdapter.setFavorite(vendor_item_id, true);
 
                 CategoryProductListActivity cpla = CategoryProductListActivity.getInstance();
                 if(cpla.productAdapter != null){

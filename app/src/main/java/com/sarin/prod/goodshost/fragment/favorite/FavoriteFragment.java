@@ -232,7 +232,7 @@ public class FavoriteFragment extends Fragment implements RecyclerViewClickListe
             setDelUserItemMap(MainApplication.USER_ID, pdItem.getVendor_item_id());
             HomeFragment hf = HomeFragment.getInstance();
             hf.productAdapter.setFavorite(pdItem.getVendor_item_id(), false);
-            hf.productHoriAdapter.setFavorite(pdItem.getVendor_item_id(), false);
+//            hf.productHoriAdapter.setFavorite(pdItem.getVendor_item_id(), false);
 
         } else if (v.getId() == R.id.favorite_alarm_edit) {
             bottomSheetDialog.show();
