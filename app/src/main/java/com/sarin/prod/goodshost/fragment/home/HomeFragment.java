@@ -45,12 +45,18 @@ import com.sarin.prod.goodshost.view.EventPopupDialog;
 import com.sarin.prod.goodshost.view.PopupDialogUtil;
 import com.sarin.prod.goodshost.view.PopupDialogClickListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import com.sarin.prod.goodshost.util.PreferenceManager;
+
 
 public class HomeFragment extends Fragment implements RecyclerViewClickListener {
 
@@ -191,14 +197,25 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
             getTopProducts(10, 0, currentCategoryCode);
         }
 
-
-        EventPopupDialog popupDialog = new EventPopupDialog();
-        String imageUrl = "https://dealdive.co.kr/dealdive/image/getImage?imageName=b940f5e81570000801a78a5f99866e4f.png";  // 네트워크 상의 이미지 URL
-        popupDialog.showImageDialog(getContext(), imageUrl);
-
-
+        if(shouldShowPopup()) {
+            EventPopupDialog popupDialog = new EventPopupDialog();
+            String imageUrl = "https://dealdive.co.kr/dealdive/image/getImage?imageName=b940f5e81570000801a78a5f99866e4f.png";  // 네트워크 상의 이미지 URL
+            popupDialog.showImageDialog(getContext(), imageUrl);
+        }
 
         return root;
+    }
+
+    // 팝업을 띄울지 결정하는 메서드
+    private boolean shouldShowPopup() {
+        // 저장된 '오늘 하루 보지 않기' 날짜 가져오기
+        String savedDate = PreferenceManager.getString(getContext(), "shouldShowPopup");
+
+        // 현재 날짜 가져오기
+        String currentDate = sUtil.getCurrentDate();
+
+        // 저장된 날짜가 없거나, 저장된 날짜와 오늘 날짜가 다를 경우 팝업을 띄움
+        return !currentDate.equals(savedDate);
     }
 
     /**

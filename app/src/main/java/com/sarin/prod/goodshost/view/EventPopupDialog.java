@@ -10,9 +10,12 @@ import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.sarin.prod.goodshost.R;
+import com.sarin.prod.goodshost.util.StringUtil;
+import com.sarin.prod.goodshost.util.PreferenceManager;
 
 public class EventPopupDialog {
 
+    private StringUtil stringUtil = StringUtil.getInstance();
     public void showImageDialog(Context context, String imageUrl) {
         // AlertDialog 빌더 생성
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -42,6 +45,14 @@ public class EventPopupDialog {
         LinearLayout okButton = dialogView.findViewById(R.id.dialog_button_ok);
         okButton.setOnClickListener(v -> {
             // 팝업 창 닫기
+            dialog.dismiss();  // 'dialog'를 이 범위 내에서 참조할 수 있음
+        });
+
+        LinearLayout dayButton = dialogView.findViewById(R.id.dialog_button_day);
+        dayButton.setOnClickListener(v -> {
+            // 팝업 창 닫기
+            String currentDate = stringUtil.getCurrentDate();
+            PreferenceManager.setString(context, "shouldShowPopup", currentDate);
             dialog.dismiss();  // 'dialog'를 이 범위 내에서 참조할 수 있음
         });
 
