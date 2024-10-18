@@ -3,6 +3,7 @@ package com.sarin.prod.goodshost.fragment.event;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,7 @@ import com.sarin.prod.goodshost.item.ProductAlarmItem;
 import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.network.RetrofitClientInstance;
 import com.sarin.prod.goodshost.network.RetrofitInterface;
+import com.sarin.prod.goodshost.util.StringUtil;
 import com.sarin.prod.goodshost.view.PopupDialogClickListener;
 import com.sarin.prod.goodshost.view.PopupDialogUtil;
 import com.sarin.prod.goodshost.adapter.EventAdapter;
@@ -53,6 +55,7 @@ public class EventFragment extends Fragment implements EventRecyclerViewClickLis
     private static RecyclerView recyclerView;
     private List<EventItem> eventItems = new ArrayList<>();
     private EventItem eventItem = new EventItem();
+    private StringUtil stringUtil = StringUtil.getInstance();
 
 
     public static EventFragment newInstance() {
@@ -86,7 +89,10 @@ public class EventFragment extends Fragment implements EventRecyclerViewClickLis
         eventItem = eventAdapter.get(pos);
 //        pdItem_possion = pos;
         if (v.getId() == R.id.full_layout) {
-            Toast.makeText(getContext(), "" + pos, Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            String url = eventItem.getLink();
+            intent.setData(Uri.parse(url));
+            startActivity(intent);
         }
     }
 
