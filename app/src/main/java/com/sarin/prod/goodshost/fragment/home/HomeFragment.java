@@ -34,6 +34,7 @@ import com.sarin.prod.goodshost.adapter.RecyclerViewClickListener;
 
 import com.sarin.prod.goodshost.databinding.FragmentHomeBinding;
 import com.sarin.prod.goodshost.item.CategoryItem;
+import com.sarin.prod.goodshost.item.EventItem;
 import com.sarin.prod.goodshost.item.ProductItem;
 import com.sarin.prod.goodshost.item.ReturnMsgItem;
 import com.sarin.prod.goodshost.item.SharedViewModel;
@@ -198,13 +199,54 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
         }
 
         if(shouldShowPopup()) {
-            EventPopupDialog popupDialog = new EventPopupDialog();
-            String imageUrl = "https://dealdive.co.kr/dealdive/image/getImage?imageName=b940f5e81570000801a78a5f99866e4f.png";  // 네트워크 상의 이미지 URL
-            popupDialog.showImageDialog(getContext(), imageUrl);
+            getEvent("");
         }
 
         return root;
     }
+
+    public void getEvent(String type){
+
+        retrofit2.Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        RetrofitInterface service = retrofit.create(RetrofitInterface.class);   // 레트로핏 인터페이스 객체 구현
+
+        Call<List<EventItem>> call = service.getEvent("getEvent", type);
+
+        call.enqueue(new Callback<List<EventItem>>() {
+            @Override
+            public void onResponse(Call<List<EventItem>> call, Response<List<EventItem>> response) {
+                if(response.isSuccessful()){
+                    List<EventItem> eventItems = response.body();
+                    Log.d(MainApplication.TAG, eventItems.toString());
+
+                    if(eventItems.size() > 0){
+                        EventPopupDialog popupDialog = new EventPopupDialog();
+                        popupDialog.showImageDialog(getContext(), eventItems.get(0));
+                    }
+
+                }
+                else{
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<EventItem>> call, Throwable t) {
+//                loadingProgressManager.hideLoading();
+                PopupDialogUtil.showCustomDialog(getActivity(), new PopupDialogClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegativeClick() {
+                    }
+                }, "ONE", getResources().getString(R.string.server_not_connecting));
+            }
+        });
+
+    }
+
 
     // 팝업을 띄울지 결정하는 메서드
     private boolean shouldShowPopup() {

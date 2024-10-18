@@ -96,6 +96,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             } else if (itemId == R.id.navigation_favorite) {
                 if(before_itemId == R.id.navigation_favorite)   return true;    // 같은 메뉴 반복 클릭 방지
+                if(before_itemId == R.id.navigation_event){
+                    navBuilder.setEnterAnim(R.anim.from_left_enter)
+                            .setExitAnim(R.anim.to_right_exit);
+                } else {
+                    navBuilder.setEnterAnim(R.anim.from_right_enter)
+                            .setExitAnim(R.anim.to_left_exit);
+                }
+            } else if (itemId == R.id.navigation_event) {
+                if(before_itemId == R.id.navigation_event)   return true;    // 같은 메뉴 반복 클릭 방지
                 if(before_itemId == R.id.navigation_setting){
                     navBuilder.setEnterAnim(R.anim.from_left_enter)
                             .setExitAnim(R.anim.to_right_exit);

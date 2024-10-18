@@ -2,6 +2,8 @@ package com.sarin.prod.goodshost.view;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -10,13 +12,14 @@ import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.sarin.prod.goodshost.R;
+import com.sarin.prod.goodshost.item.EventItem;
 import com.sarin.prod.goodshost.util.StringUtil;
 import com.sarin.prod.goodshost.util.PreferenceManager;
 
 public class EventPopupDialog {
 
     private StringUtil stringUtil = StringUtil.getInstance();
-    public void showImageDialog(Context context, String imageUrl) {
+    public void showImageDialog(Context context, EventItem eventItem) {
         // AlertDialog 빌더 생성
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
@@ -27,7 +30,7 @@ public class EventPopupDialog {
         // 이미지 뷰에 Glide로 이미지 로드
         ImageView imageView = dialogView.findViewById(R.id.dialog_image_view);
         Glide.with(context)
-                .load(imageUrl)  // 네트워크 URL이나 로컬 파일 경로를 사용할 수 있음
+                .load(eventItem.getImage())  // 네트워크 URL이나 로컬 파일 경로를 사용할 수 있음
 //                .placeholder(R.drawable.placeholder)  // 로딩 중일 때 보여줄 이미지
 //                .error(R.drawable.error_image)  // 에러가 발생했을 때 보여줄 이미지
                 .into(imageView);
@@ -53,6 +56,17 @@ public class EventPopupDialog {
             // 팝업 창 닫기
             String currentDate = stringUtil.getCurrentDate();
             PreferenceManager.setString(context, "shouldShowPopup", currentDate);
+            dialog.dismiss();  // 'dialog'를 이 범위 내에서 참조할 수 있음
+        });
+
+        ImageView dialog_image_view = dialogView.findViewById(R.id.dialog_image_view);
+        dialog_image_view.setOnClickListener(v -> {
+            // 팝업 창 닫기
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            String url = eventItem.getLink();
+            intent.setData(Uri.parse(url));
+            context.startActivity(intent);
+
             dialog.dismiss();  // 'dialog'를 이 범위 내에서 참조할 수 있음
         });
 
